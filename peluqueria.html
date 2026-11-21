@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OUTVOSS · Peluquería masculina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<style>
+:root{--bg:#0a0a0a;--ch:#c59b5f;--chl:#e6cfa5;--tx:#fff;--mut:#b8b4ab;--glass:rgba(15,15,15,.74);--line:rgba(197,155,95,.28);--neu:#16161a}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{color:var(--tx);font:15px/1.65 'Plus Jakarta Sans',system-ui,sans-serif;overflow-x:hidden}
+h1,h2,h3{font-family:'Cinzel',serif;line-height:1.08}
+a{color:inherit}
+/* header */
+.hd{position:fixed;inset:0 0 auto;height:72px;padding:0 clamp(16px,4vw,48px);display:flex;align-items:center;gap:20px;z-index:50;transition:background .3s,backdrop-filter .3s}
+.hd.sc{background:rgba(10,10,10,.82);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.logo{font-family:'Cinzel',serif;font-weight:700;letter-spacing:.2em;text-decoration:none;margin-right:auto}
+.hd nav{display:flex;gap:26px}.hd nav a{text-decoration:none;color:var(--mut);font-size:13px;font-weight:500}.hd nav a:hover{color:var(--chl)}
+.cur{height:34px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--chl);padding:0 8px;font:inherit;font-size:12px}
+.cur option{background:#111}
+/* botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;height:46px;padding:0 26px;border:0;border-radius:6px;background:var(--ch);color:#14110b;font:inherit;font-weight:700;font-size:14px;cursor:pointer;text-decoration:none;transition:background .2s}
+.btn:hover{background:var(--chl)}
+.btn.ghost{background:none;border:1px solid rgba(255,255,255,.28);color:var(--tx)}.btn.ghost:hover{border-color:var(--ch);color:var(--chl)}
+.btn.sm{height:36px;padding:0 16px;font-size:12.5px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--chl);outline-offset:2px}
+/* secciones a pantalla completa con video a la derecha */
+.sec{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:96px clamp(16px,5vw,64px) 64px;overflow:hidden;background:var(--bg)}
+.vid{position:absolute;inset:0;z-index:0}
+.vid video{width:100%;height:100%;object-fit:cover;object-position:75% center}
+.vid::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0a0a0a 0%,rgba(10,10,10,.86) 38%,rgba(10,10,10,.35) 100%),linear-gradient(180deg,rgba(10,10,10,.5),transparent 25%,transparent 70%,#0a0a0a)}
+.vid.none{background:radial-gradient(circle at 76% 50%,rgba(197,155,95,.2),transparent 36%)}
+.vid.none::before{content:"";position:absolute;right:12%;top:50%;width:min(44vh,360px);aspect-ratio:1;transform:translateY(-50%);border-radius:50%;border:2px solid rgba(230,207,165,.45);box-shadow:0 0 60px rgba(197,155,95,.25),inset 0 0 50px rgba(197,155,95,.12)}
+.in{position:relative;z-index:2;max-width:560px;width:100%}
+.in.wide{max-width:1100px}
+.eb{font-size:12px;font-weight:600;letter-spacing:.18em;color:var(--ch);margin-bottom:12px}
+.in h1{font-size:clamp(36px,6vw,72px);font-weight:700;margin-bottom:18px}
+.in h2{font-size:clamp(28px,4.4vw,52px);font-weight:700;margin-bottom:16px}
+.in p.l{color:var(--mut);max-width:44ch;margin-bottom:26px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.down{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:3;color:var(--chl);text-decoration:none;font-size:22px;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translate(-50%,6px)}}
+/* tarjetas glass */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
+.gl{background:var(--glass);border:1px solid var(--line);border-radius:12px;padding:22px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;flex-direction:column;gap:8px;transition:transform .25s,border-color .25s}
+.gl:hover{transform:translateY(-4px);border-color:var(--ch)}
+.gl.top{border-color:var(--ch);box-shadow:0 0 30px rgba(197,155,95,.15)}
+.gl h3{font-size:18px}.gl p{color:var(--mut);font-size:13.5px;flex:1}
+.gl .pr{display:flex;justify-content:space-between;align-items:baseline;color:var(--chl);font-weight:700}.gl .pr small{color:var(--mut);font-weight:500}
+.met{display:flex;gap:34px;margin:6px 0 26px;flex-wrap:wrap}.met b{display:block;font-family:'Cinzel',serif;font-size:24px;color:var(--chl)}.met span{font-size:12px;color:var(--mut)}
+/* footer */
+footer{background:#070708;border-top:1px solid var(--line);padding:48px clamp(16px,5vw,64px) 28px}
+.fg{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px;max-width:1200px;margin:0 auto}
+footer h4{font-size:12px;letter-spacing:.16em;color:var(--ch);margin-bottom:12px}
+footer p,footer li{color:var(--mut);font-size:13.5px}footer ul{list-style:none;display:grid;gap:8px}footer a{text-decoration:none}footer a:hover{color:var(--chl)}
+.legal{max-width:1200px;margin:34px auto 0;padding-top:22px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.legal .cp{color:var(--mut);font-size:12.5px;margin-right:auto}
+.neu{border:0;border-radius:12px;background:var(--neu);color:var(--chl);padding:10px 16px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:6px 6px 12px #040405,-5px -5px 11px #25252c;transition:box-shadow .15s}
+.neu:hover{color:#fff}.neu:active{box-shadow:inset 4px 4px 9px #040405,inset -4px -4px 9px #25252c}
+/* modales */
+dialog{margin:auto;width:min(94vw,460px);max-height:90vh;overflow:auto;background:#141418;color:var(--tx);border:1px solid var(--line);border-radius:12px;padding:26px}
+dialog::backdrop{background:rgba(5,5,7,.8);backdrop-filter:blur(6px)}
+dialog h3{font-size:22px;margin-bottom:16px}
+dialog label{display:block;font-size:12px;color:var(--mut);margin-bottom:12px}
+dialog input,dialog select{width:100%;height:42px;margin-top:5px;padding:0 10px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:#09090b;color:#fff;font:inherit}
+.legalbody{white-space:pre-line;color:var(--mut);font-size:14px;margin-bottom:18px}
+.msg{margin-top:12px;font-size:13px}.msg.err{color:#e07a6b}.msg.ok{color:#9fd6a8}
+@media(max-width:900px){.hd nav{display:none}.cards{grid-template-columns:1fr}.fg{grid-template-columns:1fr 1fr}.vid::after{background:linear-gradient(180deg,rgba(10,10,10,.55),rgba(10,10,10,.82) 60%,#0a0a0a)}.vid video{object-position:70% center}.sec{align-items:flex-end}}
+@media(max-width:520px){.fg{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="hd" id="hd">
+  <a class="logo" href="index.html">OUTVOSS</a>
+  <nav><a href="#inicio">Inicio</a><a href="#servicios">Servicios</a><a href="#arte">El Arte</a><a href="#experiencia">Experiencia</a><a href="index.html">Tienda</a></nav>
+  <select class="cur" id="cur" aria-label="Moneda"><option>COP</option><option>USD</option></select>
+  <button class="btn sm" data-book>Reservar cita</button>
+</header>
+
+<main>
+<section class="sec" id="inicio" data-sec="hero"><div class="vid none"></div>
+  <div class="in"><div class="eb" data-f="eyebrow">SIGNATURE EXPERIENCE</div>
+    <h1 data-f="title">PRECISION. STYLE. CONFIDENCE.</h1>
+    <p class="l" data-f="body">Un santuario de cuidado personal elevado, diseñado a la medida del caballero moderno.</p>
+    <div class="row"><button class="btn" data-book>Reservar cita</button><a class="btn ghost" href="#servicios">Ver servicios</a></div></div>
+  <a class="down" href="#servicios" aria-label="Bajar">↓</a></section>
+
+<section class="sec" id="servicios" data-sec="servicios"><div class="vid none"></div>
+  <div class="in wide"><div class="eb" data-f="eyebrow">SERVICES</div>
+    <h2 data-f="title">NUESTROS SERVICIOS</h2><p class="l" data-f="body">Compara y elige el servicio que quieres agendar.</p>
+    <div class="cards" id="cards"><div class="gl"><p>Cargando servicios…</p></div></div></div></section>
+
+<section class="sec" id="arte" data-sec="oficio"><div class="vid none"></div>
+  <div class="in"><div class="eb" data-f="eyebrow">THE CRAFT</div>
+    <h2 data-f="title">THE CRAFT</h2>
+    <p class="l" data-f="body">Tijeras de acero afiladas a mano, técnica y detalle en cada corte.</p>
+    <div class="met"><div><b>45 MIN</b><span>Sesión dedicada</span></div><div><b>100%</b><span>Acabado a medida</span></div></div>
+    <a class="btn" href="#servicios">Elegir mi corte</a></div></section>
+
+<section class="sec" id="experiencia" data-sec="experiencia"><div class="vid none"></div>
+  <div class="in"><div class="eb" data-f="eyebrow">PREMIUM GROOMING</div>
+    <h2 data-f="title">PREMIUM GROOMING EXPERIENCE</h2>
+    <p class="l" data-f="body">Productos de calidad, trato especializado y un nivel de servicio que se nota.</p>
+    <div class="row"><button class="btn" data-book>Reservar cita</button><a class="btn ghost" href="#servicios">Explorar servicios</a></div></div>
+  <a class="down" href="#cierre" aria-label="Bajar">↓</a></section>
+
+<section class="sec" id="cierre" data-sec="cierre"><div class="vid none"></div>
+  <div class="in"><div class="eb" data-f="eyebrow">TU TURNO</div>
+    <h2 data-f="title">YOUR NEXT LOOK STARTS HERE.</h2>
+    <p class="l" data-f="body">Asegura tu barbero y tu horario en segundos.</p>
+    <button class="btn" data-book>Reservar cita</button></div></section>
+</main>
+
+<footer>
+  <div class="fg">
+    <div><div class="logo" style="margin-bottom:10px">OUTVOSS</div><p>Moda masculina contemporánea y grooming privado · Colombia</p></div>
+    <div><h4>NAVEGACIÓN</h4><ul><li><a href="index.html">Inicio</a></li><li><a href="#servicios">Servicios</a></li><li><a href="catalogo.html">Catálogo</a></li></ul></div>
+    <div><h4>CONTACTO</h4><p id="fMail">contacto@outvoss.com</p><p id="fWa"></p></div>
+    <div><h4>RESERVA</h4><button class="neu" data-book>Reservar cita</button></div>
+  </div>
+  <div class="legal"><span class="cp">© <span id="yr"></span> OUTVOSS. Todos los derechos reservados.</span><span id="legalBtns" style="display:contents"></span></div>
+</footer>
+
+<dialog id="dBook"><h3>Reserva tu sillón</h3>
+  <form id="fBook">
+    <label>Servicio<select id="bSvc" required></select></label>
+    <label>Nombre completo<input id="bName" required minlength="2" maxlength="100" autocomplete="name"></label>
+    <label>Teléfono<input id="bTel" type="tel" required pattern="\+?[0-9 ()\-]{7,20}" autocomplete="tel"></label>
+    <label>Correo electrónico<input id="bMail" type="email" required autocomplete="email"></label>
+    <label>Fecha y hora<input id="bWhen" type="datetime-local" required></label>
+    <div class="row"><button class="btn" id="bGo">Confirmar reserva</button><button class="btn ghost" type="button" data-close>Cerrar</button></div>
+    <div class="msg" id="bMsg" role="status"></div>
+  </form></dialog>
+<dialog id="dLegal"><h3 id="lT"></h3><div class="legalbody" id="lB"></div><button class="btn ghost sm" data-close>Cerrar</button></dialog>
+
+<script>
+const sb=supabase.createClient('https://vpncwfbinzmvsplsjubf.supabase.co','sb_publishable_cUU3BIEnmhEXbp6XzQdDLA__0uaGHQW');
+const $=s=>document.querySelector(s);
+let cfg={usd_rate:4000,default_display:'COP'},svcs=[];
+const money=n=>$('#cur').value==='USD'?new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n/cfg.usd_rate):new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(n);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+$('#yr').textContent=new Date().getFullYear();
+addEventListener('scroll',()=>$('#hd').classList.toggle('sc',scrollY>40),{passive:true});
+
+function renderServices(){
+  const box=$('#cards');box.replaceChildren();
+  if(!svcs.length){box.append(el('div','gl')).append(el('p',0,'Pronto publicaremos nuestros servicios.'));return}
+  svcs.forEach((s,i)=>{const c=el('article','gl'+(i===svcs.length-1?' top':''));
+    c.append(el('h3',0,s.name),el('p',0,s.description||''));
+    const p=el('div','pr',money(s.price));p.append(el('small',0,s.duration_min+' min'));c.append(p);
+    const b=el('button','btn sm','Seleccionar →');b.onclick=()=>openBook(s.id);c.append(b);box.append(c)});
+  $('#bSvc').replaceChildren(...svcs.map(s=>{const o=el('option',0,`${s.name} — ${money(s.price)}`);o.value=s.id;return o}));
+}
+$('#cur').onchange=renderServices;
+
+async function init(){
+  const [st,sv,md,lg]=await Promise.all([
+    sb.from('site_settings').select('value').eq('key','general').maybeSingle(),
+    sb.from('barber_services').select('*').order('sort_order'),
+    sb.from('site_media').select('*').eq('page','peluqueria'),
+    sb.from('legal_pages').select('slug,title,body').order('sort_order')]);
+  if(st.data)cfg={...cfg,...st.data.value};
+  $('#cur').value=cfg.default_display||'COP';
+  if(cfg.contact_email)$('#fMail').textContent=cfg.contact_email;
+  if(cfg.whatsapp)$('#fWa').textContent='WhatsApp '+cfg.whatsapp;
+  svcs=sv.data||[];renderServices();
+  (md.data||[]).forEach(m=>{const s=document.querySelector(`[data-sec="${m.section_key}"]`);if(!s)return;
+    [['eyebrow'],['title'],['body']].forEach(([f])=>{if(m[f]){const n=s.querySelector(`[data-f="${f}"]`);if(n)n.textContent=m[f]}});
+    if(m.url){const v=s.querySelector('.vid');v.classList.remove('none');v.replaceChildren();
+      if(m.media_type==='image'){const i=el('img');i.src=m.url;i.alt='';i.style.cssText='width:100%;height:100%;object-fit:cover;object-position:75% center';v.append(i)}
+      else{const x=document.createElement('video');Object.assign(x,{src:m.url,autoplay:true,loop:true,muted:true,playsInline:true,preload:'metadata'});x.setAttribute('muted','');
+        if(m.poster_url)x.poster=m.poster_url;x.onerror=()=>{v.classList.add('none');x.remove()};v.append(x)}}});
+  const lb=$('#legalBtns');(lg.data||[]).forEach(p=>{const b=el('button','neu',p.title);b.type='button';
+    b.onclick=()=>{$('#lT').textContent=p.title;$('#lB').textContent=p.body;$('#dLegal').showModal()};lb.append(b)});
+}
+init();
+
+function openBook(id){const d=$('#dBook');$('#bMsg').textContent='';if(id)$('#bSvc').value=id;
+  const n=new Date(Date.now()+3600e3);n.setMinutes(0,0,0);const pad=x=>String(x).padStart(2,'0');
+  $('#bWhen').min=`${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}T${pad(n.getHours())}:00`;d.showModal()}
+document.addEventListener('click',e=>{
+  if(e.target.closest('[data-book]'))openBook();
+  if(e.target.closest('[data-close]'))e.target.closest('dialog').close();
+  if(e.target.tagName==='DIALOG')e.target.close()});
+$('#fBook').addEventListener('submit',async e=>{e.preventDefault();
+  const m=$('#bMsg'),go=$('#bGo');go.disabled=true;m.className='msg';m.textContent='Reservando…';
+  const{error}=await sb.rpc('book_appointment',{p_name:$('#bName').value,p_phone:$('#bTel').value,p_email:$('#bMail').value,
+    p_service_id:$('#bSvc').value,p_scheduled_at:new Date($('#bWhen').value).toISOString()});
+  go.disabled=false;
+  if(error){m.className='msg err';m.textContent=error.message;return}
+  m.className='msg ok';m.textContent='¡Listo! Tu cita quedó registrada como pendiente. Te contactaremos para confirmarla.';e.target.reset()});
+</script>
+</body>
+</html>
