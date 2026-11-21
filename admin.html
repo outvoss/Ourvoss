@@ -94,6 +94,7 @@ td span{color:var(--sand,#e5dec9)}
   <header><h1>OUTVOSS · ADMIN</h1>
     <label style="margin:0;display:flex;align-items:center;gap:8px">Ver precios en
       <select id="curSel"><option>COP</option><option>USD</option></select></label>
+    <a class="btn ghost sm" href="index.html" style="text-decoration:none;display:inline-flex;align-items:center">Ver sitio</a>
     <button class="btn ghost sm" data-out>Salir</button></header>
   <nav id="nav"></nav>
   <main id="main"></main>
@@ -126,7 +127,8 @@ $('#aForm').addEventListener('submit',async e=>{e.preventDefault();
   const email=$('#aEmail').value.trim().toLowerCase();aMsg('Procesando…');
   if(mode==='login'){const{error}=await sb.auth.signInWithPassword({email,password:$('#aPass').value});if(error)aMsg('Correo o contraseña incorrectos','err');}
   else if(mode==='signup'){const{error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:here,shouldCreateUser:true}});
-    error?aMsg(error.message,'err'):aMsg('Listo. Revisa tu correo y abre el enlace para crear tu contraseña.','ok');}
+    const ok='Si tu correo está autorizado, te enviamos un enlace para crear tu contraseña. Revisa también la carpeta de spam.';
+    (!error||/database error|autorizado|not allowed|signups/i.test(error.message))?aMsg(ok,'ok'):aMsg(error.message,'err');}
   else{const{error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:here});
     error?aMsg(error.message,'err'):aMsg('Si el correo existe, te enviamos un enlace para restablecer tu contraseña.','ok');}
 });
@@ -135,7 +137,8 @@ $('#pwForm').addEventListener('submit',async e=>{e.preventDefault();
   if(a!==b){m.textContent='Las contraseñas no coinciden';m.className='msg err';return}
   const{error}=await sb.auth.updateUser({password:a,data:{has_password:true}});
   if(error){m.textContent=error.message;m.className='msg err';return}
-  const{data}=await sb.auth.getSession();route('SIGNED_IN',data.session);
+  m.textContent='Contraseña guardada. Te llevamos al sitio…';m.className='msg ok';
+  setTimeout(()=>{location.href='index.html'},900);
 });
 document.addEventListener('click',async e=>{if(e.target.closest('[data-out]')){await sb.auth.signOut();}});
 
