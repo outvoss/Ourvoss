@@ -1,3 +1,28 @@
+// Pantalla de entrada inicial (Preloader con arco luminoso)
+const outvossIntroLoader = document.getElementById('outvossIntroLoader');
+const loaderLogoImg = document.getElementById('loaderLogoImg');
+const loaderLogoPlaceholder = document.getElementById('loaderLogoPlaceholder');
+
+if (loaderLogoImg && loaderLogoPlaceholder) {
+  const logoSrc = (loaderLogoImg.getAttribute('src') || '').trim();
+  if (logoSrc) {
+    loaderLogoImg.classList.remove('hidden');
+    loaderLogoPlaceholder.classList.add('hidden');
+  }
+  loaderLogoImg.addEventListener('error', () => {
+    loaderLogoImg.classList.add('hidden');
+    loaderLogoPlaceholder.classList.remove('hidden');
+  });
+}
+
+if (outvossIntroLoader) {
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      outvossIntroLoader.classList.add('is-dismissed');
+    }, 3200);
+  });
+}
+
 // Elementos de cambio de vista (OUTVOSS vs PELUQUERÍA)
 const viewOutvoss = document.getElementById('viewOutvoss');
 const viewBarber = document.getElementById('viewBarber');
@@ -6,12 +31,21 @@ const navBarber = document.getElementById('navBarber');
 const toggleBarberBtn = document.getElementById('toggleBarberBtn');
 const toggleBarberLabel = document.getElementById('toggleBarberLabel');
 
-// Escenarios de Scrollytelling
+// Escenarios de Scrollytelling (4 partes independientes de OUTVOSS + Peluquería)
 const scrollyOutvoss = document.getElementById('scrollyOutvoss');
+const scrollyOutvossParte2 = document.getElementById('scrollyOutvossParte2');
+const scrollyOutvossParte3 = document.getElementById('scrollyOutvossParte3');
+const scrollyOutvossParte4 = document.getElementById('scrollyOutvossParte4');
+const outvossStages = [scrollyOutvoss, scrollyOutvossParte2, scrollyOutvossParte3, scrollyOutvossParte4].filter(Boolean);
+
 const scrollyBarber = document.getElementById('scrollyBarber');
 const outvossPanels = document.querySelectorAll('[data-outvoss-scene]');
 const barberPanels = document.querySelectorAll('[data-barber-scene]');
 const haloOutvoss = document.getElementById('haloOutvoss');
+const haloOutvossParte2 = document.getElementById('haloOutvossParte2');
+const haloOutvossParte3 = document.getElementById('haloOutvossParte3');
+const haloOutvossParte4 = document.getElementById('haloOutvossParte4');
+const outvossHalos = [haloOutvoss, haloOutvossParte2, haloOutvossParte3, haloOutvossParte4].filter(Boolean);
 const haloBarber = document.getElementById('haloBarber');
 
 let currentView = 'outvoss';
@@ -141,12 +175,180 @@ if (heroMp4Player && heroMp4Player.getAttribute('src')) {
   loadHeroMp4ByUrl(heroMp4Player.getAttribute('src'));
 }
 
+// =========================================================
+// PANTALLA DE MODELOS 3D DE CALZADO / ZAPATILLAS (TRAS SECCIÓN 2)
+// =========================================================
+const SUPABASE_URL = 'https://vpncwfbinzmvsplsjubf.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_cUU3BIEnmhEXbp6XzQdDLA__0uaGHQW';
+const SUPABASE_3D_TABLE = 'outvoss_3d_zapatillas';
+
+const shoe3dIframe = document.getElementById('shoe3dIframe');
+const shoe3dTitle = document.getElementById('shoe3dTitle');
+const shoe3dCategory = document.getElementById('shoe3dCategory');
+const shoe3dCounter = document.getElementById('shoe3dCounter');
+const shoe3dDots = document.getElementById('shoe3dDots');
+const prev3dShoeBtn = document.getElementById('prev3dShoeBtn');
+const next3dShoeBtn = document.getElementById('next3dShoeBtn');
+
+let OUTVOSS_3D_MODELS = Array.from({ length: 18 }, (_, index) => ({
+  title: `Modelo Calzado 3D #${String(index + 1).padStart(2, '0')}`,
+  category: 'CALZADO 3D · OUTVOSS',
+  embedUrl: '',
+  mediaUrl: ''
+}));
+
+let current3dShoeIndex = 0;
+
+function updateShoe3dMediaLayer(model) {
+  if (!shoe3dIframe) return;
+  const viewerBox = shoe3dIframe.parentElement;
+  if (!viewerBox) return;
+
+  let mediaPreviewEl = document.getElementById('shoe3dStorageMediaPreview');
+  const cleanMediaUrl = (model.mediaUrl || '').trim();
+  const cleanEmbedUrl = (model.embedUrl || '').trim();
+
+  if (cleanMediaUrl && !cleanEmbedUrl) {
+    if (!mediaPreviewEl) {
+      mediaPreviewEl = document.createElement('div');
+      mediaPreviewEl.id = 'shoe3dStorageMediaPreview';
+      mediaPreviewEl.style.width = '100%';
+      mediaPreviewEl.style.height = '100%';
+      mediaPreviewEl.style.display = 'flex';
+      mediaPreviewEl.style.alignItems = 'center';
+      mediaPreviewEl.style.justifyContent = 'center';
+      viewerBox.appendChild(mediaPreviewEl);
+    }
+
+    const lowerUrl = cleanMediaUrl.toLowerCase();
+    if (lowerUrl.endsWith('.mp4') || lowerUrl.endsWith('.webm') || lowerUrl.endsWith('.mov')) {
+      mediaPreviewEl.innerHTML = `<video src="${cleanMediaUrl}" autoplay loop muted playsinline controls style="width:100%;height:100%;object-fit:contain;"></video>`;
+    } else {
+      mediaPreviewEl.innerHTML = `<img src="${cleanMediaUrl}" alt="${model.title}" style="max-width:100%;max-height:100%;object-fit:contain;display:block;" />`;
+    }
+
+    shoe3dIframe.classList.add('hidden');
+    shoe3dIframe.removeAttribute('src');
+    mediaPreviewEl.classList.remove('hidden');
+  } else {
+    if (mediaPreviewEl) {
+      mediaPreviewEl.classList.add('hidden');
+      mediaPreviewEl.innerHTML = '';
+    }
+    shoe3dIframe.classList.remove('hidden');
+    if (cleanEmbedUrl) {
+      if (shoe3dIframe.src !== cleanEmbedUrl) {
+        shoe3dIframe.src = cleanEmbedUrl;
+      }
+    } else {
+      shoe3dIframe.removeAttribute('src');
+    }
+  }
+}
+
+function buildShoe3dDots() {
+  if (!shoe3dDots) return;
+  shoe3dDots.innerHTML = '';
+  OUTVOSS_3D_MODELS.forEach((_, idx) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = `screen-3d-dot${idx === current3dShoeIndex ? ' active' : ''}`;
+    dot.setAttribute('aria-label', `Ver modelo 3D ${idx + 1}`);
+    dot.addEventListener('click', () => render3dShoeModel(idx));
+    shoe3dDots.appendChild(dot);
+  });
+}
+
+function render3dShoeModel(index) {
+  if (!OUTVOSS_3D_MODELS.length) return;
+  const total = OUTVOSS_3D_MODELS.length;
+  current3dShoeIndex = ((index % total) + total) % total;
+  const model = OUTVOSS_3D_MODELS[current3dShoeIndex];
+
+  if (shoe3dTitle) shoe3dTitle.textContent = model.title;
+  if (shoe3dCategory) shoe3dCategory.textContent = model.category;
+  if (shoe3dCounter) {
+    shoe3dCounter.textContent = `${String(current3dShoeIndex + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+  }
+
+  updateShoe3dMediaLayer(model);
+
+  if (shoe3dDots) {
+    const dotButtons = shoe3dDots.querySelectorAll('.screen-3d-dot');
+    dotButtons.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === current3dShoeIndex);
+    });
+  }
+}
+
+async function loadOutvoss3dModelsFromSupabase() {
+  try {
+    const endpoint = `${SUPABASE_URL}/rest/v1/${SUPABASE_3D_TABLE}?is_active=eq.true&select=id,sort_order,title,category,embed_url,media_url,is_active&order=sort_order.asc,created_at.asc`;
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        apikey: SUPABASE_PUBLISHABLE_KEY,
+        Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`
+      }
+    });
+
+    if (!response.ok) return;
+    const rows = await response.json();
+    if (!Array.isArray(rows) || !rows.length) return;
+
+    OUTVOSS_3D_MODELS = rows.map((row, index) => ({
+      title: (row.title || '').trim() || `Modelo Calzado 3D #${String(index + 1).padStart(2, '0')}`,
+      category: (row.category || '').trim() || 'CALZADO 3D · OUTVOSS',
+      embedUrl: (row.embed_url || '').trim(),
+      mediaUrl: (row.media_url || '').trim()
+    }));
+
+    buildShoe3dDots();
+    render3dShoeModel(0);
+  } catch (err) {
+    // Mantiene el arreglo de respaldo local sin interrumpir la experiencia
+  }
+}
+
+if (prev3dShoeBtn) {
+  prev3dShoeBtn.addEventListener('click', () => render3dShoeModel(current3dShoeIndex - 1));
+}
+
+if (next3dShoeBtn) {
+  next3dShoeBtn.addEventListener('click', () => render3dShoeModel(current3dShoeIndex + 1));
+}
+
+buildShoe3dDots();
+render3dShoeModel(0);
+loadOutvoss3dModelsFromSupabase();
 
 // Sincronización de Scroll con los paneles y el pulso del Halo Circular
 function updateScrollProgress() {
-  const activeStage = currentView === 'outvoss' ? scrollyOutvoss : scrollyBarber;
-  const activePanels = currentView === 'outvoss' ? outvossPanels : barberPanels;
-  const activeHalo = currentView === 'outvoss' ? haloOutvoss : haloBarber;
+  if (currentView === 'outvoss') {
+    outvossPanels.forEach((panel) => {
+      panel.classList.add('active');
+    });
+
+    outvossStages.forEach((stage, idx) => {
+      const rect = stage.getBoundingClientRect();
+      const scrollableDistance = Math.max(stage.offsetHeight - window.innerHeight, 1);
+      const scrolled = Math.min(Math.max(-rect.top, 0), scrollableDistance);
+      const progress = scrolled / scrollableDistance;
+      const halo = outvossHalos[idx];
+
+      if (halo) {
+        const haloScale = 1 + Math.sin(progress * Math.PI * 2) * 0.04;
+        halo.style.transform = `translateY(-50%) scale(${haloScale.toFixed(3)})`;
+      }
+    });
+    return;
+  }
+
+  const activeStage = scrollyBarber;
+  const activePanels = barberPanels;
+  const activeHalo = haloBarber;
+
+  if (!activeStage) return;
 
   const rect = activeStage.getBoundingClientRect();
   const scrollableDistance = activeStage.offsetHeight - window.innerHeight;
@@ -158,8 +360,10 @@ function updateScrollProgress() {
     panel.classList.toggle('active', idx === activeScene);
   });
 
-  const haloScale = 1 + Math.sin(progress * Math.PI * 2) * 0.04;
-  activeHalo.style.transform = `translateY(-50%) scale(${haloScale.toFixed(3)})`;
+  if (activeHalo) {
+    const haloScale = 1 + Math.sin(progress * Math.PI * 2) * 0.04;
+    activeHalo.style.transform = `translateY(-50%) scale(${haloScale.toFixed(3)})`;
+  }
 }
 
 window.addEventListener('scroll', updateScrollProgress, { passive: true });
@@ -262,6 +466,3 @@ bookingForm.addEventListener('submit', (e) => {
 });
 
 updateScrollProgress();
-
-
-
