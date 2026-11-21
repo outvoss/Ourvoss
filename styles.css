@@ -41,6 +41,172 @@ body {
 }
 
 /* =========================================================
+   PANTALLA DE CARGA INICIAL CON HAZ DE LUZ EN MARCO ARCO
+========================================================== */
+.outvoss-intro-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(circle at 50% 42%, #151519 0%, #070709 75%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  transition: opacity 0.85s var(--ease-luxury), visibility 0.85s ease;
+}
+
+.outvoss-intro-loader.is-dismissed {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-center-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Marco estilo portal/arco con borde luminoso animado */
+.arch-glow-frame {
+  position: relative;
+  width: 196px;
+  height: 224px;
+  border-radius: 100px 100px 14px 14px;
+  padding: 2.5px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(214, 194, 159, 0.14);
+  box-shadow:
+    0 0 42px rgba(214, 194, 159, 0.16),
+    inset 0 0 20px rgba(214, 194, 159, 0.08);
+  margin-bottom: 28px;
+}
+
+/* Haz de luz giratorio que recorre todo el perímetro del arco */
+.arch-glow-frame::before {
+  content: '';
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 230deg,
+    rgba(214, 194, 159, 0.35) 285deg,
+    #fff6e3 335deg,
+    var(--champagne) 355deg,
+    transparent 360deg
+  );
+  animation: borderLightSweep 2.4s linear infinite;
+}
+
+.arch-inner-slot {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  border-radius: 98px 98px 12px 12px;
+  background: radial-gradient(circle at 50% 45%, #131317 0%, #09090b 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+}
+
+.loader-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.loader-logo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.loader-logo-placeholder span {
+  font-family: 'Cinzel', serif;
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  background: linear-gradient(135deg, #fff4df 0%, var(--champagne) 55%, var(--champagne-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.loader-logo-placeholder small {
+  font-size: 8.5px;
+  letter-spacing: 1.6px;
+  color: var(--text-secondary);
+}
+
+/* Letras inferiores OUTVOSS + BEYOND THE ORDINARY */
+.loader-brand-lockup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  animation: loaderFadeUp 0.9s var(--ease-luxury) forwards;
+}
+
+.loader-brand-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 600;
+  letter-spacing: 9px;
+  padding-left: 9px;
+  background: linear-gradient(180deg, #f8efe0 0%, var(--champagne) 65%, #9e8965 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.loader-brand-tagline {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: clamp(9.5px, 1.4vw, 11.5px);
+  font-weight: 500;
+  letter-spacing: 4px;
+  color: var(--sand);
+  opacity: 0.88;
+}
+
+.tagline-line {
+  width: 34px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--champagne), transparent);
+}
+
+@keyframes borderLightSweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loaderFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
    PORTADA MULTIMEDIA GRANDE MP4 DE FONDO (PRIMERA CAPA)
 ========================================================== */
 .cinema-hero-cover {
@@ -205,6 +371,127 @@ body {
   }
 }
 
+/* =========================================================
+   PANTALLA 3D DEL TAMAÑO DE LA PORTADA (TRAS SECCIÓN 2)
+========================================================== */
+.outvoss-3d-hero-screen {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  padding: 86px 48px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(214, 194, 159, 0.12), transparent 62%),
+    linear-gradient(180deg, #09090b 0%, #141418 55%, #09090b 100%);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  z-index: 15;
+}
+
+.screen-3d-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.screen-3d-heading-group .eyebrow {
+  margin-bottom: 4px;
+}
+
+.screen-3d-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(22px, 2.8vw, 34px);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.screen-3d-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.screen-3d-counter {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--champagne-light);
+  min-width: 66px;
+  text-align: center;
+}
+
+.screen-3d-model-banner {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.screen-3d-category {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--champagne);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(20, 20, 24, 0.85);
+}
+
+.screen-3d-model-name {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(16px, 2vw, 22px);
+  font-weight: 600;
+  color: var(--ivory);
+}
+
+.screen-3d-viewer-box {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 260px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  background: #070709;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.65);
+}
+
+.screen-3d-viewer-box iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.screen-3d-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.screen-3d-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: rgba(214, 194, 159, 0.16);
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.screen-3d-dot.active {
+  background: var(--champagne);
+  transform: scale(1.25);
+}
 
 /* HEADER */
 .site-header {
@@ -314,7 +601,6 @@ body {
   transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
 
-
 .btn-nav-toggle:hover,
 .btn-nav-toggle.is-barber-active {
   background: var(--champagne);
@@ -409,6 +695,16 @@ body {
   width: 100%;
 }
 
+/* Cada una de las 4 partes independientes de OUTVOSS */
+#viewOutvoss .scrolly-stage {
+  height: 115vh;
+}
+
+.outvoss-interlude-slot {
+  position: relative;
+  width: 100%;
+}
+
 .scroll-anchor {
   position: absolute;
   left: 0;
@@ -418,9 +714,13 @@ body {
 }
 
 #outvoss-inicio, #barber-inicio { top: 0vh; }
-#outvoss-portafolio, #barber-servicios { top: 105vh; }
-#outvoss-filosofia, #barber-arte { top: 210vh; }
-#outvoss-canales, #barber-experiencia { top: 315vh; }
+#outvoss-portafolio, #barber-servicios { top: 0vh; }
+#outvoss-filosofia, #barber-arte { top: 0vh; }
+#outvoss-canales, #barber-experiencia { top: 0vh; }
+
+#barber-servicios { top: 105vh; }
+#barber-arte { top: 210vh; }
+#barber-experiencia { top: 315vh; }
 
 .sticky-viewport {
   position: sticky;
@@ -965,6 +1265,10 @@ body {
     display: none;
   }
 
+  .outvoss-3d-hero-screen {
+    padding: 80px 18px 20px;
+  }
+
   .media-circle-wrap,
   .ambient-halo {
     right: 50%;
@@ -996,6 +1300,3 @@ body {
     justify-content: flex-start;
   }
 }
-
-
-
