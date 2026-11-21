@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OUTVOSS — Beyond The Ordinary. Own Your Style.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- HEADER GLOBAL DE MARCA -->
+  <header class="site-header">
+    <a href="#outvoss-inicio" class="brand" data-switch-view="outvoss">
+      <!-- Símbolo minimalista geométrico OUTVOSS -->
+      <span class="brand-crest" aria-label="Símbolo OUTVOSS">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <polygon points="12 2 21 8.5 17.5 20 6.5 20 3 8.5 12 2" />
+          <line x1="12" y1="2" x2="12" y2="20" />
+        </svg>
+      </span>
+      <div class="brand-text">
+        <span class="brand-name">OUTVOSS</span>
+        <span class="brand-sub">EUROPEAN CONTEMPORARY MENSWEAR</span>
+      </div>
+    </a>
+
+    <!-- Navegación dinámica según la vista activa -->
+    <nav class="main-nav" id="navOutvoss">
+      <a href="#outvoss-inicio">Inicio</a>
+      <a href="#outvoss-portafolio">Portafolio</a>
+      <a href="#outvoss-filosofia">Identidad</a>
+      <a href="#outvoss-canales">Contacto</a>
+    </nav>
+
+    <nav class="main-nav hidden" id="navBarber">
+      <a href="#barber-inicio">Inicio</a>
+      <a href="#barber-servicios">Servicios</a>
+      <a href="#barber-arte">El Arte</a>
+      <a href="#barber-experiencia">Experiencia</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="btn-nav-toggle" id="toggleBarberBtn" type="button">
+        <span class="toggle-dot"></span>
+        <span id="toggleBarberLabel">Peluquería</span>
+      </button>
+      <button class="btn-outline-champagne" id="headerActionBtn" type="button">Asesoría VIP</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- =========================================================
+         VISTA 1: UNIVERSO PRINCIPAL OUTVOSS (MODA & LIFESTYLE)
+    ========================================================== -->
+       <div class="view-container active" id="viewOutvoss">
+           <!-- PORTADA CINEMATOGRÁFICA A PANTALLA COMPLETA (PRIMERA CAPA) -->
+      <section class="cinema-hero-cover" id="outvossCinemaHero">
+        <div class="cinema-player-stage">
+          <!-- ENLACE DIRECTO .MP4 EN CLOUDINARY -->
+          <video
+            id="heroMp4Player"
+            src="https://res.cloudinary.com/r3qer78t/video/upload/v1786299280/InShot_20260809_120513339.mp4"
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="metadata"
+          ></video>
+
+          <div class="cinema-poster-fallback" id="heroMp4Fallback">
+            <span class="cinema-sigil">OUTVOSS</span>
+            <p>REPRODUCTOR MULTIMEDIA MP4 DE FONDO</p>
+            <small>Conecta tu enlace <code>.mp4</code> desde el código o panel de administración</small>
+          </div>
+        </div>
+
+        <div class="cinema-scrim-overlay"></div>
+
+        <div class="cinema-hero-overlay-content">
+          <span class="eyebrow">EUROPEAN CONTEMPORARY MENSWEAR</span>
+          <h1 class="cinema-display-title">OUTVOSS</h1>
+          <p class="cinema-subtitle">OWN YOUR STYLE · ELEGANCIA EUROPEA Y CARÁCTER CONTEMPORÁNEO</p>
+
+          <div class="cinema-cta-group">
+            <a href="#scrollyOutvoss" class="btn-solid-champagne">Descubrir Colección ↓</a>
+            <button class="btn-ghost" data-open-outvoss-modal type="button">Asesoría & Catálogo</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEGUNDA CAPA HACIA ABAJO: ESCENARIO CIRCULAR Y SCROLLYTELLING -->
+      <div class="scrolly-stage" id="scrollyOutvoss">
+
+        <!-- Capa de imagen de fondo configurable para OUTVOSS -->
+        <div class="sticky-viewport outvoss-bg-layer">
+          <div class="bg-overlay-gradient"></div>
+          <div class="ambient-halo" id="haloOutvoss"></div>
+          <div class="floor-grid"></div>
+
+          <!-- Contenedor circular del Video del Maniquí -->
+          <div class="media-circle-wrap" id="mannequinMediaWrap">
+            <div class="circle-video-frame">
+              <!-- REEMPLAZA 'maniqui-outvoss.mp4' POR LA RUTA DE TU VIDEO -->
+              <video id="mannequinVideo" src="maniqui-outvoss.mp4" autoplay loop muted playsinline></video>
+              <div class="video-placeholder-ui" id="mannequinFallback">
+                <span class="placeholder-sigil">OV</span>
+                <p>EXHIBICIÓN DIGITAL 360°</p>
+                <small>Conecta tu archivo <code>maniqui-outvoss.mp4</code></small>
+              </div>
+            </div>
+            <div class="rotate-hud">
+              <span class="hud-dot"></span>
+              <span id="outvossHudText">COLECCIÓN OUTVOSS · BEYOND THE ORDINARY</span>
+            </div>
+          </div>
+
+          <!-- ESCENA 0: HERO OUTVOSS -->
+          <section class="story-panel active" data-outvoss-scene="0">
+            <div class="panel-content left">
+              <span class="eyebrow">EUROPEAN CONTEMPORARY MENSWEAR</span>
+              <h1 class="display-title">BEYOND THE<br />ORDINARY.<br /><span class="champagne-text">OWN YOUR STYLE.</span></h1>
+              <p class="lead-copy">
+                Moda masculina contemporánea que equilibra la sofisticación europea, el carácter urbano y la autenticidad. Vestir con identidad, proyectar seguridad y diferenciarse sin exagerar.
+              </p>
+              <div class="cta-row">
+                <button class="btn-solid-champagne" data-open-outvoss-modal type="button">Explorar Catálogo</button>
+                <a href="#outvoss-portafolio" class="btn-ghost">Ver Categorías</a>
+              </div>
+            </div>
+          </section>
+
+          <!-- ESCENA 1: PORTAFOLIO DE PRODUCTOS (9 CATEGORÍAS) -->
+          <section class="story-panel" data-outvoss-scene="1">
+            <div class="panel-content left wide-panel">
+              <span class="eyebrow">PORTAFOLIO COMERCIAL</span>
+              <h2 class="section-title">CURADURÍA<br />MASCULINA</h2>
+              <p class="lead-copy compact">
+                Selección versátil que integra códigos casuales, urbanos, deportivos y ejecutivos.
+              </p>
+
+              <div class="category-filter-pills" id="categoryPills">
+                <button class="pill active" data-cat="todos" type="button">Todo (9)</button>
+                <button class="pill" data-cat="superiores" type="button">Superiores</button>
+                <button class="pill" data-cat="inferiores" type="button">Pantalones</button>
+                <button class="pill" data-cat="exteriores" type="button">Chaquetas & Abrigos</button>
+                <button class="pill" data-cat="complementos" type="button">Calzado & Accesorios</button>
+              </div>
+
+              <div class="catalog-grid" id="catalogGrid">
+                <article class="catalog-card" data-group="superiores">
+                  <span class="service-tag">01 · BÁSICOS & PREMIUM</span>
+                  <h3>CAMISETAS</h3>
+                  <p>Cortes limpios de alto gramaje y caída impecable.</p>
+                </article>
+                <article class="catalog-card" data-group="superiores">
+                  <span class="service-tag">02 · SMART CASUAL</span>
+                  <h3>POLOS</h3>
+                  <p>Polos casuales y sofisticados de estética europea.</p>
+                </article>
+                <article class="catalog-card" data-group="superiores">
+                  <span class="service-tag">03 · EJECUTIVO & URBANO</span>
+                  <h3>CAMISAS</h3>
+                  <p>Camisas casuales y elegantes de estructura refinada.</p>
+                </article>
+                <article class="catalog-card" data-group="inferiores">
+                  <span class="service-tag">04 · VERSATILIDAD</span>
+                  <h3>PANTALONES</h3>
+                  <p>Jeans, chinos y pantalones contemporáneos.</p>
+                </article>
+                <article class="catalog-card" data-group="superiores">
+                  <span class="service-tag">05 · CONFORT ELEVADO</span>
+                  <h3>PRENDAS SUPERIORES</h3>
+                  <p>Buzos, suéteres y tejidos de textura sobria.</p>
+                </article>
+                <article class="catalog-card" data-group="exteriores">
+                  <span class="service-tag">06 · CARÁCTER URBANO</span>
+                  <h3>CHAQUETAS</h3>
+                  <p>Chaquetas casuales y urbanas con presencia.</p>
+                </article>
+                <article class="catalog-card" data-group="exteriores">
+                  <span class="service-tag">07 · SILUETA EXTERIOR</span>
+                  <h3>ABRIGOS</h3>
+                  <p>Prendas exteriores de corte sobrio y atemporal.</p>
+                </article>
+                <article class="catalog-card" data-group="complementos">
+                  <span class="service-tag">08 · DETALLES FIRMA</span>
+                  <h3>ACCESORIOS</h3>
+                  <p>Gorras, cinturones y complementos esenciales.</p>
+                </article>
+                <article class="catalog-card" data-group="complementos">
+                  <span class="service-tag">09 · PISADA FIRME</span>
+                  <h3>CALZADO</h3>
+                  <p>Calzado masculino casual y urbano de diseño limpio.</p>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <!-- ESCENA 2: IDENTIDAD Y FILOSOFÍA -->
+          <section class="story-panel" data-outvoss-scene="2">
+            <div class="panel-content left">
+              <span class="eyebrow">FILOSOFÍA DE MARCA</span>
+              <h2 class="section-title">IDENTIDAD<br />SIN CONCESIONES</h2>
+              <p class="lead-copy">
+                Inspirada en la fusión de <strong>OUTSIDE</strong> y <strong>VOSS</strong>, nuestra propuesta ocupa el punto exacto entre la sastrería contemporánea y la comodidad urbana. El estilo no consiste en seguir tendencias, sino en construir sello propio.
+              </p>
+              <div class="craft-metrics">
+                <div class="metric">
+                  <strong>SOBRIA</strong>
+                  <span>Estética Europea</span>
+                </div>
+                <div class="metric">
+                  <strong>VERSÁTIL</strong>
+                  <span>Casual a Ejecutivo</span>
+                </div>
+                <div class="metric">
+                  <strong>EXCLUSIVA</strong>
+                  <span>Curaduría Selecta</span>
+                </div>
+              </div>
+              <button class="btn-solid-champagne" data-open-outvoss-modal type="button">Solicitar Asesoría de Estilo</button>
+            </div>
+          </section>
+
+          <!-- ESCENA 3: CANALES Y PROYECCIÓN -->
+          <section class="story-panel" data-outvoss-scene="3">
+            <div class="panel-content left">
+              <span class="eyebrow">ATENCIÓN PERSONALIZADA · COLOMBIA</span>
+              <h2 class="section-title">TU NUEVA<br />IMAGEN EMPIEZA AQUÍ.</h2>
+              <p class="lead-copy">
+                Accede a nuestro catálogo digital, recibe recomendación directa de prendas o complementa tu look en nuestro espacio privado de peluquería masculina.
+              </p>
+              <div class="cta-row">
+                <button class="btn-solid-champagne" data-open-outvoss-modal type="button">Contactar Asesor →</button>
+                <button class="btn-ghost" data-switch-view="barber" type="button">Ir a Peluquería</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="scroll-anchor" id="outvoss-inicio"></div>
+        <div class="scroll-anchor" id="outvoss-portafolio"></div>
+        <div class="scroll-anchor" id="outvoss-filosofia"></div>
+        <div class="scroll-anchor" id="outvoss-canales"></div>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         VISTA 2: SERVICIO DE PELUQUERÍA (CONSERVADO + VIDEO EN CÍRCULO)
+    ========================================================== -->
+    <div class="view-container hidden" id="viewBarber">
+      <div class="scrolly-stage" id="scrollyBarber">
+        <!-- Capa de imagen de fondo configurable para PELUQUERÍA -->
+        <div class="sticky-viewport barber-bg-layer">
+          <div class="bg-overlay-gradient"></div>
+          <div class="ambient-halo" id="haloBarber"></div>
+          <div class="floor-grid"></div>
+
+          <!-- Contenedor circular del Video de Peluquería (reemplaza la silla dibujada) -->
+          <div class="media-circle-wrap" id="barberMediaWrap">
+            <div class="circle-video-frame">
+              <!-- REEMPLAZA 'video-peluqueria.mp4' POR LA RUTA DE TU VIDEO -->
+              <video id="barberVideo" src="video-peluqueria.mp4" autoplay loop muted playsinline></video>
+              <div class="video-placeholder-ui" id="barberFallback">
+                <span class="placeholder-sigil">TB</span>
+                <p>GROOMING STUDIO</p>
+                <small>Conecta tu archivo <code>video-peluqueria.mp4</code></small>
+              </div>
+            </div>
+            <div class="rotate-hud">
+              <span class="hud-dot"></span>
+              <span>SERVICIO EXCLUSIVO OUTVOSS · RESERVA TU SILLÓN</span>
+            </div>
+          </div>
+
+          <section class="story-panel active" data-barber-scene="0">
+            <div class="panel-content left">
+              <span class="eyebrow">SALÓN MASCULINO PREMIUM · OUTVOSS</span>
+              <h1 class="display-title">PRECISIÓN.<br />ESTILO.<br />CONFIANZA.</h1>
+              <p class="lead-copy">
+                Entra en un santuario de cuidado personal elevado, diseñado a la medida del caballero moderno.
+                Cortes de autor, afeitados a navaja con toalla caliente y oficio atemporal.
+              </p>
+              <div class="cta-row">
+                <button class="btn-solid-champagne" data-open-booking type="button">Reservar Cita</button>
+                <a href="#barber-servicios" class="btn-ghost">Explorar Servicios</a>
+              </div>
+            </div>
+          </section>
+
+          <section class="story-panel" data-barber-scene="1">
+            <div class="panel-content left">
+              <span class="eyebrow">RITUALES EXCLUSIVOS</span>
+              <h2 class="section-title">EXPERIENCIA<br />INSIGNIA</h2>
+              <p class="lead-copy">
+                Cada sesión comienza con un diagnóstico anatómico y finaliza con un detallado de máxima precisión.
+              </p>
+              <div class="service-cards">
+                <article class="service-card">
+                  <span class="service-tag">01 · $55</span>
+                  <h3>CORTE DE CABELLO</h3>
+                  <p>Arquitectura a tijera sobre peine, desvanecido a piel y lavado botánico.</p>
+                  <button class="card-link" data-open-booking type="button">Seleccionar →</button>
+                </article>
+                <article class="service-card">
+                  <span class="service-tag">02 · $40</span>
+                  <h3>ESCULPIDO DE BARBA</h3>
+                  <p>Perfilado a navaja libre, aceites esenciales al vapor y bálsamo de madera de cedro.</p>
+                  <button class="card-link" data-open-booking type="button">Seleccionar →</button>
+                </article>
+                <article class="service-card">
+                  <span class="service-tag">03 · $85</span>
+                  <h3>ESTILISMO PREMIUM</h3>
+                  <p>Corte completo, afeitado real con espuma caliente, acupresión craneal y peinado.</p>
+                  <button class="card-link" data-open-booking type="button">Seleccionar →</button>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <section class="story-panel" data-barber-scene="2">
+            <div class="panel-content left">
+              <span class="eyebrow">INGENIERÍA DE HERENCIA</span>
+              <h2 class="section-title">EL ARTE</h2>
+              <p class="lead-copy">
+                Desde tijeras de acero japonés afiladas a mano hasta sillones hidráulicos de hierro fundido, cada detalle está construido para el equilibrio, la ergonomía y el lujo perdurable.
+              </p>
+              <div class="craft-metrics">
+                <div class="metric">
+                  <strong>360°</strong>
+                  <span>Eje Hidráulico</span>
+                </div>
+                <div class="metric">
+                  <strong>45 MIN</strong>
+                  <span>Sesión Dedicada</span>
+                </div>
+                <div class="metric">
+                  <strong>100%</strong>
+                  <span>Acabado a Medida</span>
+                </div>
+              </div>
+              <button class="btn-solid-champagne" data-open-booking type="button">Reserva Tu Sillón</button>
+            </div>
+          </section>
+
+          <section class="story-panel" data-barber-scene="3">
+            <div class="panel-content left">
+              <span class="eyebrow">CUPOS DIARIOS LIMITADOS</span>
+              <h2 class="section-title">TU PRÓXIMO LOOK<br />EMPIEZA AQUÍ.</h2>
+              <p class="lead-copy">
+                Toma asiento bajo el halo. Asegura tu barbero maestro preferido y tu horario de llegada en segundos.
+              </p>
+              <div class="cta-row">
+                <button class="btn-solid-champagne" data-open-booking type="button">Reservar Cita →</button>
+                <button class="btn-ghost" data-switch-view="outvoss" type="button">← Volver a Tienda OUTVOSS</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="scroll-anchor" id="barber-inicio"></div>
+        <div class="scroll-anchor" id="barber-servicios"></div>
+        <div class="scroll-anchor" id="barber-arte"></div>
+        <div class="scroll-anchor" id="barber-experiencia"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER UNIFICADO OUTVOSS -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <div class="brand">
+          <span class="brand-crest">OV</span>
+          <div class="brand-text">
+            <span class="brand-name">OUTVOSS</span>
+            <span class="brand-sub">BEYOND THE ORDINARY · OWN YOUR STYLE</span>
+          </div>
+        </div>
+        <p class="footer-note">Moda Masculina Contemporánea & Grooming Privado · Colombia</p>
+      </div>
+
+      <div class="footer-col">
+        <span class="footer-heading">CANALES DE ATENCIÓN</span>
+        <p class="footer-note">Catálogo Digital & Asesoría Personalizada</p>
+        <p class="footer-note">contacto@outvoss.com</p>
+      </div>
+
+      <div class="footer-col align-end footer-cta-group">
+        <button class="btn-outline-champagne" data-switch-view="barber" type="button">Peluquería</button>
+        <button class="btn-solid-champagne" data-open-outvoss-modal type="button">Atención OUTVOSS</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL 1: ATENCIÓN / CATÁLOGO OUTVOSS -->
+  <div class="modal-backdrop" id="outvossModal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-top">
+        <span class="eyebrow">OUTVOSS CONCIERGE</span>
+        <button class="modal-close" id="closeOutvossModalBtn" type="button">✕</button>
+      </div>
+      <h3 class="modal-title">Asesoría & Catálogo</h3>
+      <form class="booking-form" id="outvossForm">
+        <label>
+          <span>Categoría de Interés</span>
+          <select id="outvossCategorySelect">
+            <option value="Camisetas & Polos">Camisetas & Polos</option>
+            <option value="Camisas & Prendas Superiores">Camisas & Prendas Superiores</option>
+            <option value="Pantalones (Jeans / Chinos)">Pantalones (Jeans / Chinos)</option>
+            <option value="Chaquetas & Abrigos">Chaquetas & Abrigos</option>
+            <option value="Accesorios & Calzado">Accesorios & Calzado</option>
+            <option value="Asesoría de Imagen Completa">Asesoría de Imagen Completa</option>
+          </select>
+        </label>
+        <label>
+          <span>Tu Nombre</span>
+          <input type="text" id="outvossClientName" placeholder="Ej. Carlos Mendoza" required />
+        </label>
+        <label>
+          <span>WhatsApp o Correo de Contacto</span>
+          <input type="text" id="outvossClientContact" placeholder="+57 300 000 0000" required />
+        </label>
+        <button class="btn-solid-champagne full-width" type="submit">Solicitar Catálogo</button>
+      </form>
+      <div class="booking-success" id="outvossSuccess">
+        <strong>Solicitud Registrada.</strong>
+        <p id="outvossConfirmText"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: RESERVA DE PELUQUERÍA (CONSERVADO) -->
+  <div class="modal-backdrop" id="bookingModal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-top">
+        <span class="eyebrow">RESERVAR SESIÓN · PELUQUERÍA</span>
+        <button class="modal-close" id="closeModalBtn" type="button">✕</button>
+      </div>
+      <h3 class="modal-title">Reserva Tu Sillón</h3>
+      <form class="booking-form" id="bookingForm">
+        <label>
+          <span>Servicio</span>
+          <select id="serviceSelect">
+            <option value="Corte de Cabello — $55">Corte de Cabello — $55</option>
+            <option value="Esculpido de Barba — $40">Esculpido de Barba — $40</option>
+            <option value="Estilismo Premium — $85">Estilismo Premium — $85</option>
+          </select>
+        </label>
+        <label>
+          <span>Nombre Completo</span>
+          <input type="text" id="clientName" placeholder="Alexander Miller" required />
+        </label>
+        <label>
+          <span>Hora Preferida</span>
+          <input type="time" id="clientTime" value="15:00" required />
+        </label>
+        <button class="btn-solid-champagne full-width" type="submit">Confirmar Reserva</button>
+      </form>
+      <div class="booking-success" id="bookingSuccess">
+        <strong>Sillón Reservado.</strong>
+        <p id="bookingConfirmText"></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
+
