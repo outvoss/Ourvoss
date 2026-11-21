@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OUTVOSS · Catálogo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<style>
+:root{--bg:#09090b;--ch:#d6c29f;--chl:#ece0c8;--chd:#94805d;--tx:#f5f3ef;--mut:#a19d94;--glass:rgba(20,20,24,.62);--line:rgba(214,194,159,.26);--neu:#16161a}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{color:var(--tx);font:15px/1.65 'Plus Jakarta Sans',system-ui,sans-serif;overflow-x:hidden}
+h1,h2,h3{font-family:'Cinzel',serif;line-height:1.1}
+a{color:inherit}
+.hd{position:fixed;inset:0 0 auto;height:72px;padding:0 clamp(16px,4vw,48px);display:flex;align-items:center;gap:20px;z-index:50;transition:background .3s}
+.hd.sc{background:rgba(9,9,11,.84);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.logo{font-family:'Cinzel',serif;font-weight:700;letter-spacing:.2em;text-decoration:none;margin-right:auto}
+.hd nav{display:flex;gap:26px}.hd nav a{text-decoration:none;color:var(--mut);font-size:13px;font-weight:500}.hd nav a:hover{color:var(--chl)}
+.cur{height:34px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--chl);padding:0 8px;font:inherit;font-size:12px}.cur option{background:#111}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:46px;padding:0 26px;border:0;border-radius:6px;background:linear-gradient(135deg,var(--chl),var(--ch) 55%,var(--chd));color:#14110b;font:inherit;font-weight:700;font-size:14px;cursor:pointer;text-decoration:none}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:none;border:1px solid rgba(255,255,255,.28);color:var(--tx)}.btn.ghost:hover{border-color:var(--ch);color:var(--chl)}
+.btn.sm{height:36px;padding:0 16px;font-size:12.5px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,.it:focus-visible{outline:2px solid var(--chl);outline-offset:2px}
+.sec{position:relative;padding:96px clamp(16px,5vw,64px) 40px;background:var(--bg)}
+.full{min-height:100vh;min-height:100svh;display:flex;align-items:center;overflow:hidden}
+.vid{position:absolute;inset:0;z-index:0}
+.vid video{width:100%;height:100%;object-fit:cover;object-position:75% center}
+.vid::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#09090b 0%,rgba(9,9,11,.85) 40%,rgba(9,9,11,.35) 100%),linear-gradient(180deg,rgba(9,9,11,.5),transparent 25%,transparent 72%,#09090b)}
+.vid.none{background:radial-gradient(circle at 76% 50%,rgba(214,194,159,.18),transparent 38%)}
+.in{position:relative;z-index:2;max-width:580px}
+.eb{font-size:12px;font-weight:600;letter-spacing:.18em;color:var(--ch);margin-bottom:12px}
+.in h1{font-size:clamp(40px,7vw,84px);font-weight:700;margin-bottom:16px}
+h2.t{font-size:clamp(26px,3.8vw,44px);font-weight:700;margin-bottom:10px}
+.l{color:var(--mut);max-width:46ch;margin-bottom:24px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.wrap{max-width:1200px;margin:0 auto}
+/* bento */
+.bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:170px;grid-auto-flow:dense;gap:14px;margin-top:24px}
+.bc{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(150deg,#1c1c22,#101013);cursor:pointer;padding:0;text-align:left;color:inherit;font:inherit;transition:border-color .25s}
+.bc:hover{border-color:var(--ch)}
+.bc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.bc .cap{position:absolute;left:10px;right:10px;bottom:10px;padding:10px 14px;border-radius:12px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.bc h3{font-size:15px}.bc small{display:block;color:var(--mut);font-size:12px;line-height:1.35;margin-top:2px}
+.s-xl{grid-column:span 2;grid-row:span 2}.s-lg{grid-column:span 2}.s-wide{grid-column:span 2}.s-tall{grid-row:span 2}
+/* maniquí */
+.stage{display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:clamp(18px,4vw,56px);align-items:center;margin-top:24px}
+.frame{position:relative;aspect-ratio:3/4;max-height:78vh;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:radial-gradient(circle at 50% 40%,#1b1b20,#09090b);box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.frame video{width:100%;height:100%;object-fit:cover;display:block}
+.frame .ph{position:absolute;inset:0;display:grid;place-items:center;color:var(--mut);font-size:13px;text-align:center;padding:20px}
+.ld{position:absolute;inset:0;display:grid;place-items:center;background:rgba(9,9,11,.7);backdrop-filter:blur(4px);font-size:13px;color:var(--chl)}
+.ld[hidden],.ph[hidden]{display:none}
+.gl{background:var(--glass);border:1px solid var(--line);border-radius:16px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.info{padding:24px}.info h3{font-size:24px;margin-bottom:6px}.info .pr{color:var(--chl);font-weight:700;font-size:18px;margin-bottom:10px}.info p{color:var(--mut);margin-bottom:18px}
+/* carrusel */
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 14px}
+.pill{border:1px solid var(--line);background:var(--glass);color:var(--mut);border-radius:999px;padding:6px 14px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+.pill.on,.pill:hover{border-color:var(--ch);color:var(--chl);background:rgba(214,194,159,.14)}
+.car{display:flex;gap:14px;overflow-x:auto;padding:6px 2px 14px;scrollbar-width:thin;scrollbar-color:var(--chd) transparent}
+.it{flex:0 0 210px;border-radius:16px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:border-color .25s,transform .25s}
+.it:hover{transform:translateY(-3px)}.it.on{border-color:var(--ch);box-shadow:0 0 26px rgba(214,194,159,.2)}
+.it .im{height:170px;background:linear-gradient(150deg,#22222a,#121216);display:grid;place-items:center;font-family:'Cinzel',serif;font-size:34px;color:var(--chd);position:relative}
+.it .im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.it .bd{padding:12px 14px}.it h3{font-size:14px;margin-bottom:2px}.it small{color:var(--mut);font-size:12px}.it b{display:block;color:var(--chl);margin-top:4px;font-size:14px}
+.badge{position:absolute;top:8px;left:8px;z-index:1;font-family:'Plus Jakarta Sans';font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--ch);color:#14110b}
+.vp{position:absolute;top:8px;right:8px;z-index:1;font-family:'Plus Jakarta Sans';font-size:10.5px;padding:3px 8px;border-radius:999px;background:var(--glass);color:var(--chl);border:1px solid var(--line)}
+.empty{color:var(--mut);padding:20px 0}
+/* footer + neu */
+footer{background:#070709;border-top:1px solid var(--line);padding:44px clamp(16px,5vw,64px) 28px;margin-top:40px}
+.fg{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px;max-width:1200px;margin:0 auto}
+footer h4{font-size:12px;letter-spacing:.16em;color:var(--ch);margin-bottom:12px}footer p,footer li{color:var(--mut);font-size:13.5px}footer ul{list-style:none;display:grid;gap:8px}footer a{text-decoration:none}footer a:hover{color:var(--chl)}
+.legal{max-width:1200px;margin:32px auto 0;padding-top:22px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:14px;align-items:center}.legal .cp{color:var(--mut);font-size:12.5px;margin-right:auto}
+.neu{border:0;border-radius:12px;background:var(--neu);color:var(--chl);padding:10px 16px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:6px 6px 12px #040405,-5px -5px 11px #25252c}
+.neu:hover{color:#fff}.neu:active{box-shadow:inset 4px 4px 9px #040405,inset -4px -4px 9px #25252c}
+dialog{margin:auto;width:min(94vw,440px);max-height:90vh;overflow:auto;background:#141418;color:var(--tx);border:1px solid var(--line);border-radius:12px;padding:26px}
+dialog::backdrop{background:rgba(5,5,7,.8);backdrop-filter:blur(6px)}
+dialog h3{font-size:22px;margin-bottom:16px}dialog label{display:block;font-size:12px;color:var(--mut);margin-bottom:12px}
+dialog input,dialog select{width:100%;height:42px;margin-top:5px;padding:0 10px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:#09090b;color:#fff;font:inherit}
+.legalbody{white-space:pre-line;color:var(--mut);font-size:14px;margin-bottom:18px}
+.msg{margin-top:12px;font-size:13px}.msg.err{color:#e07a6b}.msg.ok{color:#9fd6a8}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#141418;border:1px solid var(--ch);padding:10px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:80;font-size:13px}#toast.on{opacity:1}
+@media(max-width:900px){.hd nav{display:none}.bento{grid-template-columns:repeat(2,1fr);grid-auto-rows:150px}.s-xl{grid-column:span 2}.stage{grid-template-columns:1fr}.frame{max-height:60svh;margin:0 auto;width:min(100%,380px)}.fg{grid-template-columns:1fr 1fr}.vid::after{background:linear-gradient(180deg,rgba(9,9,11,.55),rgba(9,9,11,.85) 60%,#09090b)}.full{align-items:flex-end}}
+@media(max-width:520px){.fg{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="hd" id="hd"><a class="logo" href="index.html">OUTVOSS</a>
+  <nav><a href="index.html">Inicio</a><a href="#coleccion">Colección</a><a href="#maniqui">Maniquí</a><a href="peluqueria.html">Peluquería</a></nav>
+  <select class="cur" id="cur" aria-label="Moneda"><option>COP</option><option>USD</option></select>
+  <button class="btn sm" data-ask>Asesoría</button></header>
+
+<section class="sec full" id="hero" data-sec="hero"><div class="vid none"></div>
+  <div class="in"><div class="eb" data-f="eyebrow">COLECCIÓN OUTVOSS</div><h1 data-f="title">CATÁLOGO</h1>
+    <p class="l" data-f="body">Moda masculina contemporánea: sofisticación europea, carácter urbano y autenticidad.</p>
+    <div class="row"><a class="btn" href="#coleccion">Ver colección</a><button class="btn ghost" data-ask>Pedir asesoría</button></div></div></section>
+
+<section class="sec" id="coleccion"><div class="wrap">
+  <div class="eb">CURADURÍA MASCULINA</div><h2 class="t">Explora por categoría</h2>
+  <p class="l" style="margin-bottom:0">Elige una categoría y mira las prendas puestas en nuestro maniquí virtual.</p>
+  <div class="bento" id="bento"></div></div></section>
+
+<section class="sec" id="maniqui"><div class="wrap">
+  <div class="eb">MANIQUÍ VIRTUAL</div><h2 class="t" data-m="title">Pruébalo en el maniquí</h2>
+  <div class="stage">
+    <div class="frame" id="frame"><video id="mv" muted loop playsinline autoplay></video>
+      <div class="ph" id="ph">El maniquí aparecerá aquí cuando cargues su video en el panel de administración.</div>
+      <div class="ld" id="ld" hidden>Cargando prenda…</div></div>
+    <div class="gl info" id="info"><h3>Selecciona una prenda</h3><p>Toca cualquier tarjeta del carrusel y el maniquí se la pondrá.</p>
+      <div class="row"><button class="btn ghost sm" id="reset" hidden>← Volver al maniquí base</button></div></div>
+  </div>
+  <div class="pills" id="pills"></div>
+  <div class="car" id="car" aria-label="Carrusel de prendas"></div>
+</div></section>
+
+<section class="sec full" id="cierre" data-sec="cierre" style="min-height:70vh"><div class="vid none"></div>
+  <div class="in"><div class="eb" data-f="eyebrow">ATENCIÓN PERSONALIZADA</div><h2 class="t" data-f="title" style="font-size:clamp(30px,5vw,56px)">TU NUEVA IMAGEN EMPIEZA AQUÍ.</h2>
+    <p class="l" data-f="body">Recibe recomendación directa de prendas.</p>
+    <div class="row"><button class="btn" data-ask>Contactar asesor</button><a class="btn ghost" href="peluqueria.html">Ir a Peluquería</a></div></div></section>
+
+<footer><div class="fg">
+  <div><div class="logo" style="margin-bottom:10px">OUTVOSS</div><p>Moda masculina contemporánea y grooming privado · Colombia</p></div>
+  <div><h4>NAVEGACIÓN</h4><ul><li><a href="index.html">Inicio</a></li><li><a href="#coleccion">Colección</a></li><li><a href="peluqueria.html">Peluquería</a></li></ul></div>
+  <div><h4>CONTACTO</h4><p id="fMail">contacto@outvoss.com</p><p id="fWa"></p></div>
+  <div><h4>ASESORÍA</h4><button class="neu" data-ask>Atención OUTVOSS</button></div></div>
+  <div class="legal"><span class="cp">© <span id="yr"></span> OUTVOSS. Todos los derechos reservados.</span><span id="legalBtns" style="display:contents"></span></div></footer>
+
+<dialog id="dAsk"><h3>Asesoría y catálogo</h3><form id="fAsk">
+  <label>Interés<input id="aCat" maxlength="80" placeholder="Ej. Chaquetas, asesoría de imagen…"></label>
+  <label>Tu nombre<input id="aName" required minlength="2" maxlength="100" autocomplete="name"></label>
+  <label>WhatsApp o correo<input id="aCon" required minlength="5" maxlength="120"></label>
+  <div class="row"><button class="btn" id="aGo">Enviar solicitud</button><button class="btn ghost" type="button" data-close>Cerrar</button></div>
+  <div class="msg" id="aMsg" role="status"></div></form></dialog>
+<dialog id="dLegal"><h3 id="lT"></h3><div class="legalbody" id="lB"></div><button class="btn ghost sm" data-close>Cerrar</button></dialog>
+<div id="toast" role="status"></div>
+
+<script>
+const sb=supabase.createClient('https://vpncwfbinzmvsplsjubf.supabase.co','sb_publishable_cUU3BIEnmhEXbp6XzQdDLA__0uaGHQW');
+const $=s=>document.querySelector(s);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+let cfg={usd_rate:4000,default_display:'COP'},cats=[],items=[],filter='todos',sel=null,baseUrl='';
+const money=n=>$('#cur').value==='USD'?new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n/cfg.usd_rate):new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(n);
+const toast=t=>{const e=$('#toast');e.textContent=t;e.className='on';clearTimeout(toast.t);toast.t=setTimeout(()=>e.className='',2600)};
+$('#yr').textContent=new Date().getFullYear();
+addEventListener('scroll',()=>$('#hd').classList.toggle('sc',scrollY>40),{passive:true});
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function setBg(s,m){const v=s.querySelector('.vid');if(!m.url)return;v.classList.remove('none');v.replaceChildren();
+  if(m.media_type==='image'){const i=el('img');i.src=m.url;i.alt='';i.style.cssText='width:100%;height:100%;object-fit:cover;object-position:75% center';v.append(i)}
+  else{const x=document.createElement('video');Object.assign(x,{src:m.url,autoplay:true,loop:true,muted:true,playsInline:true,preload:'metadata'});x.setAttribute('muted','');x.onerror=()=>{v.classList.add('none');x.remove()};v.append(x)}}
+
+async function init(){
+  const [st,ca,it,bn,md,lg]=await Promise.all([
+    sb.from('site_settings').select('value').eq('key','general').maybeSingle(),
+    sb.from('catalog_categories').select('*').order('sort_order'),
+    sb.from('catalog_items').select('*').order('sort_order'),
+    sb.from('bento_cards').select('*, catalog_categories(slug)').order('slot'),
+    sb.from('site_media').select('*').eq('page','catalogo'),
+    sb.from('legal_pages').select('slug,title,body').order('sort_order')]);
+  if(st.data)cfg={...cfg,...st.data.value};
+  $('#cur').value=cfg.default_display||'COP';
+  if(cfg.contact_email)$('#fMail').textContent=cfg.contact_email;if(cfg.whatsapp)$('#fWa').textContent='WhatsApp '+cfg.whatsapp;
+  cats=ca.data||[];items=it.data||[];
+  const qc=new URLSearchParams(location.search).get('cat');if(qc&&cats.some(c=>c.slug===qc))filter=qc;
+  (md.data||[]).forEach(m=>{
+    if(m.section_key==='maniqui_base'){baseUrl=m.url||'';if(m.title)$('[data-m=title]').textContent=m.title;if(baseUrl)playBase();return}
+    const s=document.querySelector(`[data-sec="${m.section_key}"]`);if(!s)return;
+    ['eyebrow','title','body'].forEach(f=>{if(m[f]){const n=s.querySelector(`[data-f="${f}"]`);if(n)n.textContent=m[f]}});setBg(s,m)});
+  renderBento(bn.data||[]);renderPills();renderCar();
+  (lg.data||[]).forEach(p=>{const b=el('button','neu',p.title);b.type='button';b.onclick=()=>{$('#lT').textContent=p.title;$('#lB').textContent=p.body;$('#dLegal').showModal()};$('#legalBtns').append(b)});
+}
+function renderBento(cards){
+  const b=$('#bento');b.replaceChildren();
+  cards.forEach(c=>{const x=el('button','bc s-'+c.size);x.type='button';
+    if(c.image_url){const i=el('img');i.src=c.image_url;i.alt='';i.loading='lazy';x.append(i)}
+    const cap=el('div','cap');cap.append(el('h3',0,c.title));if(c.subtitle)cap.append(el('small',0,c.subtitle));x.append(cap);
+    x.onclick=()=>{filter=c.catalog_categories?.slug||'todos';renderPills();renderCar();$('#maniqui').scrollIntoView({behavior:reduce?'auto':'smooth'})};b.append(x)});
+}
+function renderPills(){
+  const p=$('#pills');p.replaceChildren();
+  [{slug:'todos',name:'Todo'},...cats].forEach(c=>{const b=el('button','pill'+(c.slug===filter?' on':''),c.name);b.type='button';
+    b.onclick=()=>{filter=c.slug;renderPills();renderCar()};p.append(b)});
+}
+function renderCar(){
+  const car=$('#car');car.replaceChildren();pos=0;car.scrollLeft=0;
+  const cid=cats.find(c=>c.slug===filter)?.id;
+  const list=items.filter(i=>filter==='todos'||i.category_id===cid);
+  if(!list.length){car.append(el('p','empty','Aún no hay prendas en esta categoría.'));return}
+  list.forEach(i=>{const c=el('article','it gl'+(sel?.id===i.id?' on':''));c.tabIndex=0;c.dataset.id=i.id;c.setAttribute('role','button');
+    const im=el('div','im',i.name.charAt(0));
+    if(i.image_url){im.textContent='';const g=el('img');g.src=i.image_url;g.alt='';g.loading='lazy';im.append(g)}
+    if(i.badge)im.append(el('span','badge',i.badge));if(i.mannequin_video_url)im.append(el('span','vp','▶ Maniquí'));
+    const bd=el('div','bd');bd.append(el('h3',0,i.name),el('small',0,cats.find(k=>k.id===i.category_id)?.name||''),el('b',0,money(i.price)));
+    c.append(im,bd);c.onclick=()=>pick(i);c.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();pick(i)}};car.append(c)});
+}
+$('#cur').onchange=()=>{renderCar();if(sel)showInfo(sel)};
+
+/* maniquí */
+const mv=$('#mv');
+function playBase(){if(!baseUrl)return;$('#ph').hidden=true;mv.src=baseUrl;mv.play().catch(()=>{})}
+mv.addEventListener('loadeddata',()=>{$('#ld').hidden=true;$('#ph').hidden=true});
+mv.addEventListener('error',()=>{if(mv.getAttribute('src')){$('#ld').hidden=true;if(sel)toast('No se pudo cargar el video')}});
+function showInfo(i){const f=$('#info');f.replaceChildren(el('h3',0,i.name),el('div','pr',money(i.price)),el('p',0,i.description||''));
+  const r=el('div','row'),a=el('button','btn sm','Pedir esta prenda');a.onclick=()=>openAsk(i.name);
+  const b=el('button','btn ghost sm','← Maniquí base');b.hidden=!baseUrl;b.onclick=()=>{sel=null;renderCar();playBase();resetInfo()};r.append(a,b);f.append(r)}
+function resetInfo(){$('#info').replaceChildren(el('h3',0,'Selecciona una prenda'),el('p',0,'Toca cualquier tarjeta del carrusel y el maniquí se la pondrá.'))}
+function pick(i){
+  sel=i;document.querySelectorAll('.it').forEach(c=>c.classList.toggle('on',c.dataset.id===i.id));showInfo(i);
+  if(i.mannequin_video_url){$('#ld').hidden=false;$('#ph').hidden=true;mv.poster=i.image_url||'';mv.src=i.mannequin_video_url;mv.play().catch(()=>{})}
+  else toast('Esta prenda aún no tiene video en el maniquí');
+  if(matchMedia('(max-width:900px)').matches)$('#frame').scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});
+}
+
+/* carrusel automático */
+const car=$('#car');let pos=0,dir=1,paused=false,idle;
+const hold=()=>{paused=true;clearTimeout(idle);idle=setTimeout(()=>{pos=car.scrollLeft;paused=false},3000)};
+['pointerdown','wheel','touchstart','focusin'].forEach(e=>car.addEventListener(e,hold,{passive:true}));
+car.addEventListener('mouseenter',()=>{paused=true;clearTimeout(idle)});
+car.addEventListener('mouseleave',()=>{pos=car.scrollLeft;paused=false});
+(function tick(){
+  if(!reduce&&!paused&&!document.hidden){const max=car.scrollWidth-car.clientWidth;
+    if(max>4){pos+=dir*.55;if(pos>=max){pos=max;dir=-1}else if(pos<=0){pos=0;dir=1}car.scrollLeft=pos}}
+  requestAnimationFrame(tick)})();
+
+/* asesoría */
+function openAsk(cat){$('#aMsg').textContent='';if(cat)$('#aCat').value=cat;$('#dAsk').showModal()}
+document.addEventListener('click',e=>{if(e.target.closest('[data-ask]'))openAsk();
+  if(e.target.closest('[data-close]'))e.target.closest('dialog').close();if(e.target.tagName==='DIALOG')e.target.close()});
+$('#fAsk').addEventListener('submit',async e=>{e.preventDefault();const m=$('#aMsg'),g=$('#aGo');g.disabled=true;m.className='msg';m.textContent='Enviando…';
+  const{error}=await sb.rpc('submit_catalog_request',{p_name:$('#aName').value,p_contact:$('#aCon').value,p_category:$('#aCat').value});g.disabled=false;
+  if(error){m.className='msg err';m.textContent=error.message;return}
+  m.className='msg ok';m.textContent='Solicitud recibida. Un asesor te escribirá pronto.';e.target.reset()});
+init();
+</script>
+</body>
+</html>
