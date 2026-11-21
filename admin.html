@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OUTVOSS · Administración</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<style>
+:root{--bg:#09090b;--panel:#141418;--line:rgba(214,194,159,.22);--ch:#d6c29f;--chl:#ece0c8;--chd:#94805d;--tx:#f5f3ef;--mut:#a19d94;--bad:#e07a6b;--ok:#9fd6a8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font:14px/1.5 'Plus Jakarta Sans',system-ui,sans-serif;min-height:100vh}
+h1,h2{font-family:'Cinzel',serif;letter-spacing:.06em}
+.scr{display:none}.scr.on{display:block}
+.center{min-height:100vh;display:none;align-items:center;justify-content:center;padding:20px}.center.on{display:flex}
+.card{width:100%;max-width:400px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:28px}
+.card h1{font-size:22px;margin-bottom:4px}.card p.s{color:var(--mut);font-size:13px;margin-bottom:18px}
+.tabs2{display:flex;gap:4px;margin-bottom:18px;border-bottom:1px solid var(--line)}
+.tabs2 button{flex:1;background:none;border:0;border-bottom:2px solid transparent;color:var(--mut);padding:8px 4px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.tabs2 button.on{color:var(--chl);border-color:var(--ch)}
+label{display:block;font-size:12px;color:var(--mut);margin-bottom:12px}
+input,select{width:100%;height:40px;padding:0 10px;margin-top:5px;border-radius:6px;border:1px solid rgba(255,255,255,.14);background:#09090b;color:var(--tx);font:inherit}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--ch);outline-offset:1px}
+input[type=checkbox]{width:20px;height:20px;margin:0;accent-color:var(--ch)}
+.btn{height:42px;padding:0 20px;border:0;border-radius:6px;background:linear-gradient(135deg,var(--chl),var(--ch) 55%,var(--chd));color:#11100c;font:inherit;font-weight:700;cursor:pointer}
+.btn.full{width:100%}.btn.sm{height:32px;padding:0 12px;font-size:12px}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--chl)}
+.btn.del{background:none;border:1px solid rgba(224,122,107,.4);color:var(--bad)}
+.msg{margin-top:12px;font-size:13px;min-height:18px}.msg.err{color:var(--bad)}.msg.ok{color:var(--ok)}
+header{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(9,9,11,.94);backdrop-filter:blur(8px);z-index:5;flex-wrap:wrap}
+header h1{font-size:16px;margin-right:auto}
+header select{width:auto;height:34px;margin:0}
+nav{display:flex;gap:6px;padding:12px 20px;overflow-x:auto;border-bottom:1px solid var(--line)}
+nav button{white-space:nowrap;background:none;border:1px solid var(--line);color:var(--mut);border-radius:999px;padding:6px 14px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+nav button.on{background:var(--ch);color:#11100c;border-color:var(--ch)}
+main{padding:20px;max-width:1200px;margin:0 auto}
+.bar{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.bar h2{font-size:18px;margin-right:auto}
+.stat{color:var(--chl);font-weight:600}
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{width:100%;border-collapse:collapse;min-width:680px}
+th{text-align:left;font-size:11.5px;color:var(--chl);font-weight:600;padding:10px;background:var(--panel);white-space:nowrap}
+td{padding:6px 10px;border-top:1px solid var(--line);vertical-align:middle}
+td input,td select{margin:0;height:36px;min-width:90px}
+td span{color:var(--sand,#e5dec9)}
+.low input[data-k=stock]{border-color:var(--bad);color:var(--bad)}
+.fl{display:flex;gap:6px;min-width:230px}.up{margin:0;display:inline-flex;align-items:center;padding:0 10px;border:1px solid var(--line);border-radius:6px;color:var(--chl);cursor:pointer;font-size:12px;white-space:nowrap}
+.act{display:flex;gap:6px}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--panel);border:1px solid var(--ch);padding:10px 18px;border-radius:8px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:50}
+#toast.on{opacity:1}#toast.bad{border-color:var(--bad);color:var(--bad)}
+.form{max-width:440px}
+.inv{display:flex;gap:8px;align-items:center;margin:6px 0;color:var(--mut)}
+.empty{padding:28px;text-align:center;color:var(--mut)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ACCESO -->
+<div class="center on" id="sAuth"><div class="card">
+  <h1>OUTVOSS</h1><p class="s">Panel de administración</p>
+  <div class="tabs2" id="aTabs"><button class="on" data-m="login">Ingresar</button><button data-m="signup">Crear cuenta</button><button data-m="forgot">Olvidé mi clave</button></div>
+  <form id="aForm">
+    <label>Correo<input type="email" id="aEmail" autocomplete="email" required></label>
+    <label id="aPassL">Contraseña<input type="password" id="aPass" autocomplete="current-password" minlength="8"></label>
+    <button class="btn full" id="aBtn">Ingresar</button>
+    <div class="msg" id="aMsg" role="status"></div>
+  </form>
+</div></div>
+
+<!-- ESTABLECER CONTRASEÑA -->
+<div class="center" id="sPw"><div class="card">
+  <h1>Crea tu contraseña</h1><p class="s">Correo confirmado. Elige la contraseña con la que ingresarás.</p>
+  <form id="pwForm">
+    <label>Nueva contraseña (mín. 8)<input type="password" id="pw1" minlength="8" autocomplete="new-password" required></label>
+    <label>Repite la contraseña<input type="password" id="pw2" minlength="8" autocomplete="new-password" required></label>
+    <button class="btn full">Guardar contraseña</button>
+    <div class="msg" id="pwMsg" role="status"></div>
+  </form>
+</div></div>
+
+<!-- SIN PERMISOS -->
+<div class="center" id="sDenied"><div class="card">
+  <h1>Cuenta sin permisos</h1><p class="s" id="dMail"></p>
+  <p style="color:var(--mut);margin-bottom:18px">Tu correo está confirmado, pero aún no figura como administrador. Pide a un administrador que lo autorice.</p>
+  <button class="btn ghost full" data-out>Cerrar sesión</button>
+</div></div>
+
+<!-- APP -->
+<div class="scr" id="sApp">
+  <header><h1>OUTVOSS · ADMIN</h1>
+    <label style="margin:0;display:flex;align-items:center;gap:8px">Ver precios en
+      <select id="curSel"><option>COP</option><option>USD</option></select></label>
+    <button class="btn ghost sm" data-out>Salir</button></header>
+  <nav id="nav"></nav>
+  <main id="main"></main>
+</div>
+<div id="toast" role="status"></div>
+
+<script>
+const SB_URL='https://vpncwfbinzmvsplsjubf.supabase.co';
+const SB_KEY='sb_publishable_cUU3BIEnmhEXbp6XzQdDLA__0uaGHQW'; // clave pública (la misma de app.js)
+const sb=supabase.createClient(SB_URL,SB_KEY);
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const here=location.origin+location.pathname;
+let cfg={usd_rate:4000,default_display:'COP'},disp='COP',lists={},cur=null,rows=[];
+
+const show=id=>{['sAuth','sPw','sDenied'].forEach(x=>$('#'+x).classList.toggle('on',x===id));$('#sApp').classList.toggle('on',id==='sApp')};
+function toast(t,bad){const e=$('#toast');e.textContent=t;e.className='on'+(bad?' bad':'');clearTimeout(toast.t);toast.t=setTimeout(()=>e.className='',2400)}
+const fmtMoney=n=>disp==='USD'?new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n/cfg.usd_rate):new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(n);
+const fmtDate=d=>d?new Date(d).toLocaleString('es-CO',{dateStyle:'medium',timeStyle:'short'}):'—';
+
+/* ---------- AUTH ---------- */
+let mode='login';
+$('#aTabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;mode=b.dataset.m;
+  [...$('#aTabs').children].forEach(x=>x.classList.toggle('on',x===b));
+  $('#aPassL').style.display=mode==='login'?'block':'none';$('#aPass').required=mode==='login';
+  $('#aBtn').textContent={login:'Ingresar',signup:'Enviarme el enlace de registro',forgot:'Enviar enlace de recuperación'}[mode];
+  $('#aMsg').textContent=''});
+const aMsg=(t,c)=>{$('#aMsg').textContent=t;$('#aMsg').className='msg '+(c||'')};
+$('#aForm').addEventListener('submit',async e=>{e.preventDefault();
+  const email=$('#aEmail').value.trim().toLowerCase();aMsg('Procesando…');
+  if(mode==='login'){const{error}=await sb.auth.signInWithPassword({email,password:$('#aPass').value});if(error)aMsg('Correo o contraseña incorrectos','err');}
+  else if(mode==='signup'){const{error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:here,shouldCreateUser:true}});
+    error?aMsg(error.message,'err'):aMsg('Listo. Revisa tu correo y abre el enlace para crear tu contraseña.','ok');}
+  else{const{error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:here});
+    error?aMsg(error.message,'err'):aMsg('Si el correo existe, te enviamos un enlace para restablecer tu contraseña.','ok');}
+});
+$('#pwForm').addEventListener('submit',async e=>{e.preventDefault();
+  const a=$('#pw1').value,b=$('#pw2').value,m=$('#pwMsg');
+  if(a!==b){m.textContent='Las contraseñas no coinciden';m.className='msg err';return}
+  const{error}=await sb.auth.updateUser({password:a,data:{has_password:true}});
+  if(error){m.textContent=error.message;m.className='msg err';return}
+  const{data}=await sb.auth.getSession();route('SIGNED_IN',data.session);
+});
+document.addEventListener('click',async e=>{if(e.target.closest('[data-out]')){await sb.auth.signOut();}});
+
+sb.auth.onAuthStateChange((ev,session)=>{setTimeout(()=>route(ev,session),0)});
+async function route(ev,session){
+  if(!session){show('sAuth');return}
+  if(ev==='PASSWORD_RECOVERY'||!session.user.user_metadata?.has_password){show('sPw');return}
+  const{data}=await sb.from('admin_users').select('user_id').maybeSingle();
+  if(!data){$('#dMail').textContent=session.user.email;show('sDenied');return}
+  if(!route.booted){route.booted=true;await boot()}
+  show('sApp');
+}
+
+/* ---------- CONFIGURACIÓN DE TABLAS ---------- */
+const T=(k,l,t,x={})=>({k,l,t,...x});
+const GROUPS=['superiores','inferiores','exteriores','complementos'];
+const TABS={
+ productos:{label:'Productos e inventario',table:'store_products',order:'name',sell:true,
+  defaults:{name:'Nuevo producto',stock:0,price:0},
+  cols:[T('name','Producto','text'),T('sku','SKU','text'),T('price','Precio','money'),T('stock','Inventario','int'),T('low_stock_threshold','Alerta bajo','int'),T('is_active','Visible','bool')]},
+ catalogo:{label:'Catálogo de ropa',table:'catalog_items',order:'sort_order',
+  defaults:{name:'Nueva prenda',price:0},
+  cols:[T('name','Prenda','text'),T('category_id','Categoría','fk',{f:'catalog_categories'}),T('price','Precio','money'),T('image_url','Imagen','file',{accept:'image/*'}),T('mannequin_video_url','Video del maniquí','file',{accept:'video/*'}),T('sort_order','Orden','int'),T('is_active','Visible','bool')]},
+ categorias:{label:'Categorías',table:'catalog_categories',order:'sort_order',defaults:{name:'Nueva categoría',slug:'cat-'},slugFix:true,
+  cols:[T('name','Nombre','text'),T('group_key','Grupo','sel',{o:GROUPS}),T('sort_order','Orden','int'),T('is_active','Visible','bool')]},
+ bento:{label:'Tarjetas bento',table:'bento_cards',order:'slot',noAdd:true,noDel:true,
+  cols:[T('s','Posición','ro',{g:r=>'#'+r.slot}),T('title','Título','text'),T('subtitle','Texto corto','text'),T('size','Tamaño','sel',{o:['xl','lg','wide','tall','md','sm']}),T('image_url','Imagen','file',{accept:'image/*'}),T('category_id','Abre categoría','fk',{f:'catalog_categories'}),T('is_active','Visible','bool')]},
+ servicios:{label:'Servicios peluquería',table:'barber_services',order:'sort_order',defaults:{name:'Nuevo servicio',price:0},
+  cols:[T('name','Servicio','text'),T('description','Descripción','text'),T('price','Precio','money'),T('duration_min','Min','int'),T('image_url','Imagen','file',{accept:'image/*'}),T('is_active','Visible','bool')]},
+ medios:{label:'Videos y fondos',table:'site_media',order:'page',defaults:{page:'peluqueria',media_type:'video'},uniq:true,
+  cols:[T('page','Página','sel',{o:['inicio','peluqueria','catalogo']}),T('section_key','Sección','text'),T('url','Video / imagen','file',{accept:'video/*,image/*'}),T('title','Título','text'),T('body','Texto','text'),T('is_active','Visible','bool')]},
+ citas:{label:'Citas',table:'appointments',sel:'*, clients(full_name,phone,email)',order:'scheduled_at',asc:false,noAdd:true,
+  cols:[T('scheduled_at','Fecha','ro',{g:r=>fmtDate(r.scheduled_at)}),T('c','Cliente','ro',{g:r=>r.clients?.full_name}),T('p','Teléfono','ro',{g:r=>r.clients?.phone}),T('service_name','Servicio','ro',{g:r=>r.service_name}),
+   T('status','Estado','sel',{o:['pendiente','confirmada','completada','cancelada','no_asistio']})]},
+ clientes:{label:'Clientes (CRM)',table:'client_summary',order:'created_at',asc:false,noAdd:true,noDel:true,
+  cols:[T('n','Nombre','ro',{g:r=>r.full_name}),T('p','Teléfono','ro',{g:r=>r.phone}),T('e','Correo','ro',{g:r=>r.email}),T('t','Citas','ro',{g:r=>r.total_appointments}),T('l','Última cita','ro',{g:r=>fmtDate(r.last_appointment)}),T('s','Gastado','ro',{g:r=>fmtMoney(r.total_spent)})]},
+ solicitudes:{label:'Solicitudes de catálogo',table:'catalog_requests',order:'created_at',asc:false,noAdd:true,
+  cols:[T('d','Fecha','ro',{g:r=>fmtDate(r.created_at)}),T('n','Nombre','ro',{g:r=>r.full_name}),T('c','Contacto','ro',{g:r=>r.contact}),T('ca','Interés','ro',{g:r=>r.category}),T('status','Estado','sel',{o:['nuevo','contactado','cerrado']})]},
+ ajustes:{label:'Ajustes y admins',custom:true}
+};
+
+async function boot(){
+  const{data:s}=await sb.from('site_settings').select('value').eq('key','general').maybeSingle();
+  if(s)cfg={...cfg,...s.value};disp=cfg.default_display||'COP';$('#curSel').value=disp;
+  const{data:c}=await sb.from('catalog_categories').select('id,name').order('sort_order');lists.catalog_categories=c||[];
+  $('#nav').innerHTML=Object.entries(TABS).map(([k,v])=>`<button data-t="${k}">${v.label}</button>`).join('');
+  $('#nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b)open(b.dataset.t)});
+  $('#curSel').addEventListener('change',e=>{disp=e.target.value;open(cur?.key||'productos')});
+  open('productos');
+}
+async function open(key){
+  cur={...TABS[key],key};[...$('#nav').children].forEach(b=>b.classList.toggle('on',b.dataset.t===key));
+  if(cur.custom)return settings();
+  const{data,error}=await sb.from(cur.table).select(cur.sel||'*').order(cur.order,{ascending:cur.asc!==false});
+  if(error)return $('#main').innerHTML=`<p class="empty">${esc(error.message)}</p>`;
+  rows=data;render();
+}
+function cell(c,r){
+  const v=r[c.k],a=`data-id="${r.id}" data-k="${c.k}"`;
+  switch(c.t){
+   case 'text':return `<input ${a} data-t="text" value="${esc(v)}">`;
+   case 'int':return `<input ${a} data-t="int" type="number" min="0" step="1" value="${v??0}">`;
+   case 'money':return `<input ${a} data-t="money" type="number" min="0" step="${disp==='USD'?'0.01':'1000'}" value="${disp==='USD'?(v/cfg.usd_rate).toFixed(2):v}">`;
+   case 'bool':return `<input ${a} data-t="bool" type="checkbox" aria-label="${c.l}" ${v?'checked':''}>`;
+   case 'sel':return `<select ${a} data-t="text">${c.o.map(o=>`<option ${o==v?'selected':''}>${o}</option>`).join('')}</select>`;
+   case 'fk':return `<select ${a} data-t="fk"><option value="">—</option>${(lists[c.f]||[]).map(o=>`<option value="${o.id}" ${o.id==v?'selected':''}>${esc(o.name)}</option>`).join('')}</select>`;
+   case 'file':return `<div class="fl"><input ${a} data-t="text" value="${esc(v)}" placeholder="Pega un enlace o sube un archivo"><label class="up">Subir<input type="file" hidden ${a} data-t="file" accept="${c.accept}"></label></div>`;
+   default:return `<span>${esc(c.g?c.g(r):v)}</span>`;
+  }
+}
+function render(){
+  const stat=cur.key==='productos'?`<span class="stat">Valor del inventario: ${fmtMoney(rows.reduce((s,r)=>s+r.price*r.stock,0))}</span>`:'';
+  const hasAct=cur.sell||!cur.noDel;
+  $('#main').innerHTML=`<div class="bar"><h2>${cur.label}</h2>${stat}${cur.noAdd?'':'<button class="btn sm" id="add">+ Agregar</button>'}</div>
+  <div class="wrap"><table><thead><tr>${cur.cols.map(c=>`<th>${c.l}</th>`).join('')}${hasAct?'<th></th>':''}</tr></thead><tbody id="tb">
+  ${rows.length?rows.map(r=>`<tr class="${cur.key==='productos'&&r.stock<=r.low_stock_threshold?'low':''}">${cur.cols.map(c=>`<td>${cell(c,r)}</td>`).join('')}${hasAct?`<td><div class="act">${cur.sell?`<button class="btn sm" data-sell="${r.id}">Vender</button>`:''}${cur.noDel?'':`<button class="btn del sm" data-del="${r.id}">Borrar</button>`}</div></td>`:''}</tr>`).join(''):`<tr><td colspan="9" class="empty">Sin registros</td></tr>`}
+  </tbody></table></div>`;
+}
+$('#main').addEventListener('change',async e=>{
+  const el=e.target,id=el.dataset.id;if(!id||!cur)return;const k=el.dataset.k,t=el.dataset.t;let val;
+  if(t==='file'){const f=el.files[0];if(!f)return;toast('Subiendo…');
+    const path=`${cur.table}/${Date.now()}-${f.name.replace(/[^\w.-]/g,'_')}`;
+    const{error}=await sb.storage.from('outvoss-media').upload(path,f);if(error)return toast(error.message,1);
+    val=sb.storage.from('outvoss-media').getPublicUrl(path).data.publicUrl}
+  else if(t==='bool')val=el.checked;
+  else if(t==='int')val=Math.max(0,parseInt(el.value||0,10));
+  else if(t==='money'){const n=parseFloat(el.value||0);val=disp==='USD'?Math.round(n*cfg.usd_rate):n}
+  else if(t==='fk')val=el.value||null;else val=el.value;
+  const{error}=await sb.from(cur.table).update({[k]:val}).eq('id',id);
+  if(error)return toast(error.message,1);toast('Guardado');
+  if(t==='file'||t==='money'||k==='stock'||k==='low_stock_threshold')open(cur.key);
+});
+$('#main').addEventListener('click',async e=>{
+  const b=e.target.closest('button');if(!b||!cur)return;
+  if(b.id==='add'){const d={...cur.defaults};
+    if(cur.slugFix)d.slug='cat-'+Date.now();if(cur.uniq)d.section_key='seccion-'+Date.now().toString(36);
+    const{error}=await sb.from(cur.table).insert(d);return error?toast(error.message,1):open(cur.key)}
+  if(b.dataset.del){if(!confirm('¿Borrar este registro? No se puede deshacer.'))return;
+    const{error}=await sb.from(cur.table).delete().eq('id',b.dataset.del);return error?toast(error.message,1):open(cur.key)}
+  if(b.dataset.sell){const r=rows.find(x=>x.id===b.dataset.sell);
+    const q=parseInt(prompt(`Unidades vendidas de "${r.name}" (hay ${r.stock}):`,'1'),10);if(!q||q<1)return;
+    const{error}=await sb.rpc('register_sale',{p_items:[{product_id:r.id,quantity:q}],p_payment:'efectivo'});
+    if(error)return toast(error.message.replace(/^.*?:\s*/,''),1);toast('Venta registrada, inventario actualizado');open('productos')}
+});
+
+/* ---------- AJUSTES + ADMINS ---------- */
+async function settings(){
+  const{data:inv}=await sb.from('admin_invites').select('email').order('created_at');
+  $('#main').innerHTML=`<div class="bar"><h2>Ajustes</h2></div><div class="form">
+   <label>Tasa de cambio: 1 USD = … COP<input id="sRate" type="number" min="1" step="1" value="${cfg.usd_rate}"></label>
+   <label>Moneda que ven los visitantes por defecto<select id="sDisp"><option ${cfg.default_display==='COP'?'selected':''}>COP</option><option ${cfg.default_display==='USD'?'selected':''}>USD</option></select></label>
+   <label>Correo de contacto<input id="sMail" type="email" value="${esc(cfg.contact_email)}"></label>
+   <label>WhatsApp<input id="sWa" value="${esc(cfg.whatsapp)}" placeholder="+57 300 000 0000"></label>
+   <button class="btn" id="sSave">Guardar ajustes</button>
+   <h2 style="font-size:16px;margin:30px 0 8px">Administradores autorizados</h2>
+   <p style="color:var(--mut);font-size:12.5px;margin-bottom:10px">Quien se registre con uno de estos correos y confirme su cuenta obtiene acceso al panel.</p>
+   ${(inv||[]).map(i=>`<div class="inv"><span style="flex:1">${esc(i.email)}</span><button class="btn del sm" data-rm="${esc(i.email)}">Quitar</button></div>`).join('')}
+   <div style="display:flex;gap:8px;margin-top:10px"><input id="nMail" type="email" placeholder="correo@ejemplo.com" style="margin:0"><button class="btn sm" id="nAdd" style="height:40px">Autorizar</button></div></div>`;
+  $('#sSave').onclick=async()=>{const v={...cfg,usd_rate:Number($('#sRate').value)||4000,default_display:$('#sDisp').value,contact_email:$('#sMail').value.trim(),whatsapp:$('#sWa').value.trim()};
+    const{error}=await sb.from('site_settings').update({value:v}).eq('key','general');error?toast(error.message,1):(cfg=v,toast('Ajustes guardados'))};
+  $('#nAdd').onclick=async()=>{const m=$('#nMail').value.trim().toLowerCase();if(!m)return;
+    const{error}=await sb.from('admin_invites').insert({email:m});error?toast(error.message,1):settings()};
+  $('#main').querySelectorAll('[data-rm]').forEach(b=>b.onclick=async()=>{await sb.from('admin_invites').delete().eq('email',b.dataset.rm);settings()});
+}
+</script>
+</body>
+</html>
