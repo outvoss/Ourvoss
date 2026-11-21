@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -10,8 +10,42 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <!-- PANTALLA DE ENTRADA / PRELOADER CON HAZ DE LUZ EN EL MARCO -->
+  <div class="outvoss-intro-loader" id="outvossIntroLoader" aria-label="Cargando OUTVOSS">
+    <div class="loader-center-stage">
+      <!-- Marco en arco con el haz de luz recorriendo el borde -->
+      <div class="arch-glow-frame">
+        <div class="arch-inner-slot">
+          <!-- PEGA AQUÍ EL LINK DE TU ISOTIPO EN PNG DESDE TU STORAGE -->
+          <img
+            id="loaderLogoImg"
+            src=""
+            alt="Emblema OUTVOSS"
+            class="loader-logo-img hidden"
+          />
+          <!-- Respaldo geométrico mientras conectas la URL del Storage -->
+          <div class="loader-logo-placeholder" id="loaderLogoPlaceholder">
+            <span>OV</span>
+            <small>ESPACIO ISOTIPO STORAGE</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tipografía Oficial OUTVOSS debajo del marco -->
+      <div class="loader-brand-lockup">
+        <span class="loader-brand-title">OUTVOSS</span>
+        <div class="loader-brand-tagline">
+          <span class="tagline-line"></span>
+          <span>BEYOND THE ORDINARY.</span>
+          <span class="tagline-line"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- HEADER GLOBAL DE MARCA -->
   <header class="site-header">
+
     <a href="#outvoss-inicio" class="brand" data-switch-view="outvoss">
       <!-- Símbolo minimalista geométrico OUTVOSS -->
       <span class="brand-crest" aria-label="Símbolo OUTVOSS">
@@ -54,8 +88,8 @@
     <!-- =========================================================
          VISTA 1: UNIVERSO PRINCIPAL OUTVOSS (MODA & LIFESTYLE)
     ========================================================== -->
-       <div class="view-container active" id="viewOutvoss">
-           <!-- PORTADA CINEMATOGRÁFICA A PANTALLA COMPLETA (PRIMERA CAPA) -->
+    <div class="view-container active" id="viewOutvoss">
+      <!-- PORTADA CINEMATOGRÁFICA A PANTALLA COMPLETA (PRIMERA CAPA) -->
       <section class="cinema-hero-cover" id="outvossCinemaHero">
         <div class="cinema-player-stage">
           <!-- ENLACE DIRECTO .MP4 EN CLOUDINARY -->
@@ -90,10 +124,10 @@
         </div>
       </section>
 
-      <!-- SEGUNDA CAPA HACIA ABAJO: ESCENARIO CIRCULAR Y SCROLLYTELLING -->
+      <!-- =========================================================
+           PARTE 1 DE 4: ESCENA 0 — HERO OUTVOSS + EXHIBICIÓN DIGITAL
+      ========================================================== -->
       <div class="scrolly-stage" id="scrollyOutvoss">
-
-        <!-- Capa de imagen de fondo configurable para OUTVOSS -->
         <div class="sticky-viewport outvoss-bg-layer">
           <div class="bg-overlay-gradient"></div>
           <div class="ambient-halo" id="haloOutvoss"></div>
@@ -130,9 +164,25 @@
               </div>
             </div>
           </section>
+        </div>
+
+        <div class="scroll-anchor" id="outvoss-inicio"></div>
+      </div>
+
+      <!-- ESPACIO INTERMEDIO 1 (ENTRE PARTE 1 Y PARTE 2) -->
+      <div class="outvoss-interlude-slot" id="outvossSlotEntre1y2"></div>
+
+      <!-- =========================================================
+           PARTE 2 DE 4: ESCENA 1 — CURADURÍA MASCULINA (9 CATEGORÍAS)
+      ========================================================== -->
+      <div class="scrolly-stage" id="scrollyOutvossParte2">
+        <div class="sticky-viewport outvoss-bg-layer">
+          <div class="bg-overlay-gradient"></div>
+          <div class="ambient-halo" id="haloOutvossParte2"></div>
+          <div class="floor-grid"></div>
 
           <!-- ESCENA 1: PORTAFOLIO DE PRODUCTOS (9 CATEGORÍAS) -->
-          <section class="story-panel" data-outvoss-scene="1">
+          <section class="story-panel active" data-outvoss-scene="1">
             <div class="panel-content left wide-panel">
               <span class="eyebrow">PORTAFOLIO COMERCIAL</span>
               <h2 class="section-title">CURADURÍA<br />MASCULINA</h2>
@@ -197,9 +247,64 @@
               </div>
             </div>
           </section>
+        </div>
+
+        <div class="scroll-anchor" id="outvoss-portafolio"></div>
+      </div>
+
+      <!-- ESPACIO INTERMEDIO 2: PANTALLA 3D DEL TAMAÑO DE LA PORTADA (TRAS SECCIÓN 2) -->
+      <div class="outvoss-interlude-slot" id="outvossSlotEntre2y3">
+        <section class="outvoss-3d-hero-screen" id="outvoss3dStageScreen" aria-label="Pantalla de Modelos 3D">
+          <div class="screen-3d-top-bar">
+            <div class="screen-3d-heading-group">
+              <span class="eyebrow">STUDIO 3D · OUTVOSS FOOTWEAR</span>
+              <h2 class="screen-3d-title">COLECCIÓN <span class="champagne-text">3D EN TIEMPO REAL</span></h2>
+            </div>
+
+            <div class="screen-3d-controls">
+              <button type="button" class="btn-ghost" id="prev3dShoeBtn" aria-label="Modelo anterior">← Anterior</button>
+              <span class="screen-3d-counter" id="shoe3dCounter">01 / 18</span>
+              <button type="button" class="btn-solid-champagne" id="next3dShoeBtn" aria-label="Siguiente modelo">Siguiente →</button>
+            </div>
+          </div>
+
+          <div class="screen-3d-model-banner">
+            <span class="screen-3d-category" id="shoe3dCategory">URBANO</span>
+            <h3 class="screen-3d-model-name" id="shoe3dTitle">Modelo 3D OUTVOSS</h3>
+          </div>
+
+          <div class="screen-3d-viewer-box">
+            <iframe
+              id="shoe3dIframe"
+              title="Visor de Modelos 3D OUTVOSS"
+              frameborder="0"
+              allowfullscreen
+              mozallowfullscreen="true"
+              webkitallowfullscreen="true"
+              allow="autoplay; fullscreen; xr-spatial-tracking"
+              xr-spatial-tracking
+              execution-while-out-of-viewport
+              execution-while-not-rendered
+              web-share
+              src=""
+            ></iframe>
+          </div>
+
+          <div class="screen-3d-dots" id="shoe3dDots" role="tablist" aria-label="Selector de modelos 3D"></div>
+        </section>
+      </div>
+
+      <!-- =========================================================
+           PARTE 3 DE 4: ESCENA 2 — IDENTIDAD SIN CONCESIONES
+      ========================================================== -->
+      <div class="scrolly-stage" id="scrollyOutvossParte3">
+        <div class="sticky-viewport outvoss-bg-layer">
+          <div class="bg-overlay-gradient"></div>
+          <div class="ambient-halo" id="haloOutvossParte3"></div>
+          <div class="floor-grid"></div>
 
           <!-- ESCENA 2: IDENTIDAD Y FILOSOFÍA -->
-          <section class="story-panel" data-outvoss-scene="2">
+          <section class="story-panel active" data-outvoss-scene="2">
             <div class="panel-content left">
               <span class="eyebrow">FILOSOFÍA DE MARCA</span>
               <h2 class="section-title">IDENTIDAD<br />SIN CONCESIONES</h2>
@@ -223,9 +328,25 @@
               <button class="btn-solid-champagne" data-open-outvoss-modal type="button">Solicitar Asesoría de Estilo</button>
             </div>
           </section>
+        </div>
+
+        <div class="scroll-anchor" id="outvoss-filosofia"></div>
+      </div>
+
+      <!-- ESPACIO INTERMEDIO 3 (ENTRE PARTE 3 Y PARTE 4) -->
+      <div class="outvoss-interlude-slot" id="outvossSlotEntre3y4"></div>
+
+      <!-- =========================================================
+           PARTE 4 DE 4: ESCENA 3 — TU NUEVA IMAGEN EMPIEZA AQUÍ
+      ========================================================== -->
+      <div class="scrolly-stage" id="scrollyOutvossParte4">
+        <div class="sticky-viewport outvoss-bg-layer">
+          <div class="bg-overlay-gradient"></div>
+          <div class="ambient-halo" id="haloOutvossParte4"></div>
+          <div class="floor-grid"></div>
 
           <!-- ESCENA 3: CANALES Y PROYECCIÓN -->
-          <section class="story-panel" data-outvoss-scene="3">
+          <section class="story-panel active" data-outvoss-scene="3">
             <div class="panel-content left">
               <span class="eyebrow">ATENCIÓN PERSONALIZADA · COLOMBIA</span>
               <h2 class="section-title">TU NUEVA<br />IMAGEN EMPIEZA AQUÍ.</h2>
@@ -240,9 +361,6 @@
           </section>
         </div>
 
-        <div class="scroll-anchor" id="outvoss-inicio"></div>
-        <div class="scroll-anchor" id="outvoss-portafolio"></div>
-        <div class="scroll-anchor" id="outvoss-filosofia"></div>
         <div class="scroll-anchor" id="outvoss-canales"></div>
       </div>
     </div>
@@ -469,5 +587,4 @@
   <script src="app.js"></script>
 </body>
 </html>
-
 
