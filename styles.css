@@ -442,6 +442,7 @@ select:focus-visible {
 }
 
 .btn-neu:hover { color: #fff; }
+a.btn-neu { display: inline-block; text-decoration: none; }
 .btn-neu:active { box-shadow: inset 4px 4px 9px var(--neu-dark), inset -4px -4px 9px var(--neu-light); }
 
 /* =========================================================
