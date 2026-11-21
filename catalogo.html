@@ -73,7 +73,7 @@ footer{background:#070709;border-top:1px solid var(--line);padding:44px clamp(16
 .fg{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px;max-width:1200px;margin:0 auto}
 footer h4{font-size:12px;letter-spacing:.16em;color:var(--ch);margin-bottom:12px}footer p,footer li{color:var(--mut);font-size:13.5px}footer ul{list-style:none;display:grid;gap:8px}footer a{text-decoration:none}footer a:hover{color:var(--chl)}
 .legal{max-width:1200px;margin:32px auto 0;padding-top:22px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:14px;align-items:center}.legal .cp{color:var(--mut);font-size:12.5px;margin-right:auto}
-.neu{border:0;border-radius:12px;background:var(--neu);color:var(--chl);padding:10px 16px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:6px 6px 12px #040405,-5px -5px 11px #25252c}
+.neu{display:inline-block;text-decoration:none;border:0;border-radius:12px;background:var(--neu);color:var(--chl);padding:10px 16px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:6px 6px 12px #040405,-5px -5px 11px #25252c}
 .neu:hover{color:#fff}.neu:active{box-shadow:inset 4px 4px 9px #040405,inset -4px -4px 9px #25252c}
 dialog{margin:auto;width:min(94vw,440px);max-height:90vh;overflow:auto;background:#141418;color:var(--tx);border:1px solid var(--line);border-radius:12px;padding:26px}
 dialog::backdrop{background:rgba(5,5,7,.8);backdrop-filter:blur(6px)}
@@ -126,7 +126,8 @@ dialog input,dialog select{width:100%;height:42px;margin-top:5px;padding:0 10px;
   <div><h4>NAVEGACIÓN</h4><ul><li><a href="index.html">Inicio</a></li><li><a href="#coleccion">Colección</a></li><li><a href="peluqueria.html">Peluquería</a></li></ul></div>
   <div><h4>CONTACTO</h4><p id="fMail">contacto@outvoss.com</p><p id="fWa"></p></div>
   <div><h4>ASESORÍA</h4><button class="neu" data-ask>Atención OUTVOSS</button></div></div>
-  <div class="legal"><span class="cp">© <span id="yr"></span> OUTVOSS. Todos los derechos reservados.</span><span id="legalBtns" style="display:contents"></span></div></footer>
+  <div class="legal"><span class="cp">© <span id="yr"></span> OUTVOSS. Todos los derechos reservados.</span><span id="legalBtns" style="display:contents"></span>
+      <a class="neu" href="admin.html">Acceso administración</a></div></footer>
 
 <dialog id="dAsk"><h3>Asesoría y catálogo</h3><form id="fAsk">
   <label>Interés<input id="aCat" maxlength="80" placeholder="Ej. Chaquetas, asesoría de imagen…"></label>
