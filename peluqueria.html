@@ -150,7 +150,7 @@ addEventListener('scroll',()=>$('#hd').classList.toggle('sc',scrollY>40),{passiv
 
 function renderServices(){
   const box=$('#cards');box.replaceChildren();
-  if(!svcs.length){box.append(el('div','gl')).append(el('p',0,'Pronto publicaremos nuestros servicios.'));return}
+  if(!svcs.length){const g=el('div','gl');g.append(el('p',0,'Pronto publicaremos nuestros servicios.'));box.append(g);return}
   svcs.forEach((s,i)=>{const c=el('article','gl'+(i===svcs.length-1?' top':''));
     c.append(el('h3',0,s.name),el('p',0,s.description||''));
     const p=el('div','pr',money(s.price));p.append(el('small',0,s.duration_min+' min'));c.append(p);
@@ -173,13 +173,23 @@ async function init(){
   (md.data||[]).forEach(m=>{const s=document.querySelector(`[data-sec="${m.section_key}"]`);if(!s)return;
     [['eyebrow'],['title'],['body']].forEach(([f])=>{if(m[f]){const n=s.querySelector(`[data-f="${f}"]`);if(n)n.textContent=m[f]}});
     if(m.url){const v=s.querySelector('.vid');v.classList.remove('none');v.replaceChildren();
-      if(m.media_type==='image'){const i=el('img');i.src=m.url;i.alt='';i.style.cssText='width:100%;height:100%;object-fit:cover;object-position:75% center';v.append(i)}
+      if(!/\.(mp4|webm|mov)(\?|$)/i.test(m.url)&&(m.media_type==='image'||/\.(jpe?g|png|webp|gif|avif)(\?|$)/i.test(m.url))){const i=el('img');i.src=m.url;i.alt='';i.style.cssText='width:100%;height:100%;object-fit:cover;object-position:75% center';v.append(i)}
       else{const x=document.createElement('video');Object.assign(x,{src:m.url,autoplay:true,loop:true,muted:true,playsInline:true,preload:'metadata'});x.setAttribute('muted','');
         if(m.poster_url)x.poster=m.poster_url;x.onerror=()=>{v.classList.add('none');x.remove()};v.append(x)}}});
   const lb=$('#legalBtns');(lg.data||[]).forEach(p=>{const b=el('button','neu',p.title);b.type='button';
     b.onclick=()=>{$('#lT').textContent=p.title;$('#lB').textContent=p.body;$('#dLegal').showModal()};lb.append(b)});
 }
 init();
+
+/* Logos del encabezado y del pie (se cargan en el panel: Página principal) */
+async function loadLogos(){try{
+  const{data}=await sb.from('site_media').select('section_key,url').eq('page','inicio').in('section_key',['logo_encabezado','logo_pie']);
+  (data||[]).forEach(m=>{if(!['logo_encabezado','logo_pie'].includes(m.section_key)||!/^https:\/\//i.test(m.url||''))return;
+    const t=document.querySelector(m.section_key==='logo_encabezado'?'.hd .logo':'footer .logo');if(!t)return;
+    const i=document.createElement('img');i.src=m.url;i.alt='';
+    i.style.cssText='height:30px;width:30px;object-fit:contain;border-radius:50%;vertical-align:middle;margin-right:10px';
+    i.onerror=()=>i.remove();t.prepend(i)})}catch(e){}}
+loadLogos();
 
 function openBook(id){const d=$('#dBook');$('#bMsg').textContent='';if(id)$('#bSvc').value=id;
   const n=new Date(Date.now()+3600e3);n.setMinutes(0,0,0);const pad=x=>String(x).padStart(2,'0');
