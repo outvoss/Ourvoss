@@ -170,7 +170,7 @@ const TABS={
   defaults:{name:'Nuevo producto',stock:0,price:0},
   cols:[T('name','Producto','text'),T('sku','SKU','text'),T('price','Precio','money'),T('stock','Inventario','int'),T('low_stock_threshold','Alerta bajo','int'),T('is_active','Visible','bool')]},
  inicio:{label:'Página principal (tienda)',custom:'slots',page:'inicio',
-  hint:'Aquí cargas todo lo de la página principal: el logo de la entrada (imagen PNG), la portada, el video del maniquí y el fondo de cada sección. Pulsa «Subir imagen o video»; el sistema detecta solo si es imagen o video. Máximo 50 MB por archivo; si pesa más, pega un enlace (por ejemplo de Cloudinary).'},
+  hint:'Aquí cargas todo lo de la página principal: los 3 logos (entrada, esquina superior izquierda y pie de página; deben ser imagen PNG o JPG, no video), la portada, el video del maniquí y el fondo de cada sección. Pulsa «Subir imagen o video»; el sistema detecta solo si es imagen o video. Máximo 50 MB por archivo; si pesa más, pega un enlace (por ejemplo de Cloudinary).'},
  catalogo:{label:'Catálogo de ropa',table:'catalog_items',order:'sort_order',
   defaults:{name:'Nueva prenda',price:0},
   cols:[T('name','Prenda','text'),T('category_id','Categoría','fk',{f:'catalog_categories'}),T('price','Precio','money'),T('image_url','Imagen','file',{accept:'image/*'}),T('mannequin_video_url','Video del maniquí','file',{accept:'video/*'}),T('sort_order','Orden','int'),T('is_active','Visible','bool')]},
@@ -278,7 +278,7 @@ function slotCard(r){
     <label>Título<input data-sid="${r.id}" data-sk="title" value="${esc(r.title)}"></label>
     <label>Subtítulo<input data-sid="${r.id}" data-sk="subtitle" value="${esc(r.subtitle)}"></label>`:'';
   return `<article class="slot"><h3>${esc(r.label||r.section_key)}</h3><div class="pv">${prev}</div>
-    <div class="srow"><label class="btn sm up2">Subir imagen o video<input type="file" hidden data-sid="${r.id}" accept="image/*,video/*"></label>
+    <div class="srow"><label class="btn sm up2">Subir imagen o video<input type="file" hidden data-sid="${r.id}" accept="${/^logo/.test(r.section_key)?'image/*':'image/*,video/*'}"></label>
     <button class="btn ghost sm" data-clear="${r.id}" ${r.url?'':'disabled'}>Quitar</button></div>
     <label>O pega un enlace<input data-sid="${r.id}" data-sk="url" value="${esc(r.url)}" placeholder="https://…"></label>${texts}
     <label class="chk"><input type="checkbox" data-sid="${r.id}" data-sk="is_active" ${r.is_active?'checked':''}> Visible en la página</label></article>`;
@@ -292,13 +292,16 @@ $('#main').addEventListener('change',async e=>{
   const el=e.target,id=el.dataset.sid;if(!id||!cur||cur.custom!=='slots')return;
   if(el.type==='file'){const f=el.files[0];if(!f)return;
     if(f.size>50*1024*1024)return toast(`El archivo pesa ${Math.round(f.size/1048576)} MB y el máximo es 50 MB. Pega un enlace en su lugar.`,1);
-    const row=rows.find(r=>r.id===id);toast('Subiendo…');
+    const row=rows.find(r=>r.id===id);
+    if(/^logo/.test(row.section_key)&&f.type.startsWith('video/'))return toast('Los logos deben ser una imagen (PNG o JPG), no un video.',1);
+    toast('Subiendo…');
     const path=`site_media/${row.section_key}-${Date.now()}-${f.name.replace(/[^\w.-]/g,'_')}`;
     const{error}=await sb.storage.from('outvoss-media').upload(path,f,{contentType:f.type});
     if(error)return toast(error.message,1);
     const url=sb.storage.from('outvoss-media').getPublicUrl(path).data.publicUrl;
     return saveSlot(id,{url,media_type:f.type.startsWith('video/')?'video':'image'})}
   const k=el.dataset.sk,v=el.type==='checkbox'?el.checked:el.value.trim();
+  if(k==='url'&&/^logo/.test(rows.find(r=>r.id===id)?.section_key||'')&&isVideoUrl(v))return toast('Los logos deben ser una imagen (PNG o JPG), no un video.',1);
   saveSlot(id,k==='url'?{url:v,media_type:isVideoUrl(v)?'video':'image'}:{[k]:v});
 });
 $('#main').addEventListener('click',e=>{
