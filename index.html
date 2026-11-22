@@ -1,9 +1,10 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OUTVOSS — Beyond The Ordinary. Own Your Style.</title>
+  <meta name="description" content="OUTVOSS: moda masculina contemporánea, catálogo con maniquí virtual y peluquería premium en Colombia." />
+  <title>OUTVOSS — Más allá de lo ordinario. Sé dueño de tu estilo.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -13,30 +14,21 @@
   <!-- PANTALLA DE ENTRADA / PRELOADER CON HAZ DE LUZ EN EL MARCO -->
   <div class="outvoss-intro-loader" id="outvossIntroLoader" aria-label="Cargando OUTVOSS">
     <div class="loader-center-stage">
-      <!-- Marco en arco con el haz de luz recorriendo el borde -->
       <div class="arch-glow-frame">
         <div class="arch-inner-slot">
           <!-- PEGA AQUÍ EL LINK DE TU ISOTIPO EN PNG DESDE TU STORAGE -->
-          <img
-            id="loaderLogoImg"
-            src=""
-            alt="Emblema OUTVOSS"
-            class="loader-logo-img hidden"
-          />
-          <!-- Respaldo geométrico mientras conectas la URL del Storage -->
+          <img id="loaderLogoImg" src="" alt="Emblema OUTVOSS" class="loader-logo-img hidden" />
           <div class="loader-logo-placeholder" id="loaderLogoPlaceholder">
             <span>OV</span>
-            <small>ESPACIO ISOTIPO STORAGE</small>
+            
           </div>
         </div>
       </div>
-
-      <!-- Tipografía Oficial OUTVOSS debajo del marco -->
       <div class="loader-brand-lockup">
         <span class="loader-brand-title">OUTVOSS</span>
         <div class="loader-brand-tagline">
           <span class="tagline-line"></span>
-          <span>BEYOND THE ORDINARY.</span>
+          <span>MÁS ALLÁ DE LO ORDINARIO.</span>
           <span class="tagline-line"></span>
         </div>
       </div>
@@ -45,9 +37,7 @@
 
   <!-- HEADER GLOBAL DE MARCA -->
   <header class="site-header">
-
-    <a href="#outvoss-inicio" class="brand" data-switch-view="outvoss">
-      <!-- Símbolo minimalista geométrico OUTVOSS -->
+    <a href="#outvoss-inicio" class="brand">
       <span class="brand-crest" aria-label="Símbolo OUTVOSS">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <polygon points="12 2 21 8.5 17.5 20 6.5 20 3 8.5 12 2" />
@@ -56,31 +46,27 @@
       </span>
       <div class="brand-text">
         <span class="brand-name">OUTVOSS</span>
-        <span class="brand-sub">EUROPEAN CONTEMPORARY MENSWEAR</span>
+        <span class="brand-sub">MODA MASCULINA EUROPEA</span>
       </div>
     </a>
 
-    <!-- Navegación dinámica según la vista activa -->
     <nav class="main-nav" id="navOutvoss">
       <a href="#outvoss-inicio">Inicio</a>
       <a href="#outvoss-portafolio">Portafolio</a>
+      <a href="catalogo.html">Catálogo</a>
+      <a href="peluqueria.html">Peluquería</a>
       <a href="#outvoss-filosofia">Identidad</a>
       <a href="#outvoss-canales">Contacto</a>
     </nav>
 
-    <nav class="main-nav hidden" id="navBarber">
-      <a href="#barber-inicio">Inicio</a>
-      <a href="#barber-servicios">Servicios</a>
-      <a href="#barber-arte">El Arte</a>
-      <a href="#barber-experiencia">Experiencia</a>
-    </nav>
 
     <div class="header-actions">
-      <button class="btn-nav-toggle" id="toggleBarberBtn" type="button">
+      <a class="btn-nav-toggle" id="toggleBarberBtn" href="peluqueria.html">
         <span class="toggle-dot"></span>
         <span id="toggleBarberLabel">Peluquería</span>
-      </button>
+      </a>
       <button class="btn-outline-champagne" id="headerActionBtn" type="button">Asesoría VIP</button>
+      <button class="nav-toggle" id="navToggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="navOutvoss">☰</button>
     </div>
   </header>
 
@@ -89,10 +75,9 @@
          VISTA 1: UNIVERSO PRINCIPAL OUTVOSS (MODA & LIFESTYLE)
     ========================================================== -->
     <div class="view-container active" id="viewOutvoss">
-      <!-- PORTADA CINEMATOGRÁFICA A PANTALLA COMPLETA (PRIMERA CAPA) -->
+      <!-- PORTADA CINEMATOGRÁFICA A PANTALLA COMPLETA -->
       <section class="cinema-hero-cover" id="outvossCinemaHero">
         <div class="cinema-player-stage">
-          <!-- ENLACE DIRECTO .MP4 EN CLOUDINARY -->
           <video
             id="heroMp4Player"
             src="https://res.cloudinary.com/r3qer78t/video/upload/v1786299280/InShot_20260809_120513339.mp4"
@@ -105,17 +90,15 @@
 
           <div class="cinema-poster-fallback" id="heroMp4Fallback">
             <span class="cinema-sigil">OUTVOSS</span>
-            <p>REPRODUCTOR MULTIMEDIA MP4 DE FONDO</p>
-            <small>Conecta tu enlace <code>.mp4</code> desde el código o panel de administración</small>
           </div>
         </div>
 
         <div class="cinema-scrim-overlay"></div>
 
         <div class="cinema-hero-overlay-content">
-          <span class="eyebrow">EUROPEAN CONTEMPORARY MENSWEAR</span>
-          <h1 class="cinema-display-title">OUTVOSS</h1>
-          <p class="cinema-subtitle">OWN YOUR STYLE · ELEGANCIA EUROPEA Y CARÁCTER CONTEMPORÁNEO</p>
+          <span class="eyebrow" id="heroEyebrow">MODA MASCULINA EUROPEA CONTEMPORÁNEA</span>
+          <h1 class="cinema-display-title" id="heroTitle">OUTVOSS</h1>
+          <p class="cinema-subtitle" id="heroSubtitle">SÉ DUEÑO DE TU ESTILO · ELEGANCIA EUROPEA Y CARÁCTER CONTEMPORÁNEO</p>
 
           <div class="cinema-cta-group">
             <a href="#scrollyOutvoss" class="btn-solid-champagne">Descubrir Colección ↓</a>
@@ -124,42 +107,37 @@
         </div>
       </section>
 
-      <!-- =========================================================
-           PARTE 1 DE 4: ESCENA 0 — HERO OUTVOSS + EXHIBICIÓN DIGITAL
-      ========================================================== -->
+      <!-- PARTE 1 DE 4: HERO OUTVOSS + EXHIBICIÓN DIGITAL -->
       <div class="scrolly-stage" id="scrollyOutvoss">
         <div class="sticky-viewport outvoss-bg-layer">
           <div class="bg-overlay-gradient"></div>
           <div class="ambient-halo" id="haloOutvoss"></div>
           <div class="floor-grid"></div>
 
-          <!-- Contenedor circular del Video del Maniquí -->
           <div class="media-circle-wrap" id="mannequinMediaWrap">
             <div class="circle-video-frame">
-              <!-- REEMPLAZA 'maniqui-outvoss.mp4' POR LA RUTA DE TU VIDEO -->
-              <video id="mannequinVideo" src="maniqui-outvoss.mp4" autoplay loop muted playsinline></video>
+              <video id="mannequinVideo" autoplay loop muted playsinline></video>
               <div class="video-placeholder-ui" id="mannequinFallback">
                 <span class="placeholder-sigil">OV</span>
                 <p>EXHIBICIÓN DIGITAL 360°</p>
-                <small>Conecta tu archivo <code>maniqui-outvoss.mp4</code></small>
+                <small>Próximamente</small>
               </div>
             </div>
             <div class="rotate-hud">
               <span class="hud-dot"></span>
-              <span id="outvossHudText">COLECCIÓN OUTVOSS · BEYOND THE ORDINARY</span>
+              <span id="outvossHudText">COLECCIÓN OUTVOSS · MÁS ALLÁ DE LO ORDINARIO</span>
             </div>
           </div>
 
-          <!-- ESCENA 0: HERO OUTVOSS -->
           <section class="story-panel active" data-outvoss-scene="0">
             <div class="panel-content left">
-              <span class="eyebrow">EUROPEAN CONTEMPORARY MENSWEAR</span>
-              <h1 class="display-title">BEYOND THE<br />ORDINARY.<br /><span class="champagne-text">OWN YOUR STYLE.</span></h1>
+              <span class="eyebrow">MODA MASCULINA EUROPEA CONTEMPORÁNEA</span>
+              <h1 class="display-title">MÁS ALLÁ DE<br />LO ORDINARIO.<br /><span class="champagne-text">SÉ DUEÑO DE TU ESTILO.</span></h1>
               <p class="lead-copy">
                 Moda masculina contemporánea que equilibra la sofisticación europea, el carácter urbano y la autenticidad. Vestir con identidad, proyectar seguridad y diferenciarse sin exagerar.
               </p>
               <div class="cta-row">
-                <button class="btn-solid-champagne" data-open-outvoss-modal type="button">Explorar Catálogo</button>
+                <a href="catalogo.html" class="btn-solid-champagne">Explorar Catálogo</a>
                 <a href="#outvoss-portafolio" class="btn-ghost">Ver Categorías</a>
               </div>
             </div>
@@ -169,19 +147,15 @@
         <div class="scroll-anchor" id="outvoss-inicio"></div>
       </div>
 
-      <!-- ESPACIO INTERMEDIO 1 (ENTRE PARTE 1 Y PARTE 2) -->
       <div class="outvoss-interlude-slot" id="outvossSlotEntre1y2"></div>
 
-      <!-- =========================================================
-           PARTE 2 DE 4: ESCENA 1 — CURADURÍA MASCULINA (9 CATEGORÍAS)
-      ========================================================== -->
+      <!-- PARTE 2 DE 4: CURADURÍA MASCULINA (9 CATEGORÍAS) -->
       <div class="scrolly-stage" id="scrollyOutvossParte2">
         <div class="sticky-viewport outvoss-bg-layer">
           <div class="bg-overlay-gradient"></div>
           <div class="ambient-halo" id="haloOutvossParte2"></div>
           <div class="floor-grid"></div>
 
-          <!-- ESCENA 1: PORTAFOLIO DE PRODUCTOS (9 CATEGORÍAS) -->
           <section class="story-panel active" data-outvoss-scene="1">
             <div class="panel-content left wide-panel">
               <span class="eyebrow">PORTAFOLIO COMERCIAL</span>
@@ -245,6 +219,9 @@
                   <p>Calzado masculino casual y urbano de diseño limpio.</p>
                 </article>
               </div>
+              <div class="cta-row" style="margin-top:14px">
+                <a href="catalogo.html" class="btn-solid-champagne">Abrir catálogo completo</a>
+              </div>
             </div>
           </section>
         </div>
@@ -252,12 +229,12 @@
         <div class="scroll-anchor" id="outvoss-portafolio"></div>
       </div>
 
-      <!-- ESPACIO INTERMEDIO 2: PANTALLA 3D DEL TAMAÑO DE LA PORTADA (TRAS SECCIÓN 2) -->
+      <!-- PANTALLA 3D DEL TAMAÑO DE LA PORTADA (TRAS SECCIÓN 2) -->
       <div class="outvoss-interlude-slot" id="outvossSlotEntre2y3">
         <section class="outvoss-3d-hero-screen" id="outvoss3dStageScreen" aria-label="Pantalla de Modelos 3D">
           <div class="screen-3d-top-bar">
             <div class="screen-3d-heading-group">
-              <span class="eyebrow">STUDIO 3D · OUTVOSS FOOTWEAR</span>
+              <span class="eyebrow">ESTUDIO 3D · CALZADO OUTVOSS</span>
               <h2 class="screen-3d-title">COLECCIÓN <span class="champagne-text">3D EN TIEMPO REAL</span></h2>
             </div>
 
@@ -294,16 +271,13 @@
         </section>
       </div>
 
-      <!-- =========================================================
-           PARTE 3 DE 4: ESCENA 2 — IDENTIDAD SIN CONCESIONES
-      ========================================================== -->
+      <!-- PARTE 3 DE 4: IDENTIDAD SIN CONCESIONES -->
       <div class="scrolly-stage" id="scrollyOutvossParte3">
         <div class="sticky-viewport outvoss-bg-layer">
           <div class="bg-overlay-gradient"></div>
           <div class="ambient-halo" id="haloOutvossParte3"></div>
           <div class="floor-grid"></div>
 
-          <!-- ESCENA 2: IDENTIDAD Y FILOSOFÍA -->
           <section class="story-panel active" data-outvoss-scene="2">
             <div class="panel-content left">
               <span class="eyebrow">FILOSOFÍA DE MARCA</span>
@@ -333,19 +307,15 @@
         <div class="scroll-anchor" id="outvoss-filosofia"></div>
       </div>
 
-      <!-- ESPACIO INTERMEDIO 3 (ENTRE PARTE 3 Y PARTE 4) -->
       <div class="outvoss-interlude-slot" id="outvossSlotEntre3y4"></div>
 
-      <!-- =========================================================
-           PARTE 4 DE 4: ESCENA 3 — TU NUEVA IMAGEN EMPIEZA AQUÍ
-      ========================================================== -->
+      <!-- PARTE 4 DE 4: TU NUEVA IMAGEN EMPIEZA AQUÍ -->
       <div class="scrolly-stage" id="scrollyOutvossParte4">
         <div class="sticky-viewport outvoss-bg-layer">
           <div class="bg-overlay-gradient"></div>
           <div class="ambient-halo" id="haloOutvossParte4"></div>
           <div class="floor-grid"></div>
 
-          <!-- ESCENA 3: CANALES Y PROYECCIÓN -->
           <section class="story-panel active" data-outvoss-scene="3">
             <div class="panel-content left">
               <span class="eyebrow">ATENCIÓN PERSONALIZADA · COLOMBIA</span>
@@ -355,7 +325,7 @@
               </p>
               <div class="cta-row">
                 <button class="btn-solid-champagne" data-open-outvoss-modal type="button">Contactar Asesor →</button>
-                <button class="btn-ghost" data-switch-view="barber" type="button">Ir a Peluquería</button>
+                <a class="btn-ghost" href="peluqueria.html">Ir a Peluquería</a>
               </div>
             </div>
           </section>
@@ -365,125 +335,6 @@
       </div>
     </div>
 
-    <!-- =========================================================
-         VISTA 2: SERVICIO DE PELUQUERÍA (CONSERVADO + VIDEO EN CÍRCULO)
-    ========================================================== -->
-    <div class="view-container hidden" id="viewBarber">
-      <div class="scrolly-stage" id="scrollyBarber">
-        <!-- Capa de imagen de fondo configurable para PELUQUERÍA -->
-        <div class="sticky-viewport barber-bg-layer">
-          <div class="bg-overlay-gradient"></div>
-          <div class="ambient-halo" id="haloBarber"></div>
-          <div class="floor-grid"></div>
-
-          <!-- Contenedor circular del Video de Peluquería (reemplaza la silla dibujada) -->
-          <div class="media-circle-wrap" id="barberMediaWrap">
-            <div class="circle-video-frame">
-              <!-- REEMPLAZA 'video-peluqueria.mp4' POR LA RUTA DE TU VIDEO -->
-              <video id="barberVideo" src="video-peluqueria.mp4" autoplay loop muted playsinline></video>
-              <div class="video-placeholder-ui" id="barberFallback">
-                <span class="placeholder-sigil">TB</span>
-                <p>GROOMING STUDIO</p>
-                <small>Conecta tu archivo <code>video-peluqueria.mp4</code></small>
-              </div>
-            </div>
-            <div class="rotate-hud">
-              <span class="hud-dot"></span>
-              <span>SERVICIO EXCLUSIVO OUTVOSS · RESERVA TU SILLÓN</span>
-            </div>
-          </div>
-
-          <section class="story-panel active" data-barber-scene="0">
-            <div class="panel-content left">
-              <span class="eyebrow">SALÓN MASCULINO PREMIUM · OUTVOSS</span>
-              <h1 class="display-title">PRECISIÓN.<br />ESTILO.<br />CONFIANZA.</h1>
-              <p class="lead-copy">
-                Entra en un santuario de cuidado personal elevado, diseñado a la medida del caballero moderno.
-                Cortes de autor, afeitados a navaja con toalla caliente y oficio atemporal.
-              </p>
-              <div class="cta-row">
-                <button class="btn-solid-champagne" data-open-booking type="button">Reservar Cita</button>
-                <a href="#barber-servicios" class="btn-ghost">Explorar Servicios</a>
-              </div>
-            </div>
-          </section>
-
-          <section class="story-panel" data-barber-scene="1">
-            <div class="panel-content left">
-              <span class="eyebrow">RITUALES EXCLUSIVOS</span>
-              <h2 class="section-title">EXPERIENCIA<br />INSIGNIA</h2>
-              <p class="lead-copy">
-                Cada sesión comienza con un diagnóstico anatómico y finaliza con un detallado de máxima precisión.
-              </p>
-              <div class="service-cards">
-                <article class="service-card">
-                  <span class="service-tag">01 · $55</span>
-                  <h3>CORTE DE CABELLO</h3>
-                  <p>Arquitectura a tijera sobre peine, desvanecido a piel y lavado botánico.</p>
-                  <button class="card-link" data-open-booking type="button">Seleccionar →</button>
-                </article>
-                <article class="service-card">
-                  <span class="service-tag">02 · $40</span>
-                  <h3>ESCULPIDO DE BARBA</h3>
-                  <p>Perfilado a navaja libre, aceites esenciales al vapor y bálsamo de madera de cedro.</p>
-                  <button class="card-link" data-open-booking type="button">Seleccionar →</button>
-                </article>
-                <article class="service-card">
-                  <span class="service-tag">03 · $85</span>
-                  <h3>ESTILISMO PREMIUM</h3>
-                  <p>Corte completo, afeitado real con espuma caliente, acupresión craneal y peinado.</p>
-                  <button class="card-link" data-open-booking type="button">Seleccionar →</button>
-                </article>
-              </div>
-            </div>
-          </section>
-
-          <section class="story-panel" data-barber-scene="2">
-            <div class="panel-content left">
-              <span class="eyebrow">INGENIERÍA DE HERENCIA</span>
-              <h2 class="section-title">EL ARTE</h2>
-              <p class="lead-copy">
-                Desde tijeras de acero japonés afiladas a mano hasta sillones hidráulicos de hierro fundido, cada detalle está construido para el equilibrio, la ergonomía y el lujo perdurable.
-              </p>
-              <div class="craft-metrics">
-                <div class="metric">
-                  <strong>360°</strong>
-                  <span>Eje Hidráulico</span>
-                </div>
-                <div class="metric">
-                  <strong>45 MIN</strong>
-                  <span>Sesión Dedicada</span>
-                </div>
-                <div class="metric">
-                  <strong>100%</strong>
-                  <span>Acabado a Medida</span>
-                </div>
-              </div>
-              <button class="btn-solid-champagne" data-open-booking type="button">Reserva Tu Sillón</button>
-            </div>
-          </section>
-
-          <section class="story-panel" data-barber-scene="3">
-            <div class="panel-content left">
-              <span class="eyebrow">CUPOS DIARIOS LIMITADOS</span>
-              <h2 class="section-title">TU PRÓXIMO LOOK<br />EMPIEZA AQUÍ.</h2>
-              <p class="lead-copy">
-                Toma asiento bajo el halo. Asegura tu barbero maestro preferido y tu horario de llegada en segundos.
-              </p>
-              <div class="cta-row">
-                <button class="btn-solid-champagne" data-open-booking type="button">Reservar Cita →</button>
-                <button class="btn-ghost" data-switch-view="outvoss" type="button">← Volver a Tienda OUTVOSS</button>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <div class="scroll-anchor" id="barber-inicio"></div>
-        <div class="scroll-anchor" id="barber-servicios"></div>
-        <div class="scroll-anchor" id="barber-arte"></div>
-        <div class="scroll-anchor" id="barber-experiencia"></div>
-      </div>
-    </div>
   </main>
 
   <!-- FOOTER UNIFICADO OUTVOSS -->
@@ -494,22 +345,34 @@
           <span class="brand-crest">OV</span>
           <div class="brand-text">
             <span class="brand-name">OUTVOSS</span>
-            <span class="brand-sub">BEYOND THE ORDINARY · OWN YOUR STYLE</span>
+            <span class="brand-sub">MÁS ALLÁ DE LO ORDINARIO · SÉ DUEÑO DE TU ESTILO</span>
           </div>
         </div>
         <p class="footer-note">Moda Masculina Contemporánea & Grooming Privado · Colombia</p>
+        <ul class="footer-links">
+          <li><a href="catalogo.html">Catálogo</a></li>
+          <li><a href="peluqueria.html">Peluquería</a></li>
+        </ul>
       </div>
 
       <div class="footer-col">
         <span class="footer-heading">CANALES DE ATENCIÓN</span>
         <p class="footer-note">Catálogo Digital & Asesoría Personalizada</p>
-        <p class="footer-note">contacto@outvoss.com</p>
+        <p class="footer-note" id="fMail">contacto@outvoss.com</p>
+        <p class="footer-note" id="fWa"></p>
       </div>
 
       <div class="footer-col align-end footer-cta-group">
-        <button class="btn-outline-champagne" data-switch-view="barber" type="button">Peluquería</button>
+        <a class="btn-outline-champagne" href="peluqueria.html">Peluquería</a>
         <button class="btn-solid-champagne" data-open-outvoss-modal type="button">Atención OUTVOSS</button>
       </div>
+    </div>
+
+    <!-- Franja legal: los textos se cargan desde Supabase (tabla legal_pages) -->
+    <div class="legal-strip">
+      <span class="legal-copy">© <span id="footerYear"></span> OUTVOSS. Todos los derechos reservados.</span>
+      <span id="legalBtns" style="display:contents"></span>
+      <a class="btn-neu" href="admin.html">Acceso administración</a>
     </div>
   </footer>
 
@@ -517,8 +380,8 @@
   <div class="modal-backdrop" id="outvossModal" aria-hidden="true">
     <div class="modal-card">
       <div class="modal-top">
-        <span class="eyebrow">OUTVOSS CONCIERGE</span>
-        <button class="modal-close" id="closeOutvossModalBtn" type="button">✕</button>
+        <span class="eyebrow">ATENCIÓN OUTVOSS</span>
+        <button class="modal-close" id="closeOutvossModalBtn" type="button" aria-label="Cerrar">✕</button>
       </div>
       <h3 class="modal-title">Asesoría & Catálogo</h3>
       <form class="booking-form" id="outvossForm">
@@ -535,12 +398,13 @@
         </label>
         <label>
           <span>Tu Nombre</span>
-          <input type="text" id="outvossClientName" placeholder="Ej. Carlos Mendoza" required />
+          <input type="text" id="outvossClientName" placeholder="Ej. Carlos Mendoza" required minlength="2" maxlength="100" />
         </label>
         <label>
           <span>WhatsApp o Correo de Contacto</span>
-          <input type="text" id="outvossClientContact" placeholder="+57 300 000 0000" required />
+          <input type="text" id="outvossClientContact" placeholder="+57 300 000 0000" required minlength="5" maxlength="120" />
         </label>
+        <p class="form-err" id="outvossErr" role="alert"></p>
         <button class="btn-solid-champagne full-width" type="submit">Solicitar Catálogo</button>
       </form>
       <div class="booking-success" id="outvossSuccess">
@@ -550,41 +414,15 @@
     </div>
   </div>
 
-  <!-- MODAL 2: RESERVA DE PELUQUERÍA (CONSERVADO) -->
-  <div class="modal-backdrop" id="bookingModal" aria-hidden="true">
-    <div class="modal-card">
-      <div class="modal-top">
-        <span class="eyebrow">RESERVAR SESIÓN · PELUQUERÍA</span>
-        <button class="modal-close" id="closeModalBtn" type="button">✕</button>
-      </div>
-      <h3 class="modal-title">Reserva Tu Sillón</h3>
-      <form class="booking-form" id="bookingForm">
-        <label>
-          <span>Servicio</span>
-          <select id="serviceSelect">
-            <option value="Corte de Cabello — $55">Corte de Cabello — $55</option>
-            <option value="Esculpido de Barba — $40">Esculpido de Barba — $40</option>
-            <option value="Estilismo Premium — $85">Estilismo Premium — $85</option>
-          </select>
-        </label>
-        <label>
-          <span>Nombre Completo</span>
-          <input type="text" id="clientName" placeholder="Alexander Miller" required />
-        </label>
-        <label>
-          <span>Hora Preferida</span>
-          <input type="time" id="clientTime" value="15:00" required />
-        </label>
-        <button class="btn-solid-champagne full-width" type="submit">Confirmar Reserva</button>
-      </form>
-      <div class="booking-success" id="bookingSuccess">
-        <strong>Sillón Reservado.</strong>
-        <p id="bookingConfirmText"></p>
-      </div>
-    </div>
-  </div>
+  <!-- DIÁLOGO DE PÁGINAS LEGALES -->
+  <dialog class="legal-dialog" id="legalDialog">
+    <h3 id="legalTitle"></h3>
+    <div class="legal-body" id="legalBody"></div>
+    <button class="btn-outline-champagne" type="button" id="legalClose">Cerrar</button>
+  </dialog>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
   <script src="app.js"></script>
+
 </body>
 </html>
-
