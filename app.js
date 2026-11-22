@@ -386,6 +386,23 @@
     fondo_canales: 'scrollyOutvossParte4'
   };
 
+  const VIDEO_EXT = /\.(mp4|webm|mov)(\?|$)/i;
+  const IMAGE_EXT = /\.(jpe?g|png|webp|gif|avif|svg)(\?|$)/i;
+  const isVideoMedia = (m) => VIDEO_EXT.test(m.url || '') || (!IMAGE_EXT.test(m.url || '') && m.media_type === 'video');
+
+  /* Logo en el encabezado y en el pie (reemplaza el emblema por la imagen subida) */
+  function setBrandLogo(selector, url) {
+    const crest = document.querySelector(selector);
+    if (!crest || !isHttps(url)) return;
+    if (!crest._orig) crest._orig = Array.from(crest.childNodes);
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = 'OUTVOSS';
+    img.style.cssText = 'width:100%;height:100%;object-fit:contain;border-radius:50%;display:block';
+    img.addEventListener('error', () => crest.replaceChildren(...crest._orig));
+    crest.replaceChildren(img);
+  }
+
   function setStageBackground(stageId, m) {
     const stage = $(stageId);
     const layer = stage && stage.querySelector('.sticky-viewport');
@@ -393,7 +410,7 @@
     const old = layer.querySelector('.bg-media');
     if (old) old.remove();
     let el;
-    if (m.media_type === 'video') {
+    if (isVideoMedia(m)) {
       el = document.createElement('video');
       el.src = m.url; el.autoplay = true; el.loop = true; el.muted = true; el.playsInline = true; el.preload = 'metadata';
       el.setAttribute('muted', '');
@@ -426,6 +443,10 @@
       (media.data || []).forEach((m) => {
         if (m.section_key === 'logo') {
           setLoaderLogo(m.url);
+        } else if (m.section_key === 'logo_encabezado') {
+          setBrandLogo('.site-header .brand-crest', m.url);
+        } else if (m.section_key === 'logo_pie') {
+          setBrandLogo('.site-footer .brand-crest', m.url);
         } else if (STAGE_BACKGROUNDS[m.section_key]) {
           setStageBackground(STAGE_BACKGROUNDS[m.section_key], m);
         } else if (m.section_key === 'hero') {
@@ -455,6 +476,19 @@
         });
       }
     } catch (e) { /* el sitio sigue con el contenido por defecto */ }
+  }
+
+  const navToggle = $('navToggle');
+  const mainNav = $('navOutvoss');
+  if (navToggle && mainNav) {
+    navToggle.addEventListener('click', () => {
+      const open = mainNav.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', String(open));
+      navToggle.textContent = open ? '✕' : '☰';
+    });
+    mainNav.addEventListener('click', (e) => {
+      if (e.target.closest('a')) { mainNav.classList.remove('open'); navToggle.setAttribute('aria-expanded', 'false'); navToggle.textContent = '☰'; }
+    });
   }
 
   loadCategories();
