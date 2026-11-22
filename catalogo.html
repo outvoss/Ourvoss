@@ -150,7 +150,7 @@ addEventListener('scroll',()=>$('#hd').classList.toggle('sc',scrollY>40),{passiv
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function setBg(s,m){const v=s.querySelector('.vid');if(!m.url)return;v.classList.remove('none');v.replaceChildren();
-  if(m.media_type==='image'){const i=el('img');i.src=m.url;i.alt='';i.style.cssText='width:100%;height:100%;object-fit:cover;object-position:75% center';v.append(i)}
+  if(!/\.(mp4|webm|mov)(\?|$)/i.test(m.url)&&(m.media_type==='image'||/\.(jpe?g|png|webp|gif|avif)(\?|$)/i.test(m.url))){const i=el('img');i.src=m.url;i.alt='';i.style.cssText='width:100%;height:100%;object-fit:cover;object-position:75% center';v.append(i)}
   else{const x=document.createElement('video');Object.assign(x,{src:m.url,autoplay:true,loop:true,muted:true,playsInline:true,preload:'metadata'});x.setAttribute('muted','');x.onerror=()=>{v.classList.add('none');x.remove()};v.append(x)}}
 
 async function init(){
@@ -235,6 +235,16 @@ $('#fAsk').addEventListener('submit',async e=>{e.preventDefault();const m=$('#aM
   if(error){m.className='msg err';m.textContent=error.message;return}
   m.className='msg ok';m.textContent='Solicitud recibida. Un asesor te escribirá pronto.';e.target.reset()});
 init();
+
+/* Logos del encabezado y del pie (se cargan en el panel: Página principal) */
+async function loadLogos(){try{
+  const{data}=await sb.from('site_media').select('section_key,url').eq('page','inicio').in('section_key',['logo_encabezado','logo_pie']);
+  (data||[]).forEach(m=>{if(!['logo_encabezado','logo_pie'].includes(m.section_key)||!/^https:\/\//i.test(m.url||''))return;
+    const t=document.querySelector(m.section_key==='logo_encabezado'?'.hd .logo':'footer .logo');if(!t)return;
+    const i=document.createElement('img');i.src=m.url;i.alt='';
+    i.style.cssText='height:30px;width:30px;object-fit:contain;border-radius:50%;vertical-align:middle;margin-right:10px';
+    i.onerror=()=>i.remove();t.prepend(i)})}catch(e){}}
+loadLogos();
 </script>
 </body>
 </html>
