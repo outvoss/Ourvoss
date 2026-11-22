@@ -227,9 +227,10 @@
     stageHaloPairs.forEach(([stage, halo]) => {
       const rect = stage.getBoundingClientRect();
       if (rect.bottom < -200 || rect.top > window.innerHeight + 200) return;
-      const progress = Math.min(Math.max((window.innerHeight - rect.top) / (window.innerHeight + rect.height), 0), 1);
+      const distance = Math.max(stage.offsetHeight - window.innerHeight, 1);
+      const progress = Math.min(Math.max(-rect.top, 0), distance) / distance;
       const scale = 1 + Math.sin(progress * Math.PI * 2) * 0.04;
-      halo.style.setProperty('--halo-scale', scale.toFixed(3));
+      halo.style.transform = 'translateY(-50%) scale(' + scale.toFixed(3) + ')';
     });
   }
   function onScroll() {
