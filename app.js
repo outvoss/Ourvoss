@@ -279,6 +279,7 @@
       data.forEach((cat, i) => {
         const card = document.createElement('a');
         card.className = 'catalog-card';
+        card.style.cssText = 'display:block;text-decoration:none;color:inherit';
         card.href = 'catalogo.html?cat=' + encodeURIComponent(cat.slug);
         card.setAttribute('data-group', cat.group_key);
 
@@ -288,6 +289,7 @@
         if (isHttps(cat.image_url)) {
           const img = document.createElement('img');
           img.className = 'cat-img';
+          img.style.cssText = 'display:block;width:100%;height:76px;object-fit:cover;border-radius:4px;margin-bottom:8px';
           img.src = cat.image_url;
           img.alt = cat.name;
           img.loading = 'lazy';
@@ -402,6 +404,7 @@
       el.addEventListener('error', () => el.remove());
     }
     el.className = 'bg-media';
+    el.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0';
     layer.prepend(el);
   }
 
@@ -452,19 +455,6 @@
         });
       }
     } catch (e) { /* el sitio sigue con el contenido por defecto */ }
-  }
-
-  const navToggle = $('navToggle');
-  const mainNav = $('navOutvoss');
-  if (navToggle && mainNav) {
-    navToggle.addEventListener('click', () => {
-      const open = mainNav.classList.toggle('open');
-      navToggle.setAttribute('aria-expanded', String(open));
-      navToggle.textContent = open ? '✕' : '☰';
-    });
-    mainNav.addEventListener('click', (e) => {
-      if (e.target.closest('a')) { mainNav.classList.remove('open'); navToggle.setAttribute('aria-expanded', 'false'); navToggle.textContent = '☰'; }
-    });
   }
 
   loadCategories();
