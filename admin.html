@@ -53,6 +53,7 @@ td span{color:var(--sand,#e5dec9)}
 #toast.on{opacity:1}#toast.bad{border-color:var(--bad);color:var(--bad)}
 .form{max-width:440px}
 .inv{display:flex;gap:8px;align-items:center;margin:6px 0;color:var(--mut)}
+.hint{color:var(--mut);font-size:13px;max-width:760px;margin:-4px 0 14px}
 .empty{padding:28px;text-align:center;color:var(--mut)}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -163,13 +164,18 @@ const TABS={
   defaults:{name:'Nueva prenda',price:0},
   cols:[T('name','Prenda','text'),T('category_id','Categoría','fk',{f:'catalog_categories'}),T('price','Precio','money'),T('image_url','Imagen','file',{accept:'image/*'}),T('mannequin_video_url','Video del maniquí','file',{accept:'video/*'}),T('sort_order','Orden','int'),T('is_active','Visible','bool')]},
  categorias:{label:'Categorías',table:'catalog_categories',order:'sort_order',defaults:{name:'Nueva categoría',slug:'cat-'},slugFix:true,
-  cols:[T('name','Nombre','text'),T('group_key','Grupo','sel',{o:GROUPS}),T('sort_order','Orden','int'),T('is_active','Visible','bool')]},
- bento:{label:'Tarjetas bento',table:'bento_cards',order:'slot',noAdd:true,noDel:true,
+  hint:'La imagen se muestra en las tarjetas del portafolio de la página principal y como respaldo en el bento del catálogo.',
+  cols:[T('name','Nombre','text'),T('group_key','Grupo','sel',{o:GROUPS}),T('description','Descripción','text'),T('image_url','Imagen','file',{accept:'image/*'}),T('sort_order','Orden','int'),T('is_active','Visible','bool')]},
+ bento:{label:'Tarjetas bento',table:'bento_cards',order:'slot',noAdd:true,noDel:true,hint:'Las 6 tarjetas de la parte superior del catálogo. Si una no tiene imagen propia, usa la de su categoría.',
   cols:[T('s','Posición','ro',{g:r=>'#'+r.slot}),T('title','Título','text'),T('subtitle','Texto corto','text'),T('size','Tamaño','sel',{o:['xl','lg','wide','tall','md','sm']}),T('image_url','Imagen','file',{accept:'image/*'}),T('category_id','Abre categoría','fk',{f:'catalog_categories'}),T('is_active','Visible','bool')]},
  servicios:{label:'Servicios peluquería',table:'barber_services',order:'sort_order',defaults:{name:'Nuevo servicio',price:0},
   cols:[T('name','Servicio','text'),T('description','Descripción','text'),T('price','Precio','money'),T('duration_min','Min','int'),T('image_url','Imagen','file',{accept:'image/*'}),T('is_active','Visible','bool')]},
- medios:{label:'Videos y fondos',table:'site_media',order:'page',defaults:{page:'peluqueria',media_type:'video'},uniq:true,
-  cols:[T('page','Página','sel',{o:['inicio','peluqueria','catalogo']}),T('section_key','Sección','text'),T('url','Video / imagen','file',{accept:'video/*,image/*'}),T('title','Título','text'),T('body','Texto','text'),T('is_active','Visible','bool')]},
+ medios:{label:'Videos e imágenes del sitio',table:'site_media',order:'page',order2:'sort_order',noAdd:true,noDel:true,
+  hint:'Aquí cargas el logo de la entrada, las portadas, los fondos de cada sección y el video del maniquí. Imágenes: JPG, PNG o WebP. Videos: MP4 de hasta 50 MB; si pesa más, pega un enlace (por ejemplo de Cloudinary). En "Tipo" elige si el archivo es video o imagen.',
+  cols:[T('p','Página','ro',{g:r=>({inicio:'Inicio',peluqueria:'Peluquería',catalogo:'Catálogo'})[r.page]||r.page}),T('l','Dónde se muestra','ro',{g:r=>r.label||r.section_key}),T('media_type','Tipo','sel',{o:[['video','Video'],['image','Imagen']]}),T('url','Archivo o enlace','file',{accept:'video/*,image/*'}),T('eyebrow','Etiqueta','text'),T('title','Título','text'),T('body','Texto','text'),T('is_active','Visible','bool')]},
+ modelos3d:{label:'Modelos 3D de calzado',table:'outvoss_3d_zapatillas',order:'sort_order',defaults:{title:'Nuevo modelo'},
+  hint:'Pantalla 3D de la página principal. Pega el enlace del visor 3D (por ejemplo Sketchfab) o sube una imagen/video si no tienes visor.',
+  cols:[T('title','Nombre','text'),T('category','Etiqueta','text'),T('embed_url','Enlace del visor 3D','text'),T('media_url','Imagen o video alterno','file',{accept:'image/*,video/*'}),T('sort_order','Orden','int'),T('is_active','Visible','bool')]},
  citas:{label:'Citas',table:'appointments',sel:'*, clients(full_name,phone,email)',order:'scheduled_at',asc:false,noAdd:true,
   cols:[T('scheduled_at','Fecha','ro',{g:r=>fmtDate(r.scheduled_at)}),T('c','Cliente','ro',{g:r=>r.clients?.full_name}),T('p','Teléfono','ro',{g:r=>r.clients?.phone}),T('service_name','Servicio','ro',{g:r=>r.service_name}),
    T('status','Estado','sel',{o:['pendiente','confirmada','completada','cancelada','no_asistio']})]},
@@ -192,7 +198,8 @@ async function boot(){
 async function open(key){
   cur={...TABS[key],key};[...$('#nav').children].forEach(b=>b.classList.toggle('on',b.dataset.t===key));
   if(cur.custom)return settings();
-  const{data,error}=await sb.from(cur.table).select(cur.sel||'*').order(cur.order,{ascending:cur.asc!==false});
+  let q=sb.from(cur.table).select(cur.sel||'*').order(cur.order,{ascending:cur.asc!==false});if(cur.order2)q=q.order(cur.order2);
+  const{data,error}=await q;
   if(error)return $('#main').innerHTML=`<p class="empty">${esc(error.message)}</p>`;
   rows=data;render();
 }
@@ -203,7 +210,7 @@ function cell(c,r){
    case 'int':return `<input ${a} data-t="int" type="number" min="0" step="1" value="${v??0}">`;
    case 'money':return `<input ${a} data-t="money" type="number" min="0" step="${disp==='USD'?'0.01':'1000'}" value="${disp==='USD'?(v/cfg.usd_rate).toFixed(2):v}">`;
    case 'bool':return `<input ${a} data-t="bool" type="checkbox" aria-label="${c.l}" ${v?'checked':''}>`;
-   case 'sel':return `<select ${a} data-t="text">${c.o.map(o=>`<option ${o==v?'selected':''}>${o}</option>`).join('')}</select>`;
+   case 'sel':return `<select ${a} data-t="text">${c.o.map(o=>{const[x,l]=Array.isArray(o)?o:[o,o];return `<option value="${esc(x)}" ${x==v?'selected':''}>${esc(l)}</option>`}).join('')}</select>`;
    case 'fk':return `<select ${a} data-t="fk"><option value="">—</option>${(lists[c.f]||[]).map(o=>`<option value="${o.id}" ${o.id==v?'selected':''}>${esc(o.name)}</option>`).join('')}</select>`;
    case 'file':return `<div class="fl"><input ${a} data-t="text" value="${esc(v)}" placeholder="Pega un enlace o sube un archivo"><label class="up">Subir<input type="file" hidden ${a} data-t="file" accept="${c.accept}"></label></div>`;
    default:return `<span>${esc(c.g?c.g(r):v)}</span>`;
@@ -212,7 +219,7 @@ function cell(c,r){
 function render(){
   const stat=cur.key==='productos'?`<span class="stat">Valor del inventario: ${fmtMoney(rows.reduce((s,r)=>s+r.price*r.stock,0))}</span>`:'';
   const hasAct=cur.sell||!cur.noDel;
-  $('#main').innerHTML=`<div class="bar"><h2>${cur.label}</h2>${stat}${cur.noAdd?'':'<button class="btn sm" id="add">+ Agregar</button>'}</div>
+  $('#main').innerHTML=`<div class="bar"><h2>${cur.label}</h2>${stat}${cur.noAdd?'':'<button class="btn sm" id="add">+ Agregar</button>'}</div>${cur.hint?`<p class="hint">${esc(cur.hint)}</p>`:''}
   <div class="wrap"><table><thead><tr>${cur.cols.map(c=>`<th>${c.l}</th>`).join('')}${hasAct?'<th></th>':''}</tr></thead><tbody id="tb">
   ${rows.length?rows.map(r=>`<tr class="${cur.key==='productos'&&r.stock<=r.low_stock_threshold?'low':''}">${cur.cols.map(c=>`<td>${cell(c,r)}</td>`).join('')}${hasAct?`<td><div class="act">${cur.sell?`<button class="btn sm" data-sell="${r.id}">Vender</button>`:''}${cur.noDel?'':`<button class="btn del sm" data-del="${r.id}">Borrar</button>`}</div></td>`:''}</tr>`).join(''):`<tr><td colspan="9" class="empty">Sin registros</td></tr>`}
   </tbody></table></div>`;
