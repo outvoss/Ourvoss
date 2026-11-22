@@ -55,6 +55,15 @@ td span{color:var(--sand,#e5dec9)}
 .inv{display:flex;gap:8px;align-items:center;margin:6px 0;color:var(--mut)}
 .hint{color:var(--mut);font-size:13px;max-width:760px;margin:-4px 0 14px}
 .empty{padding:28px;text-align:center;color:var(--mut)}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.slot{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.slot h3{font:600 14px 'Plus Jakarta Sans',system-ui,sans-serif;color:var(--chl)}
+.slot .pv{height:150px;border-radius:8px;background:#09090b;border:1px dashed var(--line);display:grid;place-items:center;overflow:hidden;color:var(--mut);font-size:12.5px}
+.slot .pv img,.slot .pv video{width:100%;height:100%;object-fit:contain}
+.slot .srow{display:flex;gap:8px;flex-wrap:wrap}
+.slot label{margin:0}.slot .chk{display:flex;align-items:center;gap:8px}
+.btn.up2{display:inline-flex;align-items:center;margin:0;font-size:12px;color:#11100c}
+.btn:disabled{opacity:.4;cursor:not-allowed}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -160,6 +169,8 @@ const TABS={
  productos:{label:'Productos e inventario',table:'store_products',order:'name',sell:true,
   defaults:{name:'Nuevo producto',stock:0,price:0},
   cols:[T('name','Producto','text'),T('sku','SKU','text'),T('price','Precio','money'),T('stock','Inventario','int'),T('low_stock_threshold','Alerta bajo','int'),T('is_active','Visible','bool')]},
+ inicio:{label:'Página principal (tienda)',custom:'slots',page:'inicio',
+  hint:'Aquí cargas todo lo de la página principal: el logo de la entrada (imagen PNG), la portada, el video del maniquí y el fondo de cada sección. Pulsa «Subir imagen o video»; el sistema detecta solo si es imagen o video. Máximo 50 MB por archivo; si pesa más, pega un enlace (por ejemplo de Cloudinary).'},
  catalogo:{label:'Catálogo de ropa',table:'catalog_items',order:'sort_order',
   defaults:{name:'Nueva prenda',price:0},
   cols:[T('name','Prenda','text'),T('category_id','Categoría','fk',{f:'catalog_categories'}),T('price','Precio','money'),T('image_url','Imagen','file',{accept:'image/*'}),T('mannequin_video_url','Video del maniquí','file',{accept:'video/*'}),T('sort_order','Orden','int'),T('is_active','Visible','bool')]},
@@ -170,8 +181,8 @@ const TABS={
   cols:[T('s','Posición','ro',{g:r=>'#'+r.slot}),T('title','Título','text'),T('subtitle','Texto corto','text'),T('size','Tamaño','sel',{o:['xl','lg','wide','tall','md','sm']}),T('image_url','Imagen','file',{accept:'image/*'}),T('category_id','Abre categoría','fk',{f:'catalog_categories'}),T('is_active','Visible','bool')]},
  servicios:{label:'Servicios peluquería',table:'barber_services',order:'sort_order',defaults:{name:'Nuevo servicio',price:0},
   cols:[T('name','Servicio','text'),T('description','Descripción','text'),T('price','Precio','money'),T('duration_min','Min','int'),T('image_url','Imagen','file',{accept:'image/*'}),T('is_active','Visible','bool')]},
- medios:{label:'Videos e imágenes del sitio',table:'site_media',order:'page',order2:'sort_order',noAdd:true,noDel:true,
-  hint:'Aquí cargas el logo de la entrada, las portadas, los fondos de cada sección y el video del maniquí. Imágenes: JPG, PNG o WebP. Videos: MP4 de hasta 50 MB; si pesa más, pega un enlace (por ejemplo de Cloudinary). En "Tipo" elige si el archivo es video o imagen.',
+ medios:{label:'Peluquería y Catálogo (videos y fondos)',table:'site_media',order:'page',order2:'sort_order',neq:['page','inicio'],noAdd:true,noDel:true,
+  hint:'Portadas y fondos de las páginas de Peluquería y Catálogo. Imágenes: JPG, PNG o WebP. Videos: MP4 de hasta 50 MB; si pesa más, pega un enlace (por ejemplo de Cloudinary). En "Tipo" elige si el archivo es video o imagen.',
   cols:[T('p','Página','ro',{g:r=>({inicio:'Inicio',peluqueria:'Peluquería',catalogo:'Catálogo'})[r.page]||r.page}),T('l','Dónde se muestra','ro',{g:r=>r.label||r.section_key}),T('media_type','Tipo','sel',{o:[['video','Video'],['image','Imagen']]}),T('url','Archivo o enlace','file',{accept:'video/*,image/*'}),T('eyebrow','Etiqueta','text'),T('title','Título','text'),T('body','Texto','text'),T('is_active','Visible','bool')]},
  modelos3d:{label:'Modelos 3D de calzado',table:'outvoss_3d_zapatillas',order:'sort_order',defaults:{title:'Nuevo modelo'},
   hint:'Pantalla 3D de la página principal. Pega el enlace del visor 3D (por ejemplo Sketchfab) o sube una imagen/video si no tienes visor.',
@@ -197,11 +208,12 @@ async function boot(){
 }
 async function open(key){
   cur={...TABS[key],key};[...$('#nav').children].forEach(b=>b.classList.toggle('on',b.dataset.t===key));
+  if(cur.custom==='slots')return slots();
   if(cur.custom)return settings();
-  let q=sb.from(cur.table).select(cur.sel||'*').order(cur.order,{ascending:cur.asc!==false});if(cur.order2)q=q.order(cur.order2);
+  let q=sb.from(cur.table).select(cur.sel||'*').order(cur.order,{ascending:cur.asc!==false});if(cur.order2)q=q.order(cur.order2);if(cur.neq)q=q.neq(cur.neq[0],cur.neq[1]);
   const{data,error}=await q;
   if(error)return $('#main').innerHTML=`<p class="empty">${esc(error.message)}</p>`;
-  rows=data;render();
+  rows=data||[];render();
 }
 function cell(c,r){
   const v=r[c.k],a=`data-id="${r.id}" data-k="${c.k}"`;
@@ -249,6 +261,50 @@ $('#main').addEventListener('click',async e=>{
     const q=parseInt(prompt(`Unidades vendidas de "${r.name}" (hay ${r.stock}):`,'1'),10);if(!q||q<1)return;
     const{error}=await sb.rpc('register_sale',{p_items:[{product_id:r.id,quantity:q}],p_payment:'efectivo'});
     if(error)return toast(error.message.replace(/^.*?:\s*/,''),1);toast('Venta registrada, inventario actualizado');open('productos')}
+});
+
+/* ---------- CASILLAS DE IMÁGENES Y VIDEOS (página principal) ---------- */
+const isVideoUrl=u=>/\.(mp4|webm|mov)(\?|$)/i.test(u||'');
+async function slots(){
+  const{data,error}=await sb.from('site_media').select('*').eq('page',cur.page).order('sort_order');
+  if(error)return $('#main').innerHTML=`<p class="empty">${esc(error.message)}</p>`;
+  rows=data||[];
+  $('#main').innerHTML=`<div class="bar"><h2>${cur.label}</h2></div><p class="hint">${esc(cur.hint)}</p>
+   <div class="slots">${rows.map(slotCard).join('')||'<p class="empty">Sin casillas</p>'}</div>`;
+}
+function slotCard(r){
+  const prev=r.url?(r.media_type==='video'?`<video src="${esc(r.url)}" muted loop playsinline controls preload="metadata"></video>`:`<img src="${esc(r.url)}" alt="">`):'Sin archivo todavía';
+  const texts=r.section_key==='hero'?`<label>Etiqueta<input data-sid="${r.id}" data-sk="eyebrow" value="${esc(r.eyebrow)}"></label>
+    <label>Título<input data-sid="${r.id}" data-sk="title" value="${esc(r.title)}"></label>
+    <label>Subtítulo<input data-sid="${r.id}" data-sk="subtitle" value="${esc(r.subtitle)}"></label>`:'';
+  return `<article class="slot"><h3>${esc(r.label||r.section_key)}</h3><div class="pv">${prev}</div>
+    <div class="srow"><label class="btn sm up2">Subir imagen o video<input type="file" hidden data-sid="${r.id}" accept="image/*,video/*"></label>
+    <button class="btn ghost sm" data-clear="${r.id}" ${r.url?'':'disabled'}>Quitar</button></div>
+    <label>O pega un enlace<input data-sid="${r.id}" data-sk="url" value="${esc(r.url)}" placeholder="https://…"></label>${texts}
+    <label class="chk"><input type="checkbox" data-sid="${r.id}" data-sk="is_active" ${r.is_active?'checked':''}> Visible en la página</label></article>`;
+}
+async function saveSlot(id,patch){
+  const{error}=await sb.from('site_media').update(patch).eq('id',id);
+  if(error)return toast(error.message,1);
+  toast('Guardado');slots();
+}
+$('#main').addEventListener('change',async e=>{
+  const el=e.target,id=el.dataset.sid;if(!id||!cur||cur.custom!=='slots')return;
+  if(el.type==='file'){const f=el.files[0];if(!f)return;
+    if(f.size>50*1024*1024)return toast(`El archivo pesa ${Math.round(f.size/1048576)} MB y el máximo es 50 MB. Pega un enlace en su lugar.`,1);
+    const row=rows.find(r=>r.id===id);toast('Subiendo…');
+    const path=`site_media/${row.section_key}-${Date.now()}-${f.name.replace(/[^\w.-]/g,'_')}`;
+    const{error}=await sb.storage.from('outvoss-media').upload(path,f,{contentType:f.type});
+    if(error)return toast(error.message,1);
+    const url=sb.storage.from('outvoss-media').getPublicUrl(path).data.publicUrl;
+    return saveSlot(id,{url,media_type:f.type.startsWith('video/')?'video':'image'})}
+  const k=el.dataset.sk,v=el.type==='checkbox'?el.checked:el.value.trim();
+  saveSlot(id,k==='url'?{url:v,media_type:isVideoUrl(v)?'video':'image'}:{[k]:v});
+});
+$('#main').addEventListener('click',e=>{
+  const b=e.target.closest('[data-clear]');if(!b||!cur||cur.custom!=='slots')return;
+  if(!confirm('¿Quitar el archivo de esta casilla? La página volverá a mostrar su fondo por defecto.'))return;
+  saveSlot(b.dataset.clear,{url:''});
 });
 
 /* ---------- AJUSTES + ADMINS ---------- */
