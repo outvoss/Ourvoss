@@ -151,8 +151,9 @@ select:focus-visible {
 .cinema-hero-cover {
   position: relative;
   width: 100%;
-  min-height: 560px;
-  height: min(100svh, 900px);
+  min-height: 100vh;
+  height: 100vh;
+  height: 100svh;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -215,8 +216,9 @@ select:focus-visible {
 .outvoss-3d-hero-screen {
   position: relative;
   width: 100%;
-  min-height: 640px;
-  height: min(100svh, 860px);
+  min-height: 100vh;
+  height: 100vh;
+  height: 100svh;
   padding: 86px 48px 28px;
   display: flex;
   flex-direction: column;
@@ -462,16 +464,17 @@ a.btn-neu { display: inline-block; text-decoration: none; }
    SCROLLYTELLING & FONDOS CON IMAGEN
 ========================================================== */
 /* Cada una de las 4 partes independientes de OUTVOSS */
-.scrolly-stage { position: relative; width: 100%; }
+.scrolly-stage { position: relative; height: 115vh; width: 100%; }
 
 .outvoss-interlude-slot { position: relative; width: 100%; }
 
 .scroll-anchor { position: absolute; left: 0; top: 0; width: 1px; height: 1px; pointer-events: none; }
 
 .sticky-viewport {
-  position: relative;
+  position: sticky;
+  top: 0;
   width: 100%;
-  min-height: min(100svh, 820px);
+  height: 100vh;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -500,7 +503,7 @@ a.btn-neu { display: inline-block; text-decoration: none; }
   top: 50%;
   width: 470px;
   height: 470px;
-  transform: translateY(-50%) scale(var(--halo-scale, 1));
+  transform: translateY(-50%);
   border-radius: 50%;
   border: 2px solid rgba(236, 224, 200, 0.5);
   box-shadow: 0 0 70px rgba(214, 194, 159, 0.28), inset 0 0 55px rgba(214, 194, 159, 0.18);
@@ -605,9 +608,9 @@ a.btn-neu { display: inline-block; text-decoration: none; }
    PANELES DE CONTENIDO
 ========================================================== */
 .story-panel {
-  position: relative;
-  width: 100%;
-  padding: 110px 48px 90px;
+  position: absolute;
+  inset: 0;
+  padding: 0 48px;
   display: flex;
   align-items: center;
   opacity: 0;
@@ -792,9 +795,16 @@ dialog.legal-dialog::backdrop { background: rgba(5, 5, 7, 0.82); backdrop-filter
 ========================================================== */
 @media (max-width: 1180px) {
   .site-header { padding: 0 28px; }
+  .main-nav { gap: 18px; }
   .brand-sub { display: none; }
-  .nav-toggle { display: inline-flex; }
+}
+
+@media (max-width: 960px) {
+  .site-header { padding: 0 18px; }
   .main-nav { display: none; }
+
+  /* Menú desplegable (solo donde el menú de enlaces está oculto) */
+  .nav-toggle { display: inline-flex; }
   .main-nav.open {
     display: flex;
     flex-direction: column;
@@ -805,36 +815,18 @@ dialog.legal-dialog::backdrop { background: rgba(5, 5, 7, 0.82); backdrop-filter
     right: 0;
     background: rgba(9, 9, 11, 0.97);
     border-bottom: 1px solid var(--border-subtle);
-    padding: 6px 28px 14px;
+    padding: 6px 18px 14px;
   }
   .main-nav.open a { padding: 14px 4px; font-size: 15px; border-bottom: 1px solid var(--border-subtle); }
-}
-
-@media (max-width: 1100px) {
-  .site-header { padding: 0 18px; }
-  .main-nav.open { padding: 6px 18px 14px; }
 
   .outvoss-3d-hero-screen { padding: 80px 18px 20px; }
 
-  /* En celular el círculo del maniquí va arriba y el texto debajo, sin superponerse */
-  .sticky-viewport { flex-direction: column; align-items: stretch; justify-content: flex-start; min-height: 0; }
-  .ambient-halo, .floor-grid { display: none; }
-  .media-circle-wrap {
-    position: relative;
-    right: auto;
-    top: auto;
-    transform: none;
-    width: min(72vw, 280px);
-    height: min(72vw, 280px);
-    margin: 100px auto 40px;
-  }
+  .media-circle-wrap,
+  .ambient-halo { right: 50%; top: 28%; transform: translate(50%, -50%); width: 240px; height: 240px; }
 
-  .rotate-hud { bottom: -30px; white-space: normal; width: max-content; max-width: 88vw; text-align: center; justify-content: center; }
+  .story-panel { padding: 0 18px 28px; align-items: flex-end; }
 
-  .story-panel { padding: 96px 18px 56px; align-items: flex-start; }
-  .media-circle-wrap + .story-panel { padding-top: 8px; }
-
-  .catalog-grid { grid-template-columns: repeat(2, 1fr); max-height: 320px; }
+  .catalog-grid { grid-template-columns: repeat(2, 1fr); max-height: 210px; }
 
   .cinema-hero-overlay-content { padding: 84px 18px 28px; }
 
@@ -845,7 +837,12 @@ dialog.legal-dialog::backdrop { background: rgba(5, 5, 7, 0.82); backdrop-filter
 
 @media (max-width: 640px) {
   .btn-nav-toggle { display: none; }
+}
+
+@media (max-width: 480px) {
+  .btn-nav-toggle { width: 104px; min-width: 104px; max-width: 104px; }
   .header-actions { gap: 8px; }
+  .btn-outline-champagne { padding: 0 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
