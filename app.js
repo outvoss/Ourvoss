@@ -20,15 +20,27 @@
   const loaderLogoImg = $('loaderLogoImg');
   const loaderLogoPlaceholder = $('loaderLogoPlaceholder');
 
-  if (loaderLogoImg && loaderLogoPlaceholder) {
-    if ((loaderLogoImg.getAttribute('src') || '').trim()) {
+  function setLoaderLogo(url) {
+    if (!loaderLogoImg || !loaderLogoPlaceholder) return;
+    if (isHttps(url)) {
+      loaderLogoImg.src = url;
       loaderLogoImg.classList.remove('hidden');
       loaderLogoPlaceholder.classList.add('hidden');
+      try { localStorage.setItem('outvoss_logo', url); } catch (e) { /* sin caché */ }
+    } else {
+      loaderLogoImg.removeAttribute('src');
+      loaderLogoImg.classList.add('hidden');
+      loaderLogoPlaceholder.classList.remove('hidden');
+      try { localStorage.removeItem('outvoss_logo'); } catch (e) { /* sin caché */ }
     }
+  }
+
+  if (loaderLogoImg && loaderLogoPlaceholder) {
     loaderLogoImg.addEventListener('error', () => {
       loaderLogoImg.classList.add('hidden');
       loaderLogoPlaceholder.classList.remove('hidden');
     });
+    try { const cached = localStorage.getItem('outvoss_logo'); if (cached) setLoaderLogo(cached); } catch (e) { /* sin caché */ }
   }
 
   if (loader) {
@@ -215,10 +227,9 @@
     stageHaloPairs.forEach(([stage, halo]) => {
       const rect = stage.getBoundingClientRect();
       if (rect.bottom < -200 || rect.top > window.innerHeight + 200) return;
-      const distance = Math.max(stage.offsetHeight - window.innerHeight, 1);
-      const progress = Math.min(Math.max(-rect.top, 0), distance) / distance;
+      const progress = Math.min(Math.max((window.innerHeight - rect.top) / (window.innerHeight + rect.height), 0), 1);
       const scale = 1 + Math.sin(progress * Math.PI * 2) * 0.04;
-      halo.style.transform = 'translateY(-50%) scale(' + scale.toFixed(3) + ')';
+      halo.style.setProperty('--halo-scale', scale.toFixed(3));
     });
   }
   function onScroll() {
@@ -258,7 +269,7 @@
     try {
       const { data, error } = await sb
         .from('catalog_categories')
-        .select('slug,name,group_key,description,sort_order')
+        .select('slug,name,group_key,description,image_url,sort_order')
         .eq('is_active', true)
         .order('sort_order');
       if (error || !Array.isArray(data) || !data.length) return; // se conservan las tarjetas del HTML
@@ -273,6 +284,14 @@
         const tag = document.createElement('span');
         tag.className = 'service-tag';
         tag.textContent = String(i + 1).padStart(2, '0') + ' · ' + (GROUP_LABEL[cat.group_key] || String(cat.group_key).toUpperCase());
+        if (isHttps(cat.image_url)) {
+          const img = document.createElement('img');
+          img.className = 'cat-img';
+          img.src = cat.image_url;
+          img.alt = cat.name;
+          img.loading = 'lazy';
+          card.appendChild(img);
+        }
         const title = document.createElement('h3');
         title.textContent = String(cat.name).toUpperCase();
         const text = document.createElement('p');
@@ -357,6 +376,34 @@
   if (legalClose && legalDialog) legalClose.addEventListener('click', () => legalDialog.close());
   if (legalDialog) legalDialog.addEventListener('click', (e) => { if (e.target === legalDialog) legalDialog.close(); });
 
+  const STAGE_BACKGROUNDS = {
+    fondo_inicio: 'scrollyOutvoss',
+    fondo_portafolio: 'scrollyOutvossParte2',
+    fondo_identidad: 'scrollyOutvossParte3',
+    fondo_canales: 'scrollyOutvossParte4'
+  };
+
+  function setStageBackground(stageId, m) {
+    const stage = $(stageId);
+    const layer = stage && stage.querySelector('.sticky-viewport');
+    if (!layer || !isHttps(m.url)) return;
+    const old = layer.querySelector('.bg-media');
+    if (old) old.remove();
+    let el;
+    if (m.media_type === 'video') {
+      el = document.createElement('video');
+      el.src = m.url; el.autoplay = true; el.loop = true; el.muted = true; el.playsInline = true; el.preload = 'metadata';
+      el.setAttribute('muted', '');
+      el.addEventListener('error', () => el.remove());
+    } else {
+      el = document.createElement('img');
+      el.src = m.url; el.alt = ''; el.loading = 'lazy';
+      el.addEventListener('error', () => el.remove());
+    }
+    el.className = 'bg-media';
+    layer.prepend(el);
+  }
+
   async function loadSiteContent() {
     if (!sb) return;
     try {
@@ -373,7 +420,11 @@
       }
 
       (media.data || []).forEach((m) => {
-        if (m.section_key === 'hero') {
+        if (m.section_key === 'logo') {
+          setLoaderLogo(m.url);
+        } else if (STAGE_BACKGROUNDS[m.section_key]) {
+          setStageBackground(STAGE_BACKGROUNDS[m.section_key], m);
+        } else if (m.section_key === 'hero') {
           if (m.eyebrow && $('heroEyebrow')) $('heroEyebrow').textContent = m.eyebrow;
           if (m.title && $('heroTitle')) $('heroTitle').textContent = m.title;
           if (m.subtitle && $('heroSubtitle')) $('heroSubtitle').textContent = m.subtitle;
@@ -400,6 +451,19 @@
         });
       }
     } catch (e) { /* el sitio sigue con el contenido por defecto */ }
+  }
+
+  const navToggle = $('navToggle');
+  const mainNav = $('navOutvoss');
+  if (navToggle && mainNav) {
+    navToggle.addEventListener('click', () => {
+      const open = mainNav.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', String(open));
+      navToggle.textContent = open ? '✕' : '☰';
+    });
+    mainNav.addEventListener('click', (e) => {
+      if (e.target.closest('a')) { mainNav.classList.remove('open'); navToggle.setAttribute('aria-expanded', 'false'); navToggle.textContent = '☰'; }
+    });
   }
 
   loadCategories();
