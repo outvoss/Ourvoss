@@ -29,7 +29,7 @@ a{color:inherit}
 .btn.sm{height:36px;padding:0 16px;font-size:12.5px}
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--chl);outline-offset:2px}
 /* secciones a pantalla completa con video a la derecha */
-.sec{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:96px clamp(16px,5vw,64px) 64px;overflow:hidden;background:var(--bg)}
+.sec{position:relative;min-height:min(100svh,860px);display:flex;align-items:center;padding:96px clamp(16px,5vw,64px) 64px;overflow:hidden;background:var(--bg)}
 .vid{position:absolute;inset:0;z-index:0}
 .vid video{width:100%;height:100%;object-fit:cover;object-position:75% center}
 .vid::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0a0a0a 0%,rgba(10,10,10,.86) 38%,rgba(10,10,10,.35) 100%),linear-gradient(180deg,rgba(10,10,10,.5),transparent 25%,transparent 70%,#0a0a0a)}
@@ -84,34 +84,34 @@ dialog input,dialog select{width:100%;height:42px;margin-top:5px;padding:0 10px;
 
 <main>
 <section class="sec" id="inicio" data-sec="hero"><div class="vid none"></div>
-  <div class="in"><div class="eb" data-f="eyebrow">SIGNATURE EXPERIENCE</div>
-    <h1 data-f="title">PRECISION. STYLE. CONFIDENCE.</h1>
+  <div class="in"><div class="eb" data-f="eyebrow">EXPERIENCIA EXCLUSIVA</div>
+    <h1 data-f="title">PRECISIÓN. ESTILO. CONFIANZA.</h1>
     <p class="l" data-f="body">Un santuario de cuidado personal elevado, diseñado a la medida del caballero moderno.</p>
     <div class="row"><button class="btn" data-book>Reservar cita</button><a class="btn ghost" href="#servicios">Ver servicios</a></div></div>
   <a class="down" href="#servicios" aria-label="Bajar">↓</a></section>
 
 <section class="sec" id="servicios" data-sec="servicios"><div class="vid none"></div>
-  <div class="in wide"><div class="eb" data-f="eyebrow">SERVICES</div>
+  <div class="in wide"><div class="eb" data-f="eyebrow">SERVICIOS</div>
     <h2 data-f="title">NUESTROS SERVICIOS</h2><p class="l" data-f="body">Compara y elige el servicio que quieres agendar.</p>
     <div class="cards" id="cards"><div class="gl"><p>Cargando servicios…</p></div></div></div></section>
 
 <section class="sec" id="arte" data-sec="oficio"><div class="vid none"></div>
-  <div class="in"><div class="eb" data-f="eyebrow">THE CRAFT</div>
-    <h2 data-f="title">THE CRAFT</h2>
+  <div class="in"><div class="eb" data-f="eyebrow">EL OFICIO</div>
+    <h2 data-f="title">EL ARTE DEL OFICIO</h2>
     <p class="l" data-f="body">Tijeras de acero afiladas a mano, técnica y detalle en cada corte.</p>
     <div class="met"><div><b>45 MIN</b><span>Sesión dedicada</span></div><div><b>100%</b><span>Acabado a medida</span></div></div>
     <a class="btn" href="#servicios">Elegir mi corte</a></div></section>
 
 <section class="sec" id="experiencia" data-sec="experiencia"><div class="vid none"></div>
-  <div class="in"><div class="eb" data-f="eyebrow">PREMIUM GROOMING</div>
-    <h2 data-f="title">PREMIUM GROOMING EXPERIENCE</h2>
+  <div class="in"><div class="eb" data-f="eyebrow">CUIDADO PERSONAL</div>
+    <h2 data-f="title">EXPERIENCIA PREMIUM DE CUIDADO PERSONAL</h2>
     <p class="l" data-f="body">Productos de calidad, trato especializado y un nivel de servicio que se nota.</p>
     <div class="row"><button class="btn" data-book>Reservar cita</button><a class="btn ghost" href="#servicios">Explorar servicios</a></div></div>
   <a class="down" href="#cierre" aria-label="Bajar">↓</a></section>
 
 <section class="sec" id="cierre" data-sec="cierre"><div class="vid none"></div>
   <div class="in"><div class="eb" data-f="eyebrow">TU TURNO</div>
-    <h2 data-f="title">YOUR NEXT LOOK STARTS HERE.</h2>
+    <h2 data-f="title">TU PRÓXIMO LOOK EMPIEZA AQUÍ.</h2>
     <p class="l" data-f="body">Asegura tu barbero y tu horario en segundos.</p>
     <button class="btn" data-book>Reservar cita</button></div></section>
 </main>
