@@ -169,6 +169,14 @@ const TABS={
  productos:{label:'Productos e inventario',table:'store_products',order:'name',sell:true,
   defaults:{name:'Nuevo producto',stock:0,price:0},
   cols:[T('name','Producto','text'),T('sku','SKU','text'),T('price','Precio','money'),T('stock','Inventario','int'),T('low_stock_threshold','Alerta bajo','int'),T('is_active','Visible','bool')]},
+ tienda:{label:'Tienda: fichas de productos',table:'store_products',order:'sort_order',order2:'name',noAdd:true,noDel:true,
+  hint:'Lo que ve el cliente en la tienda: categoría, descripción, tamaño, etiqueta (ej. NUEVO) y hasta 3 fotos por producto. El nombre, el precio y el inventario se manejan en «Productos e inventario». Los productos con precio 0 no se muestran en la tienda.',
+  cols:[T('n','Producto','ro',{g:r=>r.name}),T('category_id','Categoría','fk',{f:'store_categories'}),T('subtitle','Descripción corta','text'),T('description','Descripción completa','text'),T('size_label','Tamaño (ej. 250 ml)','text'),T('badge','Etiqueta','text'),T('image_url','Foto 1','file',{accept:'image/*'}),T('image_url_2','Foto 2','file',{accept:'image/*'}),T('image_url_3','Foto 3','file',{accept:'image/*'}),T('sort_order','Orden','int'),T('is_active','Visible','bool')]},
+ catprod:{label:'Categorías de la tienda',table:'store_categories',order:'sort_order',defaults:{name:'Nueva categoría',slug:'cat-'},slugFix:true,
+  cols:[T('name','Nombre','text'),T('emoji','Ícono (emoji)','text'),T('sort_order','Orden','int'),T('is_active','Visible','bool')]},
+ pedidos:{label:'Pedidos de la tienda',table:'store_orders',order:'created_at',asc:false,noAdd:true,noDel:true,confirm:true,
+  hint:'Pedidos que envían los clientes desde la tienda. «Confirmar y descontar» registra la venta y descuenta el inventario.',
+  cols:[T('d','Fecha','ro',{g:r=>fmtDate(r.created_at)}),T('n','Cliente','ro',{g:r=>r.customer_name}),T('p','Teléfono','ro',{g:r=>r.customer_phone}),T('e','Correo','ro',{g:r=>r.customer_email}),T('i','Productos','ro',{g:r=>(r.items||[]).map(i=>i.quantity+'× '+i.name).join(', ')}),T('t','Total','ro',{g:r=>fmtMoney(r.total)}),T('o','Nota','ro',{g:r=>r.note||''}),T('status','Estado','sel',{o:[['nuevo','Nuevo'],['confirmado','Confirmado'],['entregado','Entregado'],['cancelado','Cancelado']]})]},
  inicio:{label:'Página principal (tienda)',custom:'slots',page:'inicio',
   hint:'Aquí cargas todo lo de la página principal: los 3 logos (entrada, esquina superior izquierda y pie de página; deben ser imagen PNG o JPG, no video), la portada, el video del maniquí y el fondo de cada sección. Pulsa «Subir imagen o video»; el sistema detecta solo si es imagen o video. Máximo 50 MB por archivo; si pesa más, pega un enlace (por ejemplo de Cloudinary).'},
  catalogo:{label:'Catálogo de ropa',table:'catalog_items',order:'sort_order',
@@ -182,8 +190,8 @@ const TABS={
  servicios:{label:'Servicios peluquería',table:'barber_services',order:'sort_order',defaults:{name:'Nuevo servicio',price:0},
   cols:[T('name','Servicio','text'),T('description','Descripción','text'),T('price','Precio','money'),T('duration_min','Min','int'),T('image_url','Imagen','file',{accept:'image/*'}),T('is_active','Visible','bool')]},
  medios:{label:'Peluquería y Catálogo (videos y fondos)',table:'site_media',order:'page',order2:'sort_order',neq:['page','inicio'],noAdd:true,noDel:true,
-  hint:'Portadas y fondos de las páginas de Peluquería y Catálogo. Imágenes: JPG, PNG o WebP. Videos: MP4 de hasta 50 MB; si pesa más, pega un enlace (por ejemplo de Cloudinary). En "Tipo" elige si el archivo es video o imagen.',
-  cols:[T('p','Página','ro',{g:r=>({inicio:'Inicio',peluqueria:'Peluquería',catalogo:'Catálogo'})[r.page]||r.page}),T('l','Dónde se muestra','ro',{g:r=>r.label||r.section_key}),T('media_type','Tipo','sel',{o:[['video','Video'],['image','Imagen']]}),T('url','Archivo o enlace','file',{accept:'video/*,image/*'}),T('eyebrow','Etiqueta','text'),T('title','Título','text'),T('body','Texto','text'),T('is_active','Visible','bool')]},
+  hint:'Portadas y fondos de las páginas de Peluquería, Catálogo y Productos. Imágenes: JPG, PNG o WebP. Videos: MP4 de hasta 50 MB; si pesa más, pega un enlace (por ejemplo de Cloudinary). En "Tipo" elige si el archivo es video o imagen.',
+  cols:[T('p','Página','ro',{g:r=>({inicio:'Inicio',peluqueria:'Peluquería',catalogo:'Catálogo',productos:'Productos'})[r.page]||r.page}),T('l','Dónde se muestra','ro',{g:r=>r.label||r.section_key}),T('media_type','Tipo','sel',{o:[['video','Video'],['image','Imagen']]}),T('url','Archivo o enlace','file',{accept:'video/*,image/*'}),T('eyebrow','Etiqueta','text'),T('title','Título','text'),T('body','Texto','text'),T('is_active','Visible','bool')]},
  modelos3d:{label:'Modelos 3D de calzado',table:'outvoss_3d_zapatillas',order:'sort_order',defaults:{title:'Nuevo modelo'},
   hint:'Pantalla 3D de la página principal. Pega el enlace del visor 3D (por ejemplo Sketchfab) o sube una imagen/video si no tienes visor.',
   cols:[T('title','Nombre','text'),T('category','Etiqueta','text'),T('embed_url','Enlace del visor 3D','text'),T('media_url','Imagen o video alterno','file',{accept:'image/*,video/*'}),T('sort_order','Orden','int'),T('is_active','Visible','bool')]},
@@ -197,10 +205,11 @@ const TABS={
  ajustes:{label:'Ajustes y admins',custom:true}
 };
 
+async function loadLists(){const[a,b]=await Promise.all([sb.from('catalog_categories').select('id,name').order('sort_order'),sb.from('store_categories').select('id,name').order('sort_order')]);lists.catalog_categories=a.data||[];lists.store_categories=b.data||[]}
 async function boot(){
   const{data:s}=await sb.from('site_settings').select('value').eq('key','general').maybeSingle();
   if(s)cfg={...cfg,...s.value};disp=cfg.default_display||'COP';$('#curSel').value=disp;
-  const{data:c}=await sb.from('catalog_categories').select('id,name').order('sort_order');lists.catalog_categories=c||[];
+  await loadLists();
   $('#nav').innerHTML=Object.entries(TABS).map(([k,v])=>`<button data-t="${k}">${v.label}</button>`).join('');
   $('#nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b)open(b.dataset.t)});
   $('#curSel').addEventListener('change',e=>{disp=e.target.value;open(cur?.key||'productos')});
@@ -208,6 +217,7 @@ async function boot(){
 }
 async function open(key){
   cur={...TABS[key],key};[...$('#nav').children].forEach(b=>b.classList.toggle('on',b.dataset.t===key));
+  if(cur.cols&&cur.cols.some(c=>c.t==='fk'))await loadLists();
   if(cur.custom==='slots')return slots();
   if(cur.custom)return settings();
   let q=sb.from(cur.table).select(cur.sel||'*').order(cur.order,{ascending:cur.asc!==false});if(cur.order2)q=q.order(cur.order2);if(cur.neq)q=q.neq(cur.neq[0],cur.neq[1]);
@@ -230,10 +240,10 @@ function cell(c,r){
 }
 function render(){
   const stat=cur.key==='productos'?`<span class="stat">Valor del inventario: ${fmtMoney(rows.reduce((s,r)=>s+r.price*r.stock,0))}</span>`:'';
-  const hasAct=cur.sell||!cur.noDel;
+  const hasAct=cur.sell||cur.confirm||!cur.noDel;
   $('#main').innerHTML=`<div class="bar"><h2>${cur.label}</h2>${stat}${cur.noAdd?'':'<button class="btn sm" id="add">+ Agregar</button>'}</div>${cur.hint?`<p class="hint">${esc(cur.hint)}</p>`:''}
   <div class="wrap"><table><thead><tr>${cur.cols.map(c=>`<th>${c.l}</th>`).join('')}${hasAct?'<th></th>':''}</tr></thead><tbody id="tb">
-  ${rows.length?rows.map(r=>`<tr class="${cur.key==='productos'&&r.stock<=r.low_stock_threshold?'low':''}">${cur.cols.map(c=>`<td>${cell(c,r)}</td>`).join('')}${hasAct?`<td><div class="act">${cur.sell?`<button class="btn sm" data-sell="${r.id}">Vender</button>`:''}${cur.noDel?'':`<button class="btn del sm" data-del="${r.id}">Borrar</button>`}</div></td>`:''}</tr>`).join(''):`<tr><td colspan="9" class="empty">Sin registros</td></tr>`}
+  ${rows.length?rows.map(r=>`<tr class="${cur.key==='productos'&&r.stock<=r.low_stock_threshold?'low':''}">${cur.cols.map(c=>`<td>${cell(c,r)}</td>`).join('')}${hasAct?`<td><div class="act">${cur.confirm&&r.status==='nuevo'?`<button class="btn sm" data-confirm="${r.id}">Confirmar y descontar</button>`:''}${cur.sell?`<button class="btn sm" data-sell="${r.id}">Vender</button>`:''}${cur.noDel?'':`<button class="btn del sm" data-del="${r.id}">Borrar</button>`}</div></td>`:''}</tr>`).join(''):`<tr><td colspan="9" class="empty">Sin registros</td></tr>`}
   </tbody></table></div>`;
 }
 $('#main').addEventListener('change',async e=>{
@@ -257,6 +267,9 @@ $('#main').addEventListener('click',async e=>{
     const{error}=await sb.from(cur.table).insert(d);return error?toast(error.message,1):open(cur.key)}
   if(b.dataset.del){if(!confirm('¿Borrar este registro? No se puede deshacer.'))return;
     const{error}=await sb.from(cur.table).delete().eq('id',b.dataset.del);return error?toast(error.message,1):open(cur.key)}
+  if(b.dataset.confirm){if(!confirm('¿Confirmar el pedido? Se registrará la venta y se descontará el inventario.'))return;
+    const{error}=await sb.rpc('confirm_store_order',{p_order_id:b.dataset.confirm});
+    if(error)return toast(error.message.replace(/^.*?:\s*/,''),1);toast('Pedido confirmado, inventario actualizado');return open('pedidos')}
   if(b.dataset.sell){const r=rows.find(x=>x.id===b.dataset.sell);
     const q=parseInt(prompt(`Unidades vendidas de "${r.name}" (hay ${r.stock}):`,'1'),10);if(!q||q<1)return;
     const{error}=await sb.rpc('register_sale',{p_items:[{product_id:r.id,quantity:q}],p_payment:'efectivo'});
