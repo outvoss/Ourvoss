@@ -69,6 +69,42 @@ dialog label{display:block;font-size:12px;color:var(--mut);margin-bottom:12px}
 dialog input,dialog select{width:100%;height:42px;margin-top:5px;padding:0 10px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:#09090b;color:#fff;font:inherit}
 .legalbody{white-space:pre-line;color:var(--mut);font-size:14px;margin-bottom:18px}
 .msg{margin-top:12px;font-size:13px}.msg.err{color:#e07a6b}.msg.ok{color:#9fd6a8}
+/* catálogo de estilos */
+.stylesdlg{width:100vw;max-width:none;height:100vh;height:100dvh;max-height:none;margin:0;padding:0;border:0;border-radius:0;overflow:hidden;background:radial-gradient(circle at 82% 8%,rgba(197,155,95,.16),transparent 42%),#0a0a0a}
+.stylesdlg[open]{display:flex;flex-direction:column}
+.sthead{display:flex;align-items:center;gap:14px;padding:16px clamp(16px,4vw,48px);border-bottom:1px solid var(--line)}
+.sthead h3{margin:0 auto 0 0;font-size:clamp(20px,3vw,28px)}
+.stx{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--tx);font-size:18px;cursor:pointer;flex:none}
+.stx:hover{border-color:var(--ch);color:var(--chl)}
+.sttabs{display:flex;gap:8px;padding:14px clamp(16px,4vw,48px);overflow-x:auto;flex:none}
+.sttab{white-space:nowrap;border:1px solid var(--line);background:var(--glass);color:var(--mut);border-radius:999px;padding:9px 18px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+.sttab.on,.sttab:hover{border-color:var(--ch);color:var(--chl);background:rgba(197,155,95,.14)}
+.stbody{flex:1;overflow-y:auto;padding:6px clamp(16px,4vw,48px) 56px}
+.stnote{color:var(--mut);margin:6px 0 18px;max-width:60ch}
+.stgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.stp{position:relative;display:block;aspect-ratio:3/4;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(150deg,#22222a,#121216);cursor:pointer;padding:0;color:inherit;font:inherit;text-align:left;transition:border-color .25s,transform .25s}
+.stp:hover{border-color:var(--ch);transform:translateY(-3px)}
+.stp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s}.stp:hover img{transform:scale(1.06)}
+.stp .nm{position:absolute;left:8px;right:8px;bottom:8px;padding:9px 12px;border-radius:10px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-weight:600;font-size:13.5px;line-height:1.3}
+.stp .ini,.fi .ini{position:absolute;inset:0;display:grid;place-items:center;font-family:'Cinzel',serif;font-size:46px;color:#5b5240}
+.stprem{position:relative;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:30px 24px;padding:26px 0 10px;isolation:isolate}
+.stprem::before,.stprem::after{content:"";position:absolute;border-radius:50%;filter:blur(64px);pointer-events:none;z-index:-1}
+.stprem::before{width:280px;height:280px;left:2%;top:0;background:rgba(197,155,95,.3)}
+.stprem::after{width:320px;height:320px;right:2%;bottom:0;background:rgba(120,90,200,.18)}
+.fwrap{animation:fl 5.5s ease-in-out infinite;animation-delay:calc(var(--i,0)*-1.3s)}
+.fwrap:hover{animation-play-state:paused}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}
+.fcard{display:flex;flex-direction:column;gap:10px;height:100%;padding:14px;border-radius:22px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:0 18px 50px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.18);transform:perspective(800px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .2s ease,border-color .3s,box-shadow .3s}
+.fcard:hover{border-color:var(--ch);box-shadow:0 26px 70px rgba(0,0,0,.55),0 0 32px rgba(197,155,95,.24),inset 0 1px 0 rgba(255,255,255,.25)}
+.fi{position:relative;height:190px;border-radius:14px;overflow:hidden;background:#15151a}
+.fi img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.fcard h4{font-family:'Cinzel',serif;font-size:18px;line-height:1.2}
+.fcard p{color:var(--mut);font-size:13.5px;flex:1}
+.fp{display:flex;justify-content:space-between;align-items:center;gap:10px}.fp b{color:var(--chl);font-size:18px}
+.zoom{width:min(94vw,520px);text-align:center}
+.zoom img{width:100%;max-height:60vh;object-fit:contain;border-radius:12px;background:#101013;margin-bottom:14px}
+.zoom h3{margin-bottom:6px}.zoom p{color:var(--mut);margin-bottom:16px}
+@media(max-width:520px){.stgrid{grid-template-columns:repeat(2,1fr);gap:10px}.stprem{grid-template-columns:1fr}.fi{height:210px}}
 @media(max-width:900px){.hd nav{display:none}.cards{grid-template-columns:1fr}.fg{grid-template-columns:1fr 1fr}.vid::after{background:linear-gradient(180deg,rgba(10,10,10,.55),rgba(10,10,10,.82) 60%,#0a0a0a)}.vid video{object-position:70% center}.sec{align-items:flex-end}}
 @media(max-width:520px){.fg{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
@@ -100,7 +136,7 @@ dialog input,dialog select{width:100%;height:42px;margin-top:5px;padding:0 10px;
     <h2 data-f="title">EL ARTE DEL OFICIO</h2>
     <p class="l" data-f="body">Tijeras de acero afiladas a mano, técnica y detalle en cada corte.</p>
     <div class="met"><div><b>45 MIN</b><span>Sesión dedicada</span></div><div><b>100%</b><span>Acabado a medida</span></div></div>
-    <a class="btn" href="#servicios">Elegir mi corte</a></div></section>
+    <button class="btn" type="button" data-styles>Elegir mi corte</button></div></section>
 
 <section class="sec" id="experiencia" data-sec="experiencia"><div class="vid none"></div>
   <div class="in"><div class="eb" data-f="eyebrow">CUIDADO PERSONAL</div>
@@ -127,6 +163,13 @@ dialog input,dialog select{width:100%;height:42px;margin-top:5px;padding:0 10px;
       <a class="neu" href="admin.html">Acceso administración</a></div>
 </footer>
 
+<dialog id="dStyles" class="stylesdlg" aria-labelledby="stTitle">
+  <div class="sthead"><h3 id="stTitle">Catálogo de estilos</h3><button class="stx" id="stClose" type="button" aria-label="Cerrar catálogo">✕</button></div>
+  <div class="sttabs" id="stTabs" role="tablist" aria-label="Subcategorías"></div>
+  <div class="stbody" id="stBody"></div>
+</dialog>
+<dialog id="dZoom" class="zoom"><img id="zImg" alt=""><h3 id="zName"></h3><p id="zDesc"></p>
+  <div class="row" style="justify-content:center"><button class="btn" type="button" data-book>Reservar cita</button><button class="btn ghost" type="button" data-close>Cerrar</button></div></dialog>
 <dialog id="dBook"><h3>Reserva tu sillón</h3>
   <form id="fBook">
     <label>Servicio<select id="bSvc" required></select></label>
@@ -157,7 +200,7 @@ function renderServices(){
     const b=el('button','btn sm','Seleccionar →');b.onclick=()=>openBook(s.id);c.append(b);box.append(c)});
   $('#bSvc').replaceChildren(...svcs.map(s=>{const o=el('option',0,`${s.name} — ${money(s.price)}`);o.value=s.id;return o}));
 }
-$('#cur').onchange=renderServices;
+$('#cur').onchange=()=>{renderServices();if($('#dStyles').open)renderStyles()};
 
 async function init(){
   const [st,sv,md,lg]=await Promise.all([
@@ -181,6 +224,48 @@ async function init(){
 }
 init();
 
+/* ---------- Catálogo de estilos (se administra en el panel: Estilos de peluquería) ---------- */
+const ST_TABS=[['corte','Estilos de corte','Elige el estilo que más va contigo y llévale la referencia a tu barbero.'],['barba','Barba','Perfilados y estilos de barba para cada tipo de rostro.'],['premium','Estilismo Premium','Servicios de nuestra experiencia premium.']];
+let styles=[],stTab='corte',stLoaded=false;
+async function loadStyles(){if(stLoaded)return;
+  const{data}=await sb.from('barber_styles').select('*').eq('is_active',true).order('sort_order').order('name');
+  styles=data||[];stLoaded=true}
+function renderStyles(){
+  const tabs=$('#stTabs');tabs.replaceChildren();
+  ST_TABS.forEach(([k,l])=>{const b=el('button','sttab'+(k===stTab?' on':''),l);b.type='button';b.setAttribute('role','tab');b.setAttribute('aria-selected',k===stTab);
+    b.onclick=()=>{stTab=k;renderStyles();$('#stBody').scrollTop=0};tabs.append(b)});
+  const body=$('#stBody');body.replaceChildren();
+  const list=styles.filter(x=>x.category===stTab),note=ST_TABS.find(t=>t[0]===stTab)[2];
+  body.append(el('p','stnote',note));
+  if(!list.length){body.append(el('p','stnote','Pronto publicaremos estos estilos.'));return}
+  const ok=u=>/^https:\/\//i.test(u||'');
+  if(stTab==='premium'){
+    const g=el('div','stprem');
+    list.forEach((s,i)=>{const w=el('div','fwrap');w.style.setProperty('--i',i);
+      const c=el('article','fcard'),fi=el('div','fi');
+      if(ok(s.image_url)){const im=el('img');im.src=s.image_url;im.alt=s.name;im.loading='lazy';fi.append(im)}else fi.append(el('span','ini',s.name.charAt(0)));
+      const f=el('div','fp');if(Number(s.price)>0)f.append(el('b',0,money(s.price)));
+      const r=el('button','btn sm','Reservar');r.type='button';r.onclick=()=>{const sv=svcs.find(x=>/premium/i.test(x.name));$('#dStyles').close();openBook(sv&&sv.id)};f.append(r);
+      c.append(fi,el('h4',0,s.name),el('p',0,s.description||''),f);
+      c.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse')return;const b=c.getBoundingClientRect(),x=(e.clientX-b.left)/b.width*2-1,y=(e.clientY-b.top)/b.height*2-1;
+        c.style.setProperty('--ry',(x*7).toFixed(1)+'deg');c.style.setProperty('--rx',(-y*7).toFixed(1)+'deg')});
+      c.addEventListener('pointerleave',()=>{c.style.setProperty('--rx','0deg');c.style.setProperty('--ry','0deg')});
+      w.append(c);g.append(w)});
+    body.append(g);return}
+  const g=el('div','stgrid');
+  list.forEach(s=>{const b=el('button','stp');b.type='button';b.setAttribute('aria-label',s.name);
+    if(ok(s.image_url)){const im=el('img');im.src=s.image_url;im.alt=s.name;im.loading='lazy';b.append(im)}else b.append(el('span','ini',s.name.charAt(0)));
+    b.append(el('span','nm',s.name));
+    b.onclick=()=>{const u=ok(s.image_url);$('#zImg').hidden=!u;if(u)$('#zImg').src=s.image_url;$('#zImg').alt=s.name;$('#zName').textContent=s.name;$('#zDesc').textContent=s.description||'';$('#zDesc').hidden=!s.description;$('#dZoom').showModal()};
+    g.append(b)});
+  body.append(g)}
+async function openStyles(tab){if(tab)stTab=tab;const d=$('#dStyles');if(!d.open)d.showModal();
+  if(!stLoaded){$('#stBody').replaceChildren(el('p','stnote','Cargando estilos…'));try{await loadStyles()}catch(e){stLoaded=true}}
+  renderStyles()}
+$('#stClose').onclick=()=>$('#dStyles').close();
+document.addEventListener('click',e=>{if(e.target.closest('[data-styles]'))openStyles()});
+loadStyles().catch(()=>{});
+
 /* Logos del encabezado y del pie (se cargan en el panel: Página principal) */
 async function loadLogos(){try{
   const{data}=await sb.from('site_media').select('section_key,url').eq('page','inicio').in('section_key',['logo_encabezado','logo_pie']);
@@ -195,7 +280,7 @@ function openBook(id){const d=$('#dBook');$('#bMsg').textContent='';if(id)$('#bS
   const n=new Date(Date.now()+3600e3);n.setMinutes(0,0,0);const pad=x=>String(x).padStart(2,'0');
   $('#bWhen').min=`${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}T${pad(n.getHours())}:00`;d.showModal()}
 document.addEventListener('click',e=>{
-  if(e.target.closest('[data-book]'))openBook();
+  if(e.target.closest('[data-book]')){$('#dZoom').close();$('#dStyles').close();openBook()}
   if(e.target.closest('[data-close]'))e.target.closest('dialog').close();
   if(e.target.tagName==='DIALOG')e.target.close()});
 $('#fBook').addEventListener('submit',async e=>{e.preventDefault();
