@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OUTVOSS · Productos de cuidado personal</title>
+<meta name="description" content="Tienda OUTVOSS: productos de cuidado masculino para cabello, barba y piel.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<style>
+:root{--bg:#09090b;--ch:#d6c29f;--chl:#ece0c8;--chd:#94805d;--tx:#f5f3ef;--mut:#a19d94;--glass:rgba(20,20,24,.62);--line:rgba(214,194,159,.26);--neu:#16161a;--bad:#e07a6b;--ok:#9fd6a8}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{color:var(--tx);font:15px/1.6 'Plus Jakarta Sans',system-ui,sans-serif;overflow-x:hidden}
+h1,h2,h3{font-family:'Cinzel',serif;line-height:1.1}
+a{color:inherit}
+button{font:inherit;color:inherit}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,.card:focus-visible{outline:2px solid var(--chl);outline-offset:2px}
+/* encabezado */
+.hd{position:fixed;inset:0 0 auto;height:72px;padding:0 clamp(16px,4vw,48px);display:flex;align-items:center;gap:18px;z-index:50;transition:background .3s}
+.hd.sc{background:rgba(9,9,11,.86);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.logo{font-family:'Cinzel',serif;font-weight:700;letter-spacing:.2em;text-decoration:none;margin-right:auto}
+.hd nav{display:flex;gap:24px}.hd nav a{text-decoration:none;color:var(--mut);font-size:13px;font-weight:500}.hd nav a:hover,.hd nav a.on{color:var(--chl)}
+.cur{height:34px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--chl);padding:0 8px;font-size:12px}.cur option{background:#111}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:46px;padding:0 26px;border:0;border-radius:6px;background:linear-gradient(135deg,var(--chl),var(--ch) 55%,var(--chd));color:#14110b;font-weight:700;font-size:14px;cursor:pointer;text-decoration:none}
+.btn:hover{filter:brightness(1.08)}.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+.btn.ghost{background:none;border:1px solid rgba(255,255,255,.28);color:var(--tx)}.btn.ghost:hover{border-color:var(--ch);color:var(--chl)}
+.btn.sm{height:38px;padding:0 16px;font-size:12.5px}.btn.full{width:100%}
+.cartbtn{position:relative}.badge{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 5px;margin-left:8px;border-radius:999px;background:#14110b;color:var(--chl);font-size:11.5px}
+.bump{animation:bump .45s ease}@keyframes bump{40%{transform:scale(1.18)}}
+.wrap{max-width:1240px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+/* portada */
+.hero{padding:118px 0 34px}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(20px,4vw,56px);align-items:center}
+.eb{font-size:12px;font-weight:600;letter-spacing:.18em;color:var(--ch);margin-bottom:12px}
+.hero h1{font-size:clamp(32px,5.2vw,62px);font-weight:700;margin-bottom:14px}
+.l{color:var(--mut);max-width:48ch;margin-bottom:22px}
+.search{display:flex;align-items:center;gap:10px;max-width:520px;height:52px;padding:0 16px;border:1px solid var(--line);border-radius:14px;background:var(--glass);backdrop-filter:blur(14px)}
+.search input{flex:1;min-width:0;background:none;border:0;outline:0;color:var(--tx);font:inherit}
+.search button{background:none;border:0;color:var(--mut);cursor:pointer}
+/* escenario que reacciona */
+.stage{position:relative;aspect-ratio:1/1.1;width:100%;max-width:540px;justify-self:center;perspective:900px}
+.stage-in{position:absolute;inset:0;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease;transform-style:preserve-3d}
+.ring{position:absolute;top:3%;left:7%;width:86%;aspect-ratio:1;border-radius:50%;border:2px solid rgba(236,224,200,.5);box-shadow:0 0 70px rgba(214,194,159,.28),inset 0 0 55px rgba(214,194,159,.18);transition:box-shadow .4s,transform .4s,border-color .4s}
+.stage.hot .ring{box-shadow:0 0 120px rgba(214,194,159,.62),inset 0 0 80px rgba(214,194,159,.36);transform:scale(1.045);border-color:var(--chl)}
+.frame{position:absolute;top:8%;left:12.5%;width:75%;aspect-ratio:1;border-radius:50%;overflow:hidden;background:radial-gradient(circle,#1b1b20,#09090b);box-shadow:inset 0 0 40px rgba(0,0,0,.85)}
+.frame video,.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.frame .fb{position:absolute;inset:0;display:grid;place-items:center;font-family:'Cinzel',serif;font-size:44px;letter-spacing:5px;color:var(--ch);opacity:.65}
+.frame .fb.off{display:none}
+.frame .swap{opacity:0;transition:opacity .35s}.frame .swap.on{opacity:1}
+.orb{position:absolute;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff6e3,var(--ch));box-shadow:0 0 18px rgba(214,194,159,.5);transform:translate3d(calc(var(--px,0)*var(--d)),calc(var(--py,0)*var(--d)),0);transition:transform .2s ease;animation:float 4s ease-in-out infinite}
+.o1{width:14px;height:14px;top:10%;left:8%;--d:24px}.o2{width:9px;height:9px;top:22%;right:6%;--d:-32px;animation-delay:.8s}.o3{width:18px;height:18px;bottom:24%;right:10%;--d:38px;animation-delay:1.6s}.o4{width:8px;height:8px;bottom:30%;left:6%;--d:-20px;animation-delay:2.4s}
+@keyframes float{50%{margin-top:-10px}}
+.spot{position:absolute;left:3%;right:3%;bottom:0;display:flex;gap:12px;align-items:center;padding:10px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;transform:translateY(10px);transition:.3s;pointer-events:none}
+.spot.on{opacity:1;transform:none}
+.spot img{width:54px;height:54px;object-fit:cover;border-radius:10px;background:#111;flex:none}
+.spot b{display:block;font-size:14px;line-height:1.25}.spot span{color:var(--chl);font-weight:700;font-size:14px}
+.fly{position:fixed;z-index:300;width:40px;height:40px;border-radius:50%;background:#222 center/cover;border:2px solid var(--ch);pointer-events:none;box-shadow:0 6px 20px rgba(0,0,0,.5)}
+/* categorías y rejilla */
+.blk{padding:30px 0}
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:16px}
+.sh h2{font-size:clamp(22px,2.6vw,30px)}.sh small{color:var(--mut);font-weight:600}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{border:1px solid var(--line);background:var(--glass);color:var(--mut);border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+.pill.on,.pill:hover{border-color:var(--ch);color:var(--chl);background:rgba(214,194,159,.14)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+.card{display:flex;flex-direction:column;border-radius:18px;padding:12px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);cursor:pointer;transition:transform .25s,border-color .25s}
+.card:hover{transform:translateY(-4px);border-color:var(--ch)}
+.th{position:relative;height:200px;border-radius:12px;overflow:hidden;background:linear-gradient(150deg,#22222a,#121216);display:grid;place-items:center;font-family:'Cinzel',serif;font-size:42px;color:var(--chd);margin-bottom:12px}
+.th img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .4s}.card:hover .th img{transform:scale(1.05)}
+.tag{position:absolute;top:10px;left:10px;font:700 10.5px 'Plus Jakarta Sans';padding:4px 10px;border-radius:999px;background:var(--ch);color:#14110b}
+.stk{position:absolute;bottom:10px;left:10px;font:600 11px 'Plus Jakarta Sans';padding:4px 10px;border-radius:999px;background:rgba(9,9,11,.82);border:1px solid var(--line);color:var(--chl)}
+.stk.out{color:var(--bad);border-color:rgba(224,122,107,.5)}
+.card h3{font-size:16px;margin-bottom:4px}.card .sub{color:var(--mut);font-size:12.5px;line-height:1.4;margin-bottom:14px}
+.foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between}
+.price{font-weight:700;color:var(--chl);font-size:16px}
+.plus{width:38px;height:38px;border-radius:12px;border:0;background:var(--ch);color:#14110b;font-size:22px;font-weight:700;cursor:pointer;line-height:1}
+.plus:hover{background:var(--chl)}.plus:disabled{opacity:.35;cursor:not-allowed}
+.empty{grid-column:1/-1;color:var(--mut);padding:30px 0}
+/* ficha del producto */
+dialog{margin:auto;width:min(94vw,440px);max-height:92vh;overflow:auto;background:#141418;color:var(--tx);border:1px solid var(--line);border-radius:18px;padding:22px}
+dialog::backdrop{background:rgba(5,5,7,.82);backdrop-filter:blur(6px)}
+dialog h3{font-size:22px;margin-bottom:16px}
+.detail{width:min(94vw,480px);display:none;flex-direction:column;gap:14px}.detail[open]{display:flex}
+.dtop{display:flex;justify-content:space-between;align-items:center}
+.ib{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:transparent;cursor:pointer;font-size:16px}
+.dcat{color:var(--ch);font-size:12px;font-weight:600;letter-spacing:.14em}
+.show{display:flex;align-items:center;gap:8px;border-radius:16px;padding:12px 8px;background:rgba(255,255,255,.03);border:1px solid var(--line)}
+.sa{width:34px;height:46px;border-radius:10px;border:1px solid var(--line);background:transparent;font-size:22px;cursor:pointer;flex:none}
+.dstage{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:10px}
+.dimg{position:relative;width:100%;height:230px;border-radius:12px;overflow:hidden;background:#101013;display:grid;place-items:center;font-family:'Cinzel',serif;font-size:50px;color:var(--chd)}
+.dimg img{width:100%;height:100%;object-fit:contain;display:block}
+.dots{display:flex;gap:6px}.dot{width:8px;height:8px;border-radius:50%;border:0;background:#4a4742;cursor:pointer}.dot.on{width:20px;border-radius:999px;background:var(--ch)}
+.dinfo h2{font-size:22px;margin-bottom:4px}.dsub{color:var(--mut);font-size:13.5px}.dstock{font-size:12.5px;font-weight:600;color:var(--chl);margin-top:4px}.dstock.out{color:var(--bad)}
+.dqp{display:flex;align-items:center;justify-content:space-between;margin:12px 0}
+.qty{display:flex;align-items:center;gap:12px}.qty button{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:transparent;font-size:18px;cursor:pointer}.qty button:last-child{background:var(--ch);color:#14110b;border-color:var(--ch)}.qty span{min-width:22px;text-align:center;font-weight:700}
+.dqp strong{font-size:22px;color:var(--chl)}
+.ddesc{color:var(--mut);font-size:14px;line-height:1.6;white-space:pre-line}
+.dact{display:flex;gap:10px}.dact .btn:first-child{flex:1}
+/* carrito */
+.cartback{position:fixed;inset:0;z-index:120;background:rgba(5,5,7,.7);backdrop-filter:blur(5px);display:flex;justify-content:flex-end}
+.cartback[hidden]{display:none}
+.drawer{width:min(100%,410px);height:100%;background:#141418;border-left:1px solid var(--line);padding:20px;display:flex;flex-direction:column}
+.chead{display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--line)}.chead h2{font-size:20px}
+.clist{flex:1;overflow-y:auto;padding:14px 0;display:flex;flex-direction:column;gap:10px}
+.ci{display:flex;gap:10px;align-items:center;padding:10px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.ci img,.ci .ph{width:54px;height:54px;border-radius:10px;object-fit:cover;background:#1b1b20;flex:none;display:grid;place-items:center;color:var(--chd);font-family:'Cinzel',serif}
+.cin{flex:1;min-width:0}.cin h4{font-size:14px;line-height:1.3}.cin p{font-size:12.5px;color:var(--mut)}
+.cq{display:flex;align-items:center;gap:8px;margin-top:6px}.cq button{width:26px;height:26px;border-radius:8px;border:1px solid var(--line);background:transparent;cursor:pointer}
+.crm{background:none;border:0;color:var(--bad);cursor:pointer;font-size:16px}
+.cfoot{border-top:1px solid var(--line);padding-top:14px}
+.ctotal{display:flex;justify-content:space-between;font-size:17px;margin-bottom:12px}.ctotal strong{color:var(--chl)}
+.cfoot label{display:block;font-size:12px;color:var(--mut);margin-bottom:10px}
+.cfoot input{width:100%;height:40px;margin-top:4px;padding:0 10px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:#09090b;color:#fff;font:inherit}
+.msg{margin-top:10px;font-size:13px;min-height:18px}.msg.err{color:var(--bad)}.msg.ok{color:var(--ok)}
+.cempty{text-align:center;color:var(--mut);margin-top:30px}
+/* pie */
+footer{background:#070709;border-top:1px solid var(--line);padding:44px clamp(16px,5vw,64px) 28px;margin-top:40px}
+.fg{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:28px;max-width:1200px;margin:0 auto}
+footer h4{font-size:12px;letter-spacing:.16em;color:var(--ch);margin-bottom:12px}footer p,footer li{color:var(--mut);font-size:13.5px}footer ul{list-style:none;display:grid;gap:8px}footer a{text-decoration:none}footer a:hover{color:var(--chl)}
+.legal{max-width:1200px;margin:32px auto 0;padding-top:22px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:14px;align-items:center}.legal .cp{color:var(--mut);font-size:12.5px;margin-right:auto}
+.neu{display:inline-block;text-decoration:none;border:0;border-radius:12px;background:var(--neu);color:var(--chl);padding:10px 16px;font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:6px 6px 12px #040405,-5px -5px 11px #25252c}
+.neu:hover{color:#fff}.neu:active{box-shadow:inset 4px 4px 9px #040405,inset -4px -4px 9px #25252c}
+.legalbody{white-space:pre-line;color:var(--mut);font-size:14px;margin-bottom:18px}
+#toast{position:fixed;top:84px;left:50%;transform:translateX(-50%);background:#141418;border:1px solid var(--ch);padding:10px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:400;font-size:13px}#toast.on{opacity:1}
+@media(max-width:900px){.hd nav{display:none}.hero{padding-top:100px}.hero-grid{grid-template-columns:1fr}.stage{max-width:380px;margin:0 auto}.fg{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.fg{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr);gap:12px}.th{height:150px}.cartbtn .lbl{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="hd" id="hd">
+  <a class="logo" href="index.html">OUTVOSS</a>
+  <nav><a href="index.html">Inicio</a><a class="on" href="productos.html">Productos</a><a href="catalogo.html">Catálogo</a><a href="peluqueria.html">Peluquería</a></nav>
+  <select class="cur" id="cur" aria-label="Moneda"><option>COP</option><option>USD</option></select>
+  <button class="btn sm cartbtn" id="cartBtn" type="button">🛒 <span class="lbl">&nbsp;Carrito</span><span class="badge" id="badge">0</span></button>
+</header>
+
+<main>
+<section class="hero" id="inicio" data-sec="hero"><div class="wrap hero-grid">
+  <div>
+    <div class="eb" data-f="eyebrow">TIENDA OUTVOSS</div>
+    <h1 data-f="title">CUIDADO MASCULINO DE ALTO NIVEL.</h1>
+    <p class="l" data-f="body">Productos seleccionados para cabello, barba y piel. Elige, añade al carrito y te contactamos para coordinar la entrega.</p>
+    <div class="search"><span aria-hidden="true">🔍</span><input type="search" id="q" placeholder="¿Qué producto buscas?" aria-label="Buscar producto"><button type="button" id="qClear" hidden aria-label="Borrar búsqueda">✕</button></div>
+  </div>
+  <div class="stage" id="stage" aria-label="Escenario interactivo">
+    <div class="stage-in" id="stageIn">
+      <div class="ring"></div>
+      <div class="frame" id="frame"><div class="fb" id="fb">OV</div></div>
+      <i class="orb o1"></i><i class="orb o2"></i><i class="orb o3"></i><i class="orb o4"></i>
+      <div class="spot" id="spot"><img id="spotImg" alt=""><div><b id="spotName"></b><span id="spotPrice"></span></div></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="blk" id="tienda"><div class="wrap">
+  <div class="sh"><h2>¿Qué necesitas hoy?</h2><button class="pill" id="seeAll" type="button">Ver todo</button></div>
+  <div class="pills" id="pills" role="tablist" aria-label="Categorías"></div>
+</div></section>
+
+<section class="blk" style="padding-top:0"><div class="wrap">
+  <div class="sh"><h2>Nuestros productos</h2><small id="count"></small></div>
+  <div class="grid" id="grid"><p class="empty">Cargando productos…</p></div>
+</div></section>
+</main>
+
+<footer>
+  <div class="fg">
+    <div><div class="logo" style="margin-bottom:10px">OUTVOSS</div><p>Moda masculina contemporánea y grooming privado · Colombia</p></div>
+    <div><h4>NAVEGACIÓN</h4><ul><li><a href="index.html">Inicio</a></li><li><a href="catalogo.html">Catálogo</a></li><li><a href="peluqueria.html">Peluquería</a></li></ul></div>
+    <div><h4>CONTACTO</h4><p id="fMail">contacto@outvoss.com</p><p id="fWa"></p></div>
+  </div>
+  <div class="legal"><span class="cp">© <span id="yr"></span> OUTVOSS. Todos los derechos reservados.</span><span id="legalBtns" style="display:contents"></span>
+    <a class="neu" href="admin.html">Acceso administración</a></div>
+</footer>
+
+<!-- Ficha del producto -->
+<dialog id="dDetail" class="detail" aria-labelledby="dName">
+  <div class="dtop"><button class="ib" id="dClose" type="button" aria-label="Cerrar ficha">←</button><span class="dcat" id="dCat"></span><span style="width:40px"></span></div>
+  <div class="show">
+    <button class="sa" id="dPrev" type="button" aria-label="Producto anterior">‹</button>
+    <div class="dstage"><div class="dimg" id="dImg"></div><div class="dots" id="dDots"></div></div>
+    <button class="sa" id="dNext" type="button" aria-label="Producto siguiente">›</button>
+  </div>
+  <div class="dinfo"><h2 id="dName"></h2><p class="dsub" id="dSub"></p><p class="dstock" id="dStock"></p>
+    <div class="dqp"><div class="qty"><button id="dMinus" type="button" aria-label="Menos">−</button><span id="dQty">1</span><button id="dPlus" type="button" aria-label="Más">+</button></div><strong id="dPrice"></strong></div>
+    <p class="ddesc" id="dDesc"></p></div>
+  <div class="dact"><button class="btn" id="dAdd" type="button">Añadir al carrito</button><button class="btn ghost" id="dCart" type="button">Ver carrito</button></div>
+</dialog>
+
+<!-- Carrito -->
+<aside class="cartback" id="cartBack" hidden>
+  <div class="drawer" role="dialog" aria-modal="true" aria-labelledby="cartT">
+    <div class="chead"><h2 id="cartT">Tu carrito</h2><button class="ib" id="cartClose" type="button" aria-label="Cerrar carrito">✕</button></div>
+    <div class="clist" id="cartList"></div>
+    <div class="cfoot">
+      <div class="ctotal"><span>Total</span><strong id="cartTotal">$0</strong></div>
+      <form id="fOrder">
+        <label>Nombre completo<input id="oName" required minlength="2" maxlength="100" autocomplete="name"></label>
+        <label>Teléfono o WhatsApp<input id="oTel" type="tel" required pattern="\+?[0-9 ()\-]{7,20}" autocomplete="tel"></label>
+        <label>Correo electrónico<input id="oMail" type="email" required autocomplete="email"></label>
+        <label>Nota (opcional)<input id="oNote" maxlength="300" placeholder="Ej. dirección de entrega o dudas"></label>
+        <button class="btn full" id="oGo">Enviar pedido</button>
+        <div class="msg" id="oMsg" role="status"></div>
+      </form>
+    </div>
+  </div>
+</aside>
+
+<dialog id="dLegal"><h3 id="lT"></h3><div class="legalbody" id="lB"></div><button class="btn ghost sm" id="lClose" type="button">Cerrar</button></dialog>
+<div id="toast" role="status"></div>
+
+<script>
+const sb=supabase.createClient('https://vpncwfbinzmvsplsjubf.supabase.co','sb_publishable_cUU3BIEnmhEXbp6XzQdDLA__0uaGHQW');
+const $=s=>document.querySelector(s);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isHttps=u=>/^https:\/\//i.test(u||'');
+const isVideo=u=>/\.(mp4|webm|mov)(\?|$)/i.test(u||'');
+let cfg={usd_rate:4000,default_display:'COP'},cats=[],prods=[],filter='todos',query='',cur=0,qty=1,imgIdx=0,cart=[];
+try{cart=JSON.parse(localStorage.getItem('outvoss_cart')||'[]')}catch(e){}
+const saveCart=()=>{try{localStorage.setItem('outvoss_cart',JSON.stringify(cart))}catch(e){}};
+const money=n=>$('#cur').value==='USD'?new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n/cfg.usd_rate):new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(n);
+const toast=t=>{const e=$('#toast');e.textContent=t;e.className='on';clearTimeout(toast.t);toast.t=setTimeout(()=>e.className='',2400)};
+const photos=p=>[p.image_url,p.image_url_2,p.image_url_3].filter(isHttps);
+const byId=id=>prods.find(p=>p.id===id);
+const stockNote=p=>p.stock<=0?'Agotado':(p.stock<=(p.low_stock_threshold||3)?'Últimas unidades':'');
+$('#yr').textContent=new Date().getFullYear();
+addEventListener('scroll',()=>$('#hd').classList.toggle('sc',scrollY>40),{passive:true});
+
+/* ---------- escenario interactivo ---------- */
+const stage=$('#stage'),stageIn=$('#stageIn');
+if(!reduce&&matchMedia('(hover:hover)').matches){
+  stage.addEventListener('pointermove',e=>{const r=stage.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*2-1,y=(e.clientY-r.top)/r.height*2-1;
+    stageIn.style.setProperty('--ry',(x*9).toFixed(1)+'deg');stageIn.style.setProperty('--rx',(-y*9).toFixed(1)+'deg');
+    stageIn.style.setProperty('--px',x.toFixed(2));stageIn.style.setProperty('--py',y.toFixed(2))});
+  stage.addEventListener('pointerleave',()=>{['--rx','--ry','--px','--py'].forEach(k=>stageIn.style.setProperty(k,'0'))});
+}
+function pulse(){stage.classList.add('hot');clearTimeout(pulse.t);pulse.t=setTimeout(()=>stage.classList.remove('hot'),900)}
+let spotT;
+function spot(p){const u=photos(p)[0];$('#spotImg').src=u||'';$('#spotImg').style.visibility=u?'visible':'hidden';
+  $('#spotName').textContent=p.name;$('#spotPrice').textContent=money(p.price);$('#spot').classList.add('on');
+  const f=$('#frame');let sw=f.querySelector('.swap');
+  if(u){if(!sw){sw=el('img','swap');sw.alt='';f.append(sw)}sw.onload=()=>sw.classList.add('on');sw.classList.remove('on');sw.src=u}
+  clearTimeout(spotT);spotT=setTimeout(unspot,4000)}
+function unspot(){$('#spot').classList.remove('on');const sw=$('#frame .swap');if(sw)sw.classList.remove('on')}
+function fly(src,from){if(reduce||!isHttps(src)||!from)return;
+  const a=from.getBoundingClientRect(),b=$('#cartBtn').getBoundingClientRect(),d=el('div','fly');
+  d.style.left=(a.left+a.width/2-20)+'px';d.style.top=(a.top+a.height/2-20)+'px';d.style.backgroundImage='url("'+src.replace(/"/g,'%22')+'")';document.body.append(d);
+  d.animate([{transform:'translate(0,0) scale(1)',opacity:1},{transform:`translate(${b.left+b.width/2-a.left-a.width/2}px,${b.top+b.height/2-a.top-a.height/2}px) scale(.25)`,opacity:.25}],{duration:650,easing:'cubic-bezier(.5,0,.8,.4)'}).onfinish=()=>d.remove()}
+
+/* ---------- lista de productos ---------- */
+function filtered(){const t=query.trim().toLowerCase();
+  return prods.filter(p=>(filter==='todos'||p.category_id===filter)&&(!t||[p.name,p.subtitle,p.description].some(x=>(x||'').toLowerCase().includes(t))))}
+function renderPills(){const b=$('#pills');b.replaceChildren();
+  [{id:'todos',name:'Todos',emoji:'✦'},...cats].forEach(c=>{const x=el('button','pill'+(c.id===filter?' on':''),(c.emoji?c.emoji+' ':'')+c.name);x.type='button';
+    x.onclick=()=>{filter=c.id;renderPills();renderGrid()};b.append(x)})}
+function renderGrid(){
+  const g=$('#grid'),l=filtered();g.replaceChildren();
+  $('#count').textContent=l.length+(l.length===1?' producto':' productos');
+  if(!l.length){g.append(el('p','empty',prods.length?'No encontramos productos con esa búsqueda.':'Pronto publicaremos nuestros productos.'));return}
+  l.forEach(p=>{
+    const c=el('article','card');c.tabIndex=0;c.setAttribute('role','button');c.setAttribute('aria-label',p.name);
+    const th=el('div','th',p.name.charAt(0));const u=photos(p)[0];
+    if(u){th.textContent='';const i=el('img');i.src=u;i.alt=p.name;i.loading='lazy';th.append(i)}
+    if(p.badge)th.append(el('span','tag',p.badge));
+    const sn=stockNote(p);if(sn)th.append(el('span','stk'+(p.stock<=0?' out':''),sn));
+    const foot=el('div','foot');foot.append(el('span','price',money(p.price)));
+    const add=el('button','plus','+');add.type='button';add.disabled=p.stock<=0;add.setAttribute('aria-label','Añadir '+p.name+' al carrito');
+    add.onclick=e=>{e.stopPropagation();addToCart(p,1,add)};foot.append(add);
+    c.append(th,el('h3',0,p.name),el('p','sub',[p.subtitle,p.size_label].filter(Boolean).join(' · ')),foot);
+    c.onclick=()=>openDetail(p.id);c.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openDetail(p.id)}};
+    c.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse')spot(p)});
+    g.append(c)})}
+$('#cur').onchange=()=>{renderGrid();renderCart();if($('#dDetail').open)renderDetail()};
+$('#q').addEventListener('input',e=>{query=e.target.value;$('#qClear').hidden=!query;renderGrid()});
+$('#qClear').onclick=()=>{query='';$('#q').value='';$('#qClear').hidden=true;renderGrid()};
+$('#seeAll').onclick=()=>{filter='todos';query='';$('#q').value='';$('#qClear').hidden=true;renderPills();renderGrid();$('#grid').scrollIntoView({behavior:reduce?'auto':'smooth'})};
+
+/* ---------- ficha ---------- */
+function openDetail(id){const i=prods.findIndex(p=>p.id===id);if(i<0)return;cur=i;qty=1;imgIdx=0;renderDetail();const d=$('#dDetail');if(!d.open)d.showModal();spot(prods[i])}
+function renderDetail(){
+  const p=prods[cur];if(!p)return;const ph=photos(p);imgIdx=ph.length?((imgIdx%ph.length)+ph.length)%ph.length:0;
+  $('#dCat').textContent=(cats.find(c=>c.id===p.category_id)?.name||'').toUpperCase();
+  const box=$('#dImg');box.replaceChildren();
+  if(ph.length){const i=el('img');i.src=ph[imgIdx];i.alt=p.name+' (foto '+(imgIdx+1)+')';box.append(i)}else box.textContent=p.name.charAt(0);
+  const dots=$('#dDots');dots.replaceChildren();
+  if(ph.length>1)ph.forEach((_,k)=>{const b=el('button','dot'+(k===imgIdx?' on':''));b.type='button';b.setAttribute('aria-label','Foto '+(k+1));b.onclick=()=>{imgIdx=k;renderDetail()};dots.append(b)});
+  $('#dName').textContent=p.name;$('#dSub').textContent=[p.subtitle,p.size_label].filter(Boolean).join(' · ');
+  const sn=stockNote(p),s=$('#dStock');s.textContent=sn;s.className='dstock'+(p.stock<=0?' out':'');
+  $('#dDesc').textContent=p.description||'';$('#dQty').textContent=qty;$('#dPrice').textContent=money(p.price*qty);
+  $('#dAdd').disabled=p.stock<=0;$('#dAdd').textContent=p.stock<=0?'Agotado':'Añadir al carrito'}
+$('#dClose').onclick=()=>$('#dDetail').close();
+$('#dPrev').onclick=()=>{cur=(cur-1+prods.length)%prods.length;qty=1;imgIdx=0;renderDetail();spot(prods[cur])};
+$('#dNext').onclick=()=>{cur=(cur+1)%prods.length;qty=1;imgIdx=0;renderDetail();spot(prods[cur])};
+$('#dMinus').onclick=()=>{if(qty>1){qty--;renderDetail()}};
+$('#dPlus').onclick=()=>{if(qty<prods[cur].stock){qty++;renderDetail()}else toast('Solo quedan '+prods[cur].stock+' unidades')};
+$('#dAdd').onclick=e=>{addToCart(prods[cur],qty,e.currentTarget);qty=1;renderDetail()};
+$('#dCart').onclick=()=>{$('#dDetail').close();openCart()};
+
+/* ---------- carrito ---------- */
+function addToCart(p,n,from){
+  if(p.stock<=0)return toast('Producto agotado');
+  const it=cart.find(c=>c.id===p.id),have=it?it.qty:0,take=Math.min(n,p.stock-have);
+  if(take<=0)return toast('Ya tienes todas las unidades disponibles');
+  if(it)it.qty+=take;else cart.push({id:p.id,qty:take});
+  saveCart();renderCart();pulse();spot(p);fly(photos(p)[0],from);
+  toast(take+(take===1?' unidad añadida':' unidades añadidas')+' al carrito');
+  const b=$('#badge');b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump')}
+function cartLines(){return cart.map(c=>({c,p:byId(c.id)})).filter(x=>x.p)}
+function renderCart(){
+  cart=cartLines().map(x=>({id:x.c.id,qty:Math.min(x.c.qty,Math.max(x.p.stock,0))})).filter(c=>c.qty>0);saveCart();
+  const lines=cartLines(),total=lines.reduce((s,x)=>s+x.p.price*x.c.qty,0);
+  $('#badge').textContent=lines.reduce((s,x)=>s+x.c.qty,0);$('#cartTotal').textContent=money(total);
+  const list=$('#cartList');list.replaceChildren();
+  if(!lines.length){list.append(el('p','cempty','Tu carrito está vacío.'));$('#oGo').disabled=true;return}
+  $('#oGo').disabled=false;
+  lines.forEach(({c,p})=>{
+    const row=el('div','ci'),u=photos(p)[0];
+    if(u){const i=el('img');i.src=u;i.alt='';row.append(i)}else row.append(el('div','ph',p.name.charAt(0)));
+    const info=el('div','cin');info.append(el('h4',0,p.name),el('p',0,c.qty+' × '+money(p.price)+' = '+money(p.price*c.qty)));
+    const q=el('div','cq'),m=el('button',0,'−'),n=el('span',0,String(c.qty)),pl=el('button',0,'+');
+    m.type=pl.type='button';m.setAttribute('aria-label','Menos');pl.setAttribute('aria-label','Más');
+    m.onclick=()=>{c.qty--;if(c.qty<=0)cart=cart.filter(x=>x.id!==c.id);saveCart();renderCart()};
+    pl.onclick=()=>{if(c.qty<p.stock){c.qty++;saveCart();renderCart()}else toast('No hay más unidades disponibles')};
+    q.append(m,n,pl);info.append(q);
+    const rm=el('button','crm','✕');rm.type='button';rm.setAttribute('aria-label','Quitar '+p.name);rm.onclick=()=>{cart=cart.filter(x=>x.id!==c.id);saveCart();renderCart()};
+    row.append(info,rm);list.append(row)})}
+function openCart(){$('#cartBack').hidden=false;$('#oMsg').textContent='';renderCart()}
+function closeCart(){$('#cartBack').hidden=true}
+$('#cartBtn').onclick=openCart;$('#cartClose').onclick=closeCart;
+$('#cartBack').addEventListener('click',e=>{if(e.target.id==='cartBack')closeCart()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#cartBack').hidden)closeCart()});
+$('#fOrder').addEventListener('submit',async e=>{e.preventDefault();
+  const m=$('#oMsg'),go=$('#oGo'),mail=$('#oMail').value.trim();go.disabled=true;m.className='msg';m.textContent='Enviando pedido…';
+  const{error}=await sb.rpc('place_order',{p_name:$('#oName').value,p_phone:$('#oTel').value,p_email:mail,
+    p_items:cart.map(c=>({product_id:c.id,quantity:c.qty})),p_note:$('#oNote').value});
+  go.disabled=false;
+  if(error){m.className='msg err';m.textContent=error.message;await loadProducts();return}
+  cart=[];saveCart();e.target.reset();renderCart();
+  m.className='msg ok';m.textContent='¡Pedido recibido! Te escribiremos a '+mail+' para confirmarlo y coordinar el pago y la entrega.'});
+
+/* ---------- datos ---------- */
+async function loadProducts(){
+  const[c,p]=await Promise.all([sb.from('store_categories').select('*').order('sort_order'),
+    sb.from('store_products').select('*').order('sort_order').order('name')]);
+  cats=c.data||[];prods=(p.data||[]).filter(x=>Number(x.price)>0);
+  renderPills();renderGrid();renderCart()}
+async function init(){
+  const[st,md,lg]=await Promise.all([
+    sb.from('site_settings').select('value').eq('key','general').maybeSingle(),
+    sb.from('site_media').select('*').eq('page','productos'),
+    sb.from('legal_pages').select('slug,title,body').order('sort_order')]);
+  if(st.data)cfg={...cfg,...st.data.value};
+  $('#cur').value=cfg.default_display||'COP';
+  if(cfg.contact_email)$('#fMail').textContent=cfg.contact_email;if(cfg.whatsapp)$('#fWa').textContent='WhatsApp '+cfg.whatsapp;
+  (md.data||[]).forEach(m=>{if(m.section_key!=='hero')return;
+    ['eyebrow','title','body'].forEach(f=>{if(m[f]){const n=document.querySelector(`[data-f="${f}"]`);if(n)n.textContent=m[f]}});
+    if(!isHttps(m.url))return;const f=$('#frame');
+    if(isVideo(m.url)){const v=document.createElement('video');Object.assign(v,{src:m.url,autoplay:true,loop:true,muted:true,playsInline:true,preload:'metadata'});v.setAttribute('muted','');
+      v.onloadeddata=()=>$('#fb').classList.add('off');v.onerror=()=>v.remove();f.prepend(v)}
+    else{const i=el('img');i.alt='';i.onload=()=>$('#fb').classList.add('off');i.onerror=()=>i.remove();i.src=m.url;f.prepend(i)}});
+  (lg.data||[]).forEach(p=>{const b=el('button','neu',p.title);b.type='button';b.onclick=()=>{$('#lT').textContent=p.title;$('#lB').textContent=p.body;$('#dLegal').showModal()};$('#legalBtns').append(b)});
+  await loadProducts()}
+document.addEventListener('click',e=>{if(e.target.tagName==='DIALOG')e.target.close()});
+$('#lClose').onclick=()=>$('#dLegal').close();
+init();
+
+/* Logos del encabezado y del pie (se cargan en el panel: Página principal) */
+async function loadLogos(){try{
+  const{data}=await sb.from('site_media').select('section_key,url').eq('page','inicio').in('section_key',['logo_encabezado','logo_pie']);
+  (data||[]).forEach(m=>{if(!['logo_encabezado','logo_pie'].includes(m.section_key)||!isHttps(m.url))return;
+    const t=document.querySelector(m.section_key==='logo_encabezado'?'.hd .logo':'footer .logo');if(!t)return;
+    const i=document.createElement('img');i.src=m.url;i.alt='';
+    i.style.cssText='height:30px;width:30px;object-fit:contain;border-radius:50%;vertical-align:middle;margin-right:10px';
+    i.onerror=()=>i.remove();t.prepend(i)})}catch(e){}}
+loadLogos();
+</script>
+</body>
+</html>
