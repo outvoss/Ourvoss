@@ -174,12 +174,12 @@ const TABS={
   cols:[T('n','Producto','ro',{g:r=>r.name}),T('category_id','Categoría','fk',{f:'store_categories'}),T('subtitle','Descripción corta','text'),T('description','Descripción completa','text'),T('size_label','Tamaño (ej. 250 ml)','text'),T('badge','Etiqueta','text'),T('image_url','Foto 1','file',{accept:'image/*'}),T('image_url_2','Foto 2','file',{accept:'image/*'}),T('image_url_3','Foto 3','file',{accept:'image/*'}),T('sort_order','Orden','int'),T('is_active','Visible','bool')]},
  catprod:{label:'Categorías de la tienda',table:'store_categories',order:'sort_order',defaults:{name:'Nueva categoría',slug:'cat-'},slugFix:true,
   cols:[T('name','Nombre','text'),T('emoji','Ícono (emoji)','text'),T('sort_order','Orden','int'),T('is_active','Visible','bool')]},
- pedidos:{label:'Pedidos de la tienda',table:'store_orders',order:'created_at',asc:false,noAdd:true,noDel:true,confirm:true,
-  hint:'Pedidos que envían los clientes desde la tienda. «Confirmar y descontar» registra la venta y descuenta el inventario.',
-  cols:[T('d','Fecha','ro',{g:r=>fmtDate(r.created_at)}),T('n','Cliente','ro',{g:r=>r.customer_name}),T('p','Teléfono','ro',{g:r=>r.customer_phone}),T('e','Correo','ro',{g:r=>r.customer_email}),T('i','Productos','ro',{g:r=>(r.items||[]).map(i=>i.quantity+'× '+i.name).join(', ')}),T('t','Total','ro',{g:r=>fmtMoney(r.total)}),T('o','Nota','ro',{g:r=>r.note||''}),T('status','Estado','sel',{o:[['nuevo','Nuevo'],['confirmado','Confirmado'],['entregado','Entregado'],['cancelado','Cancelado']]})]},
- pedidosprendas:{label:'Pedidos de prendas',table:'catalog_orders',order:'created_at',asc:false,noAdd:true,noDel:true,
-  hint:'Pedidos de prendas que envían los clientes desde el catálogo. Las prendas no manejan inventario: cambia el estado a medida que contactas y entregas.',
-  cols:[T('d','Fecha','ro',{g:r=>fmtDate(r.created_at)}),T('n','Cliente','ro',{g:r=>r.customer_name}),T('p','Teléfono','ro',{g:r=>r.customer_phone}),T('e','Correo','ro',{g:r=>r.customer_email}),T('i','Prendas','ro',{g:r=>(r.items||[]).map(i=>i.quantity+'× '+i.name+[i.color,i.size?'talla '+i.size:''].filter(Boolean).map((x,k,a)=>(k?', ':' (')+x+(k===a.length-1?')':'')).join('')).join('; ')}),T('t','Total','ro',{g:r=>fmtMoney(r.total)}),T('o','Nota','ro',{g:r=>r.note||''}),T('status','Estado','sel',{o:[['nuevo','Nuevo'],['contactado','Contactado'],['entregado','Entregado'],['cancelado','Cancelado']]})]},
+ pedidos:{label:'Pedidos de la tienda',table:'store_orders',order:'created_at',asc:false,noAdd:true,noDel:true,confirm:true,proof:true,
+  hint:'Pedidos que envían los clientes desde la tienda, ya con su comprobante de transferencia. Revisa el comprobante («Ver comprobante»), marca el pago como Verificado y entonces usa «Confirmar y descontar» para registrar la venta y descontar el inventario.',
+  cols:[T('d','Fecha','ro',{g:r=>fmtDate(r.created_at)}),T('n','Cliente','ro',{g:r=>r.customer_name}),T('p','Teléfono','ro',{g:r=>r.customer_phone}),T('e','Correo','ro',{g:r=>r.customer_email}),T('i','Productos','ro',{g:r=>(r.items||[]).map(i=>i.quantity+'× '+i.name).join(', ')}),T('t','Total','ro',{g:r=>fmtMoney(r.total)}),T('sh','Domicilio','ro',{g:r=>Number(r.shipping)>0?fmtMoney(r.shipping):'—'}),T('pm','Método de pago','ro',{g:r=>r.payment_method?r.payment_method.toUpperCase():'—'}),T('payment_status','Pago','sel',{o:[['sin_pago','Sin pago'],['en_revision','En revisión'],['verificado','Verificado'],['rechazado','Rechazado']]}),T('o','Nota','ro',{g:r=>r.note||''}),T('status','Estado','sel',{o:[['nuevo','Nuevo'],['confirmado','Confirmado'],['entregado','Entregado'],['cancelado','Cancelado']]})]},
+ pedidosprendas:{label:'Pedidos de prendas',table:'catalog_orders',order:'created_at',asc:false,noAdd:true,noDel:true,proof:true,
+  hint:'Pedidos de prendas que envían los clientes desde el catálogo, con su comprobante de transferencia. Revisa el comprobante, marca el pago como Verificado y cambia el estado a medida que contactas y entregas.',
+  cols:[T('d','Fecha','ro',{g:r=>fmtDate(r.created_at)}),T('n','Cliente','ro',{g:r=>r.customer_name}),T('p','Teléfono','ro',{g:r=>r.customer_phone}),T('e','Correo','ro',{g:r=>r.customer_email}),T('i','Prendas','ro',{g:r=>(r.items||[]).map(i=>i.quantity+'× '+i.name+[i.color,i.size?'talla '+i.size:''].filter(Boolean).map((x,k,a)=>(k?', ':' (')+x+(k===a.length-1?')':'')).join('')).join('; ')}),T('t','Total','ro',{g:r=>fmtMoney(r.total)}),T('sh','Domicilio','ro',{g:r=>Number(r.shipping)>0?fmtMoney(r.shipping):'—'}),T('pm','Método de pago','ro',{g:r=>r.payment_method?r.payment_method.toUpperCase():'—'}),T('payment_status','Pago','sel',{o:[['sin_pago','Sin pago'],['en_revision','En revisión'],['verificado','Verificado'],['rechazado','Rechazado']]}),T('o','Nota','ro',{g:r=>r.note||''}),T('status','Estado','sel',{o:[['nuevo','Nuevo'],['contactado','Contactado'],['entregado','Entregado'],['cancelado','Cancelado']]})]},
  inicio:{label:'Página principal (tienda)',custom:'slots',page:'inicio',
   hint:'Aquí cargas todo lo de la página principal: los 3 logos (entrada, esquina superior izquierda y pie de página; deben ser imagen PNG o JPG, no video), la portada, el video del maniquí y el fondo de cada sección. Pulsa «Subir imagen o video»; el sistema detecta solo si es imagen o video. Máximo 50 MB por archivo; si pesa más, pega un enlace (por ejemplo de Cloudinary).'},
  catalogo:{label:'Catálogo de ropa',table:'catalog_items',order:'sort_order',
@@ -247,10 +247,10 @@ function cell(c,r){
 }
 function render(){
   const stat=cur.key==='productos'?`<span class="stat">Valor del inventario: ${fmtMoney(rows.reduce((s,r)=>s+r.price*r.stock,0))}</span>`:'';
-  const hasAct=cur.sell||cur.confirm||!cur.noDel;
+  const hasAct=cur.sell||cur.confirm||cur.proof||!cur.noDel;
   $('#main').innerHTML=`<div class="bar"><h2>${cur.label}</h2>${stat}${cur.noAdd?'':'<button class="btn sm" id="add">+ Agregar</button>'}</div>${cur.hint?`<p class="hint">${esc(cur.hint)}</p>`:''}
   <div class="wrap"><table><thead><tr>${cur.cols.map(c=>`<th>${c.l}</th>`).join('')}${hasAct?'<th></th>':''}</tr></thead><tbody id="tb">
-  ${rows.length?rows.map(r=>`<tr class="${cur.key==='productos'&&r.stock<=r.low_stock_threshold?'low':''}">${cur.cols.map(c=>`<td>${cell(c,r)}</td>`).join('')}${hasAct?`<td><div class="act">${cur.confirm&&r.status==='nuevo'?`<button class="btn sm" data-confirm="${r.id}">Confirmar y descontar</button>`:''}${cur.sell?`<button class="btn sm" data-sell="${r.id}">Vender</button>`:''}${cur.noDel?'':`<button class="btn del sm" data-del="${r.id}">Borrar</button>`}</div></td>`:''}</tr>`).join(''):`<tr><td colspan="9" class="empty">Sin registros</td></tr>`}
+  ${rows.length?rows.map(r=>`<tr class="${cur.key==='productos'&&r.stock<=r.low_stock_threshold?'low':''}">${cur.cols.map(c=>`<td>${cell(c,r)}</td>`).join('')}${hasAct?`<td><div class="act">${cur.proof&&r.proof_path?`<button class="btn ghost sm" data-proof="${r.id}">Ver comprobante</button>`:''}${cur.confirm&&r.status==='nuevo'?`<button class="btn sm" data-confirm="${r.id}">Confirmar y descontar</button>`:''}${cur.sell?`<button class="btn sm" data-sell="${r.id}">Vender</button>`:''}${cur.noDel?'':`<button class="btn del sm" data-del="${r.id}">Borrar</button>`}</div></td>`:''}</tr>`).join(''):`<tr><td colspan="9" class="empty">Sin registros</td></tr>`}
   </tbody></table></div>`;
 }
 $('#main').addEventListener('change',async e=>{
@@ -274,6 +274,10 @@ $('#main').addEventListener('click',async e=>{
     const{error}=await sb.from(cur.table).insert(d);return error?toast(error.message,1):open(cur.key)}
   if(b.dataset.del){if(!confirm('¿Borrar este registro? No se puede deshacer.'))return;
     const{error}=await sb.from(cur.table).delete().eq('id',b.dataset.del);return error?toast(error.message,1):open(cur.key)}
+  if(b.dataset.proof){const r=rows.find(x=>x.id===b.dataset.proof);if(!r||!r.proof_path)return;
+    const{data,error}=await sb.storage.from('payment-proofs').createSignedUrl(r.proof_path,300);
+    if(error)return toast(error.message,1);
+    const l=document.createElement('a');l.href=data.signedUrl;l.target='_blank';l.rel='noopener';document.body.append(l);l.click();l.remove();return}
   if(b.dataset.confirm){if(!confirm('¿Confirmar el pedido? Se registrará la venta y se descontará el inventario.'))return;
     const{error}=await sb.rpc('confirm_store_order',{p_order_id:b.dataset.confirm});
     if(error)return toast(error.message.replace(/^.*?:\s*/,''),1);toast('Pedido confirmado, inventario actualizado');return open('pedidos')}
@@ -331,20 +335,37 @@ $('#main').addEventListener('click',e=>{
 });
 
 /* ---------- AJUSTES + ADMINS ---------- */
+const PAY_NAMES={platinum:'Platino',nequi:'Nequi',daviplata:'Daviplata'};
 async function settings(){
   const{data:inv}=await sb.from('admin_invites').select('email').order('created_at');
+  const{data:prow}=await sb.from('site_settings').select('value').eq('key','payments').maybeSingle();const pay=(prow&&prow.value)||{methods:{}};
   $('#main').innerHTML=`<div class="bar"><h2>Ajustes</h2></div><div class="form">
    <label>Tasa de cambio: 1 USD = … COP<input id="sRate" type="number" min="1" step="1" value="${cfg.usd_rate}"></label>
    <label>Moneda que ven los visitantes por defecto<select id="sDisp"><option ${cfg.default_display==='COP'?'selected':''}>COP</option><option ${cfg.default_display==='USD'?'selected':''}>USD</option></select></label>
    <label>Correo de contacto<input id="sMail" type="email" value="${esc(cfg.contact_email)}"></label>
    <label>WhatsApp<input id="sWa" value="${esc(cfg.whatsapp)}" placeholder="+57 300 000 0000"></label>
    <button class="btn" id="sSave">Guardar ajustes</button>
+   <h2 style="font-size:16px;margin:30px 0 8px">Pagos por transferencia</h2>
+   <p style="color:var(--mut);font-size:12.5px;margin-bottom:10px">Activa los métodos que quieras ofrecer y escribe la cuenta donde recibirás las transferencias. Estos datos los verán los clientes al pagar. Si no activas ninguno, los pedidos se envían sin pago, como antes.</p>
+   ${Object.keys(PAY_NAMES).map(k=>{const m=(pay.methods&&pay.methods[k])||{};return `<div class="slot" style="margin-bottom:12px"><h3>${PAY_NAMES[k]}</h3>
+     <label class="chk"><input type="checkbox" id="pm-${k}-en" ${m.enabled?'checked':''}> Ofrecer este método de pago</label>
+     <label>Nombre que ve el cliente<input id="pm-${k}-name" value="${esc(m.name||PAY_NAMES[k])}"></label>
+     <label>Número de cuenta o celular<input id="pm-${k}-acc" value="${esc(m.account)}" placeholder="Ej. 300 000 0000"></label>
+     <label>Titular de la cuenta<input id="pm-${k}-hold" value="${esc(m.holder)}"></label></div>`}).join('')}
+   <label>Costo del domicilio en COP (déjalo vacío si lo coordinas con el cliente)<input id="pShip" type="number" min="0" step="1000" value="${esc(pay.shipping_cost==null?'':pay.shipping_cost)}"></label>
+   <label>Tiempo de entrega que ve el cliente<input id="pDel" value="${esc(pay.delivery_time||'A coordinar')}"></label>
+   <button class="btn" id="pSave">Guardar pagos</button>
    <h2 style="font-size:16px;margin:30px 0 8px">Administradores autorizados</h2>
    <p style="color:var(--mut);font-size:12.5px;margin-bottom:10px">Quien se registre con uno de estos correos y confirme su cuenta obtiene acceso al panel.</p>
    ${(inv||[]).map(i=>`<div class="inv"><span style="flex:1">${esc(i.email)}</span><button class="btn del sm" data-rm="${esc(i.email)}">Quitar</button></div>`).join('')}
    <div style="display:flex;gap:8px;margin-top:10px"><input id="nMail" type="email" placeholder="correo@ejemplo.com" style="margin:0"><button class="btn sm" id="nAdd" style="height:40px">Autorizar</button></div></div>`;
   $('#sSave').onclick=async()=>{const v={...cfg,usd_rate:Number($('#sRate').value)||4000,default_display:$('#sDisp').value,contact_email:$('#sMail').value.trim(),whatsapp:$('#sWa').value.trim()};
     const{error}=await sb.from('site_settings').update({value:v}).eq('key','general');error?toast(error.message,1):(cfg=v,toast('Ajustes guardados'))};
+  $('#pSave').onclick=async()=>{const methods={};
+    for(const k of Object.keys(PAY_NAMES)){methods[k]={enabled:$('#pm-'+k+'-en').checked,name:$('#pm-'+k+'-name').value.trim()||PAY_NAMES[k],subtitle:k==='platinum'?'Transferencia bancaria':'Transferencia '+PAY_NAMES[k],account:$('#pm-'+k+'-acc').value.trim(),holder:$('#pm-'+k+'-hold').value.trim()};
+      if(methods[k].enabled&&!methods[k].account)return toast('Escribe la cuenta de '+PAY_NAMES[k]+' o desactívalo',1)}
+    const sh=$('#pShip').value.trim(),v={methods,shipping_cost:sh===''?null:Math.max(0,Number(sh)||0),delivery_time:$('#pDel').value.trim()||'A coordinar'};
+    const{error}=await sb.from('site_settings').upsert({key:'payments',value:v});error?toast(error.message,1):toast('Pagos guardados')};
   $('#nAdd').onclick=async()=>{const m=$('#nMail').value.trim().toLowerCase();if(!m)return;
     const{error}=await sb.from('admin_invites').insert({email:m});error?toast(error.message,1):settings()};
   $('#main').querySelectorAll('[data-rm]').forEach(b=>b.onclick=async()=>{await sb.from('admin_invites').delete().eq('email',b.dataset.rm);settings()});
