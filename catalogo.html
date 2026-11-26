@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="pago.js"></script>
 <style>
 :root{--bg:#09090b;--ch:#d6c29f;--chl:#ece0c8;--chd:#94805d;--tx:#f5f3ef;--mut:#a19d94;--glass:rgba(20,20,24,.62);--line:rgba(214,194,159,.26);--neu:#16161a}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -349,14 +350,22 @@ const closeCart=()=>{$('#cartBack').hidden=true};
 $('#cartBtn').onclick=openCart;$('#cartClose').onclick=closeCart;
 $('#cartBack').addEventListener('click',e=>{if(e.target.id==='cartBack')closeCart()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#cartBack').hidden)closeCart()});
+const orderParams=extra=>({p_name:$('#oName').value,p_phone:$('#oTel').value,p_email:$('#oMail').value.trim(),
+  p_items:cart.map(c=>({item_id:c.id,quantity:c.qty,size:c.size||null,color:c.color||null})),p_note:$('#oNote').value,...extra});
+const payOn=()=>window.OutvossPay?OutvossPay.available(sb):Promise.resolve(false);
+payOn().then(v=>{if(v)$('#oGo').textContent='Continuar al pago'});
 $('#fOrder').addEventListener('submit',async e=>{e.preventDefault();
-  const m=$('#oMsg'),go=$('#oGo'),mail=$('#oMail').value.trim();go.disabled=true;m.className='msg';m.textContent='Enviando pedido…';
-  const{error}=await sb.rpc('place_catalog_order',{p_name:$('#oName').value,p_phone:$('#oTel').value,p_email:mail,
-    p_items:cart.map(c=>({item_id:c.id,quantity:c.qty,size:c.size||null,color:c.color||null})),p_note:$('#oNote').value});
-  go.disabled=false;
+  const m=$('#oMsg'),go=$('#oGo'),mail=$('#oMail').value.trim();m.className='msg';m.textContent='';
+  const finish=()=>{cart=[];saveCart();$('#fOrder').reset();renderCart();m.className='msg ok';m.textContent='¡Pedido recibido! Revisaremos tu comprobante y te escribiremos a '+mail+'.'};
+  if(await payOn()){
+    const lines=cartLines(),units=lines.reduce((t,x)=>t+x.c.qty,0);
+    await OutvossPay.open({sb,money,subtotal:lines.reduce((t,x)=>t+x.i.price*x.c.qty,0),itemsLabel:units+(units===1?' prenda':' prendas'),
+      onSubmit:pay=>sb.rpc('place_catalog_order',orderParams({p_payment_method:pay.method,p_proof_path:pay.proofPath})),onFinished:finish});
+    return}
+  go.disabled=true;m.textContent='Enviando pedido…';
+  const{error}=await sb.rpc('place_catalog_order',orderParams({}));go.disabled=false;
   if(error){m.className='msg err';m.textContent=error.message;return}
-  cart=[];saveCart();e.target.reset();renderCart();
-  m.className='msg ok';m.textContent='¡Pedido recibido! Te escribiremos a '+mail+' para confirmarlo y coordinar el pago y la entrega.'});
+  finish()});
 
 init();
 
